@@ -1,0 +1,640 @@
+\documentclass[landscape,a0]{a0poster_csml_v2}
+% NOTE: to remove logo from title, just use \headerNoLogo option below
+% Options (don't put spaces between options!)
+% portrait and landscape: format of the page 
+% A0, A1, A2, A3, A4 : size of the poster
+
+% compared to the old mpi poster style, two things have changed: 
+% - it now can be compiled with both (ps)latex and pdflatex
+% - there are different variants for headers: one with the mpi logos, 
+%   and one where you can include arbitrary files as logos (or have no
+%   logos at all). 
+% 
+
+
+% if you want to use pdflatex, then include the commands:
+\usepackage[pdftex]{graphicx,color}
+\DeclareGraphicsExtensions{.pdf}
+% if you want to use (ps)latex, then include the commands: 
+%\usepackage{graphics}
+%\DeclareGraphicsExtensions{.eps}
+
+
+\usepackage{amssymb,amsmath,bbold}
+
+% size of the columns of the poster, relative to the width of the
+% whole poster: 
+\renewcommand{\columnfrac}{.3}% i.e. want three columns
+\newcommand{\half}{\frac{1}{2}}
+
+
+
+%Kenji macros
+\newcommand{\hS}{\widehat{C}} %empirical covariance
+\newcommand{\pS}{C} %population covariance
+\newcommand{\hlam}{\widehat{\lambda}}
+\newcommand{\lam}{\lambda}
+
+
+
+\usepackage{natbib}
+
+
+\begin{document}
+\begin{poster}
+
+%------------------------------------------------------------
+% header: 
+%------------------------------------------------------------
+
+% Additionally to the 'normal' font size commands as
+% \tiny,\small,\large\ (look them up in a latex book) there are now
+% the fonts \veryHuge, \VeryHuge, \VERYHuge
+
+%title: 
+\savebox{\PosterTitle}{\VeryHuge Optimal Kernel Choice for Large-Scale Two-Sample Tests}
+%authors:
+\savebox{\PosterAuthor}{\Large 
+Arthur Gretton,$^{1,3}$ Bharath Sriperumbudur,$^1$ Dino Sejdinovic,$^1$  Heiko Strathmann$^2$, Sivaraman Balakrishnan$^4$, Massimiliano Pontil$^2$, Kenji Fukumizu$^5$}
+%addresses:
+\savebox{\PosterAddress}{\large 
+$^1$Gatsby Unit and $^2$CSD, CSML, UCL, UK; $^3$MPI for Intelligent Systems, Germany;
+ $^4$ Carnegie Mellon University; $^5$ Institute of Statistical Mathematics}
+
+% Logos: 
+
+% you can either use the standard MPI header 
+% (make sure the logo files logo_mpi.pdf and logo_kyb.pdf are in your
+% latex path):
+\headerMpi 
+
+% or you can use a header without any logos: 
+%\headerNoLogo 
+
+% or you can enter your own logos and use them in the header:
+% (make sure the figures are in the path):
+%\newcommand{\LeftLogoFile}{example_logo.pdf}
+%\newcommand{\RightLogoFile}{example_logo.pdf}
+%\headerCustomLogo
+
+
+
+% the new color can then be used with the command \color{name}
+%\definecolor{anewcolor}{rgb}{0.5,0,0}
+%\newcommand{\ulescolor}{\bf \color{anewcolor}}
+\definecolor{mpigreen}{rgb}{0.3,0.61,0.59}
+\definecolor{mpigrey}{rgb}{0.86,0.85,0.83}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{brightgreen}{rgb}{0,1,0}
+\definecolor{palepink}{rgb}{1.0,0.4,0.4}
+\definecolor{anublue}{rgb}{0,0.5,0.9}
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{engPink}{cmyk}{0.0,0.4,0.44,0.33}
+
+
+\newcommand{\Mpigreen}[1]{\color{mpigreen}{#1}\color{black}}
+\newcommand{\Mpigrey}[1]{\color{mpigrey}{#1}\color{black}}
+\newcommand{\Red}[1]{\color{red}{#1}\color{black}}
+\newcommand{\Brightgreen}[1]{\color{brightgreen}{#1}\color{black}}
+\newcommand{\Palepink}[1]{\color{palepink}{#1}\color{black}}
+\newcommand{\Anublue}[1]{\color{anublue}{#1}\color{black}}
+\newcommand{\Blue}[1]{\color{blue}{#1}\color{black}}
+\newcommand{\Engpink}[1]{\color{engPink}{#1}\color{black}}
+
+
+
+%Maths macros
+\newcommand{\bdatax}{\mathbf{X}}
+\newcommand{\bdatay}{\mathbf{Y}}
+\newcommand{\bdata}{\mathbf{Z}}
+
+\newcommand{\Eb}{\mathbf{E}}
+\newcommand{\Ex}{\mathbf{E}}
+\renewcommand{\Pr}{\boldsymbol{\mathsf{P}}}
+\newcommand{\Qr}{\boldsymbol{\mathsf{Q}}}
+
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+
+%DEBUG: re-introduce when compiling on laptop
+%\renewcommand{\Re}{\mathbb{R}}
+\newcommand{\Nat}{\mathbb{N}}
+
+\newcommand{\sx}{\mathsf{x}}
+\newcommand{\sy}{\mathsf{y}}
+\newcommand{\sz}{\mathsf{z}}
+
+
+% ------------------------------------------------------------
+% first column: 
+% ------------------------------------------------------------
+% Attention: between the end of one column and the begin of the next
+% column must not be spaces - otherwise latex thinks that it has to
+% make a pagebreak... see below how I did it!
+
+
+\begin{PosterColumn} % this creates a column, you have to care yourself
+% that it doesn't get too long for the poster
+%
+
+% the old pbox command does not exist any more, as it hacked the ps
+% file (which of course does not work any more with pdflatex). So
+% please use this one instead: 
+%
+\PosterBox{Introduction }
+%
+
+
+\begin{minipage}[c]{0.50\textwidth}
+
+\begin{itemize}
+\item \Blue{Given:}
+\begin{itemize}
+\item $m$ samples $\bdatax:=\{x_1,\ldots,x_m\}$  drawn i.i.d. from \Red{$\Pr$}
+\item samples  $\bdatay$ drawn from \Red{$\Qr$}
+\end{itemize}
+\item \Blue{Determine:}~are $\Pr$  and $\Qr$ different?
+\item \Blue{Kernel test based on MMD:}
+\begin{itemize}
+\item High dimensionality
+\item Low sample size
+\item \Red{Structured data}~(strings and graphs)
+\end{itemize}
+
+\item \Blue{How to choose the kernel?}
+
+\begin{itemize}
+\item Maximize the MMD with constraint on kernel class?
+\item Cross validation based on classification view?
+\item \Red{Explicitly maximize test power}
+\end{itemize}
+
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[c]{0.45\textwidth}
+
+\Blue{Linear time vs quadratic time statistic:}
+\vspace{0.3cm}
+
+\Red{Disadvantages}~of linear time MMD vs quadratic time MMD
+\begin{itemize}
+\item Much higher variance for a given $m$, hence$\ldots$
+\item $\ldots$a \Blue{much less powerful test}~for a given $m$
+\end{itemize}
+
+\Red{Advantages}~of the linear time MMD vs quadratic time MMD
+\begin{itemize}
+\item Very simple asymptotic null distribution (a Gaussian, vs an infinite
+weighted sum of $\chi^{2}$)
+\item Both test statistic and threshold computable in $O(m)$, with storage
+$O(1)$.
+\item With enough data, \Blue{a given Type II error}~can be attained
+with \Blue{less computation}
+\end{itemize}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%
+
+
+% ------------------------------------------------------------
+\PosterBox{Definition of the MMD }
+% ------------------------------------------------------------
+
+\Blue{{\bf Functions revealing difference in distribution:}}
+
+
+\begin{itemize}
+\item  Idea: \Red{avoid density estimation}~when testing $\Pr \neq \Qr$ \small \citep{GreBorRasSchetal12} \normalsize
+$$
+D(\Pr , \Qr ; \Blue{F}) 
+:=
+\sup_{f\in \Blue{F}}\left[\Ex_{\Pr}f(\mathsf{x})-\Ex_{\Qr}f(\mathsf{y})\right].
+$$
+\item $D(\Pr , \Qr;\Blue{F})  = 0$ iff   $\Pr = \Qr$
+when  $\Blue{F:=\left\{ f\in\mathcal{F}\,:\,\| f\|_{\mathcal{F}}\le1\right\}} $~
+the unit ball in  a \Red{characteristic}~RKHS $\mathcal{F}$ \small\citep{FukGreSunSch08,FukSriGreSch09,SriGreFukSchetal10}\normalsize
+\begin{itemize}
+\item These include Gaussian, Laplace on $\mathbb{R}^d$, 
+universal kernels on compact domains \small \citep{Steinwart01b} \normalsize.
+\end{itemize}
+\end{itemize}
+
+\vspace{1cm}
+
+\Blue{{\bf The (kernel) MMD:}}
+%	\vspace{1cm}
+
+\begin{minipage}[c]{0.6\textwidth}
+\begin{align*}
+&  \eta_k
+  \quad := \quad 
+\left( D(\Pr , \Qr ; F) \right)^2 \\
+ & \underset{(1)}{=}  
+\left(
+\sup_{f\in F}\left\langle f,\mu_{x}-\mu_{y}\right\rangle _{\mathcal{F}}
+\right)^2\\
+ & \underset{(2)}{=}  
+\Blue{\left\Vert \mu_{x}-\mu_{y}\right\Vert _{\mathcal{F}}^{2}}\\
+ & =  \left\langle \mu_{x}-\mu_{y},\mu_{x}-\mu_{y}\right\rangle_{\Fcal} \\
+ & =  \Ex_{\Pr,\Pr'}\Red{k(\mathsf{x},\mathsf{x}')}+\Ex_{\Qr,\Qr'}\Red{k(\mathsf{y},\mathsf{y}')}-2\Ex_{\Pr,\Qr}\Red{k(\mathsf{x},\mathsf{y})},
+\end{align*}
+\begin{itemize}
+\item  $\mathsf{x'}$ is a R.V. independent of $\mathsf{x}$
+with distribution $\Pr$
+\item $\mathsf{y}'$ is a R.V. independent of $\mathsf{y}$ with distribution $\Qr$.
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[r]{0.35\textwidth}
+Results used:
+\begin{enumerate}
+\item Mean elements corresponding to  $\phi(\mathsf{x})$ and $\phi(\mathsf{y})$:
+\begin{eqnarray*}
+\Ex_{\Pr}(f(\mathsf{x})) 
+& =\Ex_{\Pr}\left[\left\langle \phi(\mathsf{x}),f\right\rangle _{\mathcal{F}}\right] 
+& =:\left\langle \mu_{x},f\right\rangle _{\mathcal{F}},\\
+\Ex_{\Qr}(f(\mathsf{y})) 
+& =\Ex_{\Qr}\left[\left\langle \phi(\mathsf{y}),f\right\rangle _{\mathcal{F}}\right] 
+& =:\left\langle \mu_{y},f\right\rangle _{\mathcal{F}}.
+\end{eqnarray*}
+\item The norm is also written as
+$$
+\| \mu \|_{\Fcal} = \sup_{f\in F} \langle f, \mu \rangle_{\Fcal}
+$$
+\end{enumerate}
+\end{minipage}
+
+\vspace{1cm}
+\Blue{{\bf Illustration: Gauss vs Laplace}}
+\vspace{1cm}
+
+
+\begin{minipage}[c]{0.5\textwidth}
+\includegraphics[width=0.99\textwidth]{eps/mmdDemo1D.png}
+\end{minipage}
+%
+\begin{minipage}[c]{0.04\textwidth}
+$\:$
+\end{minipage}
+\begin{minipage}[c]{0.45\textwidth}
+\Red{Linear time unbiased estimate:}
+\[
+\Red{\check{\eta}_{k}}=\frac{2}{m}\sum_{i=1}^{m/2}h_{k}(v_{i}),
+\]
+\vspace{-2mm}
+\begin{itemize}
+\item  $v_{i}:=[x_{2i-1},\: x_{2i},\: y_{2i-1},\: y_{2i}]$
+\item $h_{k}(v_{i}):=k(x_{2i-1},x_{2i})+k(y_{2i-1},y_{2i})-k(x_{2i-1},y_{2i})-k(x_{2i},y_{2i-1})$
+\end{itemize}
+
+\vspace{2mm}
+\Blue{Idea:}
+\begin{align*}
+\Blue{\widehat{\Eb}_{\Pr}k(x,x')}
+&=
+\frac{2}{m}\left[k(x_1,x_2) + k(x_3,x_4)+\ldots \right]\\
+&=
+\frac{2}{m}
+\sum_{i=1}^{m/2} k(x_{2i-1},x_{2i})
+\end{align*}
+%
+%\begin{align*}
+%&MMD(\bdatax,\bdatay;F) \\
+%&={\textstyle \frac{1}{m (m-1)}} \sum_{i \neq j}
+%  \underbrace{k(x_i, x_j) - k(x_i, y_j) - k(y_i, x_j) + k(y_i, y_j)}_{
+%  \Red{h((x_i, y_i),(x_j, y_j))}}\vspace{-2mm}
+%\end{align*}
+\end{minipage}
+
+\end{PosterColumn}
+%%%
+% ------------------------------------------------------------
+% second column: 
+% ------------------------------------------------------------
+%
+\begin{PosterColumn} % this creates a column, you have to care yourself
+% that it doesn't get too long for the poster
+
+
+
+% ------------------------------------------------------------
+\PosterBox{Hypothesis test, optimal kernel choice}
+% ------------------------------------------------------------
+
+%%%%%
+\Blue{{\bf Asymptotic distribution:}}
+\vspace{0.4cm}
+
+
+\begin{minipage}[c]{0.6\textwidth}
+
+\Blue{By central limit theorem}, whether $\Pr\neq\Qr$ or $\Pr=\Qr$,
+\[
+m^{1/2}\left(\check{\eta}_{k}-\eta_{k}\right)\overset{D}{\rightarrow}\mathcal{N}(0,2\sigma_{k}^{2})
+\]
+\begin{itemize}
+\item assuming $0<\Eb(h_{k}^{2})<\infty$ (true for bounded $k$)
+%\item factor of two arises since the average is over $m/2$ terms,
+\item $\sigma_{k}^{2}=\Eb_{v}h_{k}^{2}(v)-\left[\Eb_{v}(h_{k}(v))\right]^{2}.$
+\end{itemize}
+\Blue{Hypothesis test of asymptotic level}~ $\Red{\alpha}$:
+$$
+t_{k,\Red{\alpha}}=m^{-1/2}\sigma_{k}\sqrt{2}\Phi^{-1}(1-\Red{\alpha})
+ $$
+%where $\Phi^{-1}$ is inverse CDF of $\mathcal{N}(0,1).$
+
+\end{minipage}
+%
+\begin{minipage}[c]{0.35\textwidth}
+\includegraphics[width=0.99\textwidth]{plotNIPSposter/nullAndThreshold_v2}
+\end{minipage}
+
+
+%%%%%
+\vspace{0.9cm}
+\Blue{{\bf Optimal kernel choice:}}
+\vspace{0.9cm}
+
+\begin{minipage}[c]{0.5\textwidth}
+\Red{Type II error:}~$\check{\eta}_{k}$ falls below
+$t_{k,\alpha}$ \Blue{and}~$\eta_{k}>0$.
+
+Prob. of a Type II error:
+\[
+P(\check{\eta}_{k}<t_{k,\alpha})=\Phi\left(\Phi^{-1}(1-\alpha)-\frac{\Blue{\eta_{k}}\sqrt{m}}{\Blue{\sigma_{k}}\sqrt{2}}\right)
+\]
+%where $\Phi$ is a Normal CDF. 
+
+%\vspace{1cm}
+Since $\Phi$ monotonic, \Red{best kernel choice}~to \Red{minimize Type II error prob.}~
+is:
+\[
+k_{*}=\arg\max_{k\in\mathcal{K}}\Blue{\eta_{k}\sigma_{k}^{-1}},
+\]
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\includegraphics[width=0.99\textwidth]{plotNIPSposter/nullVsAlternative_v2}
+\end{minipage}
+%Above plot obtained using codeArthur/compareAllCDFs.m
+%Comparing two Laplace distributions, m=400, kernel size -0.4
+
+%%%%%
+
+%%%%%
+\vspace{0.9cm}
+
+\begin{minipage}[c]{0.4\textwidth}
+\Blue{{\bf Kernel class: linear combinations}}
+\vspace{0.4cm}
+
+Define the \Red{family of kernels}~ as follows:
+%\footnotesize
+\small
+\Red{\[
+\mathcal{K}:=\left\{ \sum_{u=1}^{d}\beta_{u}k_{u},\, \|\beta\|_1 =D,\,\beta_{u}\geq0,\,\forall u\in\{1,\ldots,d\}\right\} 
+\]}
+\normalsize
+
+The squared MMD becomes
+\[
+\eta_{k}%=\left\Vert \mu_{k}(p)-\mu_{k}(q)\right\Vert _{\mathcal{F}_{k}}^{2}
+=\sum_{u=1}^{d}\beta_{u}\eta_{u},
+\]
+where $\eta_{u}:=\Eb_{v}h_{u}(v)$. 
+
+
+\Blue{Denote:}
+\begin{itemize}
+\item \textrm{$\beta=(\beta_{1},\beta_{2},\ldots,\beta_{d})^{\top}\in\mathbb{R}^{d}$, }
+\item \textrm{$h=\left(h_{1},h_{2},\ldots,h_{d}\right)^{\top}\in\mathbb{R}^{d}$,}
+
+%\begin{itemize}
+%\item \textrm{$h_{u}(x,x',y,y')=k_{u}(x,x')+k_{u}(y,y')-k_{u}(x,y')-k_{u}(x',y)$}
+%\end{itemize}
+\item \textrm{$\eta=\Eb_{v}(h)=(\eta_{1},\eta_{2},\ldots,\eta_{d})^{\top}\in\mathbb{R}^{d}$. }
+\end{itemize}
+\Blue{Quantities for test:}
+\[
+\eta_{k}=\Eb(\beta^{\top}h)=\beta^{\top}\eta
+\qquad 
+\sigma_{k}^{2}:=\beta^{\top}\mathrm{cov}(h)\beta.
+\]
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\Blue{{\bf Kernel optimization}}
+\vspace{0.2cm}
+
+Empirical test parameters:
+ $$\hat{\eta}_{k}=\beta^{\top}\hat{\eta}, 
+\qquad 
+\hat{\sigma}_{k,\lambda}=\sqrt{\beta^{\top}\left(\hat{Q}+\lambda_m I \right) \beta}$$
+%$\hat{Q}$ is empirical estimate of $\mathrm{cov}(h)$.
+
+\vspace{0.5cm}
+\Blue{Note:}~ $\hat{\eta}_{k},\hat{\sigma}_{k,\lambda}$ computed on training
+data, vs $\check{\eta}_{k},\check{\sigma}_{k}$ on data to be tested
+
+\vspace{0.5cm}
+\Blue{Objective:}
+\begin{align*}
+\hat{\beta}^{*} &=
+\arg\max_{\beta\succeq 0}
+\;
+\hat\eta_{k}\hat\sigma_{k,\lambda}^{-1} \\
+%&=
+%\arg\max_{\beta\succeq0}
+%\;
+%\left(\beta^{\top}\hat{\eta}\right)\left(\beta^{\top}\left(\hat{Q}+\lambda_m I \right)\beta\right)^{-1/2}\\
+&=:
+\Red{\alpha}(\beta;\hat{\eta},\hat{Q})
+\end{align*}
+
+Assume: $\hat{\eta}$ has \Blue{at least one positive entry}
+
+%Then there exists $\quad\beta\succeq0\quad$ s.t. \textrm{$\quad\alpha(\beta;\hat{\eta},\hat{Q})>0$. }
+
+\vspace{0.5cm}
+Thus:$\quad\alpha(\hat{\beta}^{*};\hat{\eta},\hat{Q})>0$
+
+\vspace{0.5cm}
+\Blue{Solve easier quadratic program for $\beta^*$:} \newline %$\quad\hat{\beta}^{*}=\arg\max_{\beta\succeq0}\alpha^{2}(\beta;\hat{\eta},\hat{Q})$. 
+%
+%Quadratic program: 
+\[
+\min\{\beta^{\top}\left(\hat{Q}+\lambda_m I \right)\beta:\beta^{\top}\hat{\eta}=1,\,\beta\succeq0\}
+\]
+\end{minipage}
+
+\vspace{0.5cm}
+\PosterBoxSmall{
+\Mpigreen{{\bf Consistency of kernel selection:}}~
+Assume bounded kernel,  $\sigma_{k}$, bounded away
+from $0$. If $\lambda_m=\Theta(m^{-1/3})$
+then
+\[
+\left|\sup_{k\in\mathcal{K}}\hat{\eta}_{k}\hat{\sigma}_{k,\lambda}^{-1}-\sup_{k\in\mathcal{K}}\eta_{k}\sigma_{k}^{-1}\right|=O_{P}\left(m^{-1/3}\right).
+\]
+}
+\Blue{{\bf Proof idea:}}
+%
+\begin{align*}
+ & \left|\sup_{k\in\mathcal{K}}\hat{\eta}_{k}\hat{\sigma}_{k,\lambda}^{-1}-\sup_{k\in\mathcal{K}}\eta_{k}\sigma_{k}^{-1}\right|
+ \le\sup_{k\in\mathcal{K}}\left|\hat{\eta}_{k}\hat{\sigma}_{k,\lambda}^{-1}-\eta_{k}\sigma_{k,\lambda}^{-1}\right|+\sup_{k\in\mathcal{K}}\left|\eta_{k}\sigma_{k,\lambda}^{-1}-\eta_{k}\sigma_{k}^{-1}\right|\\
+ & \le\frac{\sqrt{d}}{D\sqrt{\lambda_{m}}}\left(C_{1}\sup_{k\in\mathcal{K}}\left|\hat{\eta}_{k}-\eta_{k}\right|+C_{2}\sup_{k\in\mathcal{K}}\left|\hat{\sigma}_{k,\lambda}-\sigma_{k,\lambda}\right|\right)+C_{3}D^{2}\lambda_{m}.
+\end{align*}
+
+
+
+\end{PosterColumn}
+%%%
+%%%
+% ------------------------------------------------------------
+% third  column: 
+% ------------------------------------------------------------
+%
+\begin{PosterColumn} % this creates a column, you have to care yourself
+% that it doesn't get too long for the poster
+
+% ------------------------------------------------------------
+\PosterBox{Experiments }
+% ------------------------------------------------------------
+
+%\Blue{{\bf Large-scale toy example:}}
+
+%\vspace{5mm}
+
+\Blue{{\bf Key to plots:}}
+\vspace{5mm}
+
+\emph{\textbf{opt}} -  kernel from $\mathcal{K}$ that maximizes
+ $\hat{\eta}_{k}/\hat{\sigma}_{k,\lambda}$; \emph{\textbf{max-ratio}}
+- single base kernel $k_{u}$ with largest $\hat{\eta}_{u}/\hat{\sigma}_{u,\lambda}$;
+\emph{\textbf{max-mmd}}
+- single base kernel $k_{u}$ with largest $\hat{\eta}_{u}$;
+ $\mathbf{\ell_{2}}$ - maximizes $\hat{\eta}_{k}$ subject to
+ $\left\Vert \beta\right\Vert _{2}\leq1$; 
+\emph{\textbf{xval}}, kernel from $\left\{ k_{u}\right\} _{u=1}^{d}$ chosen via  five-fold
+cross-validation \citep{SugSuzItoKanetal11}.\newline Asymptotic
+test level was \Red{$\alpha=0.05$}. 
+
+\vspace{5mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Blue{{\bf Feature selection:}}
+\vspace{5mm}
+
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/selection_data}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/selection_errors}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/selection_errors_null}
+\end{minipage}
+
+\vspace{3mm}
+\small
+\textbf{Left:} Feature selection data for 2 dimensions (for higher $d$, remaining dimensions filled with i.i.d. zero mean Gaussian noise). \textbf{Centre: } Feature
+selection results, Type II error vs number of dimensions, average
+over 5000 trials, $m=n=10^{4}$. \textbf{Right: } Type I error.
+\normalsize
+
+\vspace{1.5cm}
+
+
+
+\Blue{{\bf Grid of Gaussians:}}
+\vspace{7mm}
+
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.7\textwidth]{plotNIPSposter/blobs_easy_p}
+
+\includegraphics[width=0.7\textwidth]{plotNIPSposter/blobs_easy_q}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/blobs_errors}
+\end{minipage}
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/blobs_errors_null}
+\end{minipage}
+
+
+\vspace{2mm}
+\small
+\textbf{Left}:
+$3\times3$ Gaussian
+grid, samples from $p$ and $q$. \textbf{Centre:} Results for a $5\times 5$ grid,
+Type II error vs $\varepsilon$,  the eigenvalue ratio for the covariance
+of the Gaussians in $q$; average over 1500 trials, $m=n=10^{4}$.
+\textbf{Right}: Type I error.
+\normalsize
+\vspace{7mm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\vspace{3mm}
+
+
+\Blue{{\bf Amplitude modulated signals:}}
+\vspace{5mm}
+
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/amSignalsIllustration}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/AM_errors}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.25\textwidth}
+\includegraphics[width=0.9\textwidth]{plotNIPSposter/AM_errors_null}
+\end{minipage}
+
+
+\vspace{2mm}
+\small
+\textbf{Left}:
+Amplitude
+modulated signals, four samples from each of $p$ and $q$ prior to
+noise being added. \textbf{Centre}: AM results, Type II error vs added
+noise, average over $5000$ trials, $m=n=10^{4}.$ 
+\textbf{Right}: Type I error.
+\normalsize
+\vspace{7mm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+\vspace{-7mm}
+
+\bibliographystyle{plainnat}
+\tiny
+%\bibliography{/.amd_mnt/steinlach/export/home/kyb/agbs/arthur/bertie/arthur/mpi/bibfile/trunk/bibfile.bib}
+%\bibliography{/home/arthur/arthur/mpi/bibfile/trunk/bibfile.bib}
+\bibliography{shortEntryBib}
+
+
+\end{PosterColumn}
+%%%
+\end{poster}
+\end{document}
+

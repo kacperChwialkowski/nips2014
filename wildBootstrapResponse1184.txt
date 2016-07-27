@@ -1,0 +1,11 @@
+We thank the reviewers for their comments, and for their kind assessment of our work. In particular, we agree with reviewers 1-3 regarding their suggested improvements to the clarity of the presentation, which we will implement in a final version.
+
+We now address the additional questions of reviewer 3:
+
+"What prevents the results of this paper from being extended to U-statistics": there is no intrinsic reason the results would not apply to U-statistics. The main advantage of the V-statistics is a simpler analysis and implementation. We will make a note of this in the final version.
+
+"why could results of [18] not be directly used to prove Theorem 1." The results in [18] apply to statistics having two arguments. Theorem 1 extends these results to the case of m arguments. The main idea is that for these higher degree kernels, the asymptotics are dominated by the 2-argument term h_2, for which the results of Leucht are then applied.
+
+"The proof of Theorem 1 [...] does not seem to go through for somewhat more strongly dependent processes. In particular, the mixing coefficient needs go down at least as the 6th power."
+
+The assumptions on the mixing coefficient follow from Assumption B.1 of Leucht - hence more strongly dependent processes would require a different approach to Leucht and Neumann. It is an interesting question to look into ways to strengthen the resuslts. It is worth noting that \tau mixing is still a weaker assumption than classical mixing assumptions (Section 2).

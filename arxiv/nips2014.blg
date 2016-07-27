@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: nips2014.aux
+The style file: plain.bst
+Database file #1: nips14Bib.bib
+You're missing a field name---line 110 of file nips14Bib.bib
+ :     
+ :     %month    = "",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--empty publisher in besserve_statistical_2013
+Warning--empty publisher in HarBacMou08
+You've used 33 entries,
+            2118 wiz_defined-function locations,
+            697 strings with 8902 characters,
+and the built_in function-call counts, 11909 in all, are:
+= -- 1163
+> -- 565
+< -- 14
++ -- 231
+- -- 190
+* -- 823
+:= -- 1934
+add.period$ -- 103
+call.type$ -- 33
+change.case$ -- 187
+chr.to.int$ -- 0
+cite$ -- 35
+duplicate$ -- 468
+empty$ -- 938
+format.name$ -- 190
+if$ -- 2518
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 36
+newline$ -- 168
+num.names$ -- 66
+pop$ -- 221
+preamble$ -- 1
+purify$ -- 160
+quote$ -- 0
+skip$ -- 332
+stack$ -- 0
+substring$ -- 732
+swap$ -- 119
+text.length$ -- 14
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 122
+warning$ -- 2
+while$ -- 112
+width$ -- 35
+write$ -- 364
+(There was 1 error message)

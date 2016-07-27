@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{besserve_statistical_2013}
+M.~Besserve, N.K. Logothetis, and B.~Schölkopf.
+\newblock Statistical analysis of coupled time series with kernel
+  cross-spectral density operators.
+\newblock In {\em NIPS}, pages 2535--2543. 2013.
+
+\bibitem{chwialkowski2014kernel}
+K.~Chwialkowski and A.~Gretton.
+\newblock A kernel independence test for random processes.
+\newblock In {\em ICML}, 2014.
+
+\end{thebibliography}

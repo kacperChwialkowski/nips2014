@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: nips2014.aux
+The style file: plain.bst
+Database file #1: nips14Bib.bib
+Warning--string name "jmlr" is undefined
+--line 50 of file nips14Bib.bib
+I was expecting a `,' or a `}'---line 205 of file nips14Bib.bib
+ :   
+ :   volume={190},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "]"
+Warning--empty publisher in besserve_statistical_2013
+Warning--empty publisher in dedecker2007weak
+Warning--empty year in dedecker2007weak
+Warning--empty publisher in HarBacMou08
+Warning--empty journal in SriFukLan11
+You've used 31 entries,
+            2118 wiz_defined-function locations,
+            687 strings with 8507 characters,
+and the built_in function-call counts, 11521 in all, are:
+= -- 1130
+> -- 539
+< -- 13
++ -- 219
+- -- 182
+* -- 801
+:= -- 1848
+add.period$ -- 96
+call.type$ -- 31
+change.case$ -- 178
+chr.to.int$ -- 0
+cite$ -- 36
+duplicate$ -- 463
+empty$ -- 903
+format.name$ -- 182
+if$ -- 2445
+int.to.chr$ -- 0
+int.to.str$ -- 31
+missing$ -- 35
+newline$ -- 157
+num.names$ -- 62
+pop$ -- 215
+preamble$ -- 1
+purify$ -- 153
+quote$ -- 0
+skip$ -- 330
+stack$ -- 0
+substring$ -- 733
+swap$ -- 127
+text.length$ -- 13
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 114
+warning$ -- 5
+while$ -- 107
+width$ -- 33
+write$ -- 339
+(There was 1 error message)

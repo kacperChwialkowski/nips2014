@@ -1,0 +1,252 @@
+\section{Introduction}
+\vspace{-2.5mm}
+
+
+Statistical tests based on distribution embeddings into reproducing kernel Hilbert spaces have been applied in many contexts,  including two sample testing \cite{HarBacMou08,gretton2012kernel,SugSuzItoKanetal11}, tests of independence \cite{gretton_kernel_2008,ZhaPetJanSch11,besserve_statistical_2013}, tests of conditional independence  \cite{fukumizu2007kernel,ZhaPetJanSch11}, and tests for higher order (Lancaster) interactions \cite{sejdinovic2013kernel}. %
+% AG: if we are looking to save space in the bibliography we can cut the three references below. However it is important to have the references above, since they are more directly related to the theory-minded paper we're writing.
+%Although relatively new, these tests have already influenced research beyond machine learning and proved to be useful tools in domains such as genomics \cite{Schweikert2013}, steganography \cite{Solanki2008} and econometrics \cite{zaremba2014measures}.       
+For these tests,  consistency is guaranteed if and only if the observations are independent and identically distributed. 
+Much real-world data fails to satisfy the i.i.d. assumption: audio signals, EEG recordings, text documents, financial time series, and samples obtained when running Markov Chain Monte Carlo, all show  significant temporal dependence patterns.  
+
+The asymptotic behaviour of kernel test statistics becomes quite different when temporal dependencies exist within
+the samples.
+In recent work on independence testing using the Hilbert-Schmidt Independence
+Criterion (HSIC) \cite{chwialkowski2014kernel}, the asymptotic distribution of the statistic under the null hypothesis is obtained for a pair of independent time series, which satisfy an absolute regularity or a $\phi$-mixing assumption.
+In this case, the null distribution is shown to be an infinite weighted sum of {\em dependent} $\chi^2$-variables,
+as opposed to the sum of \emph{independent} $\chi^2$-variables obtained in the i.i.d. setting \cite{gretton_kernel_2008}.
+The difference in the asymptotic null distributions has important implications in practice:
+under the i.i.d. assumption, an empirical estimate of the null distribution can be obtained by
+repeatedly permuting the time indices of one of the signals. This breaks
+the temporal dependence within the permuted signal, which causes the test to return an elevated
+number of false positives, when used for testing time series. To address this problem, an alternative estimate of the null distribution
+is proposed in \cite{chwialkowski2014kernel}, where the null distribution is simulated by repeatedly
+{\em shifting} one
+signal relative to the other. This preserves the temporal structure within each signal, while breaking the cross-signal
+dependence.
+
+A serious limitation of the shift procedure in \cite{chwialkowski2014kernel} is that it is specific
+to the problem of independence testing: there is no obvious way to generalise it to  other
+testing contexts. For instance, we might have two time series, with the goal of comparing
+their marginal distributions - this is a generalization of the two-sample setting to which the shift
+approach does not apply.
+
+We note, however, that many kernel tests have a test statistic with a particular structure:  the Maximum Mean Discrepancy (MMD), HSIC, and the Lancaster interaction statistic,
+each have empirical estimates which can be cast as normalized $V$-statistics,
+$\frac{1} {n^{m-1}} \sum_{1\leq i_1,...,i_m \leq n} h(Z_{i_1},...,Z_{i_m})$,
+where $Z_{i_1},...,Z_{i_m}$ are samples from a random process at the time points $\{i_1,\ldots,i_m\}$. We show that
+a method of external randomization known as the {\em wild bootstrap} may be applied  \cite{leucht_dependent_2013,Shao2010} to simulate from the null distribution.
+In brief, the arguments of the above sum are repeatedly multiplied by random, user-defined time series. For a test of level
+$\alpha$, the $1-\alpha$ quantile of the empirical distribution obtained using these perturbed statistics serves as the test threshold. This approach has the important advantage over \cite{chwialkowski2014kernel} that it may be applied to {\em all} kernel-based tests for which $V$-statistics are employed, and not just for independence tests.
+
+The main result of this paper is to show that the wild bootstrap procedure yields consistent tests for time series, i.e., tests based on the wild bootstrap  have a Type I error rate (of wrongly rejecting the null hypothesis) approaching the design parameter $\alpha$, and a Type II error (of wrongly accepting the null) approaching zero, as the number of samples increases. We use this result to construct a two-sample test using MMD, and an independence test using HSIC. The latter procedure is applied both to testing for instantaneous independence, and to testing for independence across multiple time lags, for which the earlier shift procedure of \cite{chwialkowski2014kernel} cannot be applied.
+
+%DS: commented as we have the same point in the next paragraph...Out test against long range dependence is demonstrated to have an improved power in comparison to the related test by \cite{besserve_statistical_2013}.
+
+%% AG: I moved the detailed MCMC discussion to the MCMC section
+
+%Further, we construct a test of time series dependence similar to one proposed by \cite{besserve_statistical_2013} showing improvements in terms of detection errors.            
+
+%Simultaneous testing for dependence of two time series across multiple time lags is also of interest, since it may not be a priori known at what lag the dependence occurs \cite{besserve_statistical_2013}. In this case, the shift procedure of \cite{chwialkowski2014kernel} can be problematic, as certain shifts may increase dependence between the time series, and it cannot be known in advance which shifts these will be. By contrast, the wild bootstrap can be used straightforwardly in this circumstance, and outperforms \cite{besserve_statistical_2013} in experiments.
+
+We begin our presentation in Section \ref{sec:background}, with a review of the $\tau$-mixing assumption required of the time series, as well as of   $V$-statistics (of which MMD and HSIC are instances). We also introduce the form taken by the wild bootstrap. In Section \ref{sec:main}, we establish a general consistency result for the wild bootstrap procedure on $V$-statistics, which we apply to MMD and to HSIC in Section \ref{sec:mmd_hsic}. Finally, in Section \ref{sec:Experiments}, we present a number of empirical comparisons: in the two sample case, we test for differences in audio signals with the same underlying pitch, and present a performance diagnostic for the output of a Gibbs sampler (the MCMC M.D.); in the independence case, we test for independence of two time series sharing a common variance (a characteristic of econometric models), and compare against the test of \cite{besserve_statistical_2013} in the case where dependence may occur at multiple, potentially unknown lags. Our tests outperform both the naive approach which neglects the dependence structure within the samples, and the approach of \cite{besserve_statistical_2013}, when testing across multiple lags. Detailed proofs are found in the appendices of an accompanying technical report \cite{chwialkowski2014wild}, which we reference from the present document as needed.
+
+%\vspace{-2mm}
+\section{Background}\label{sec:background}
+%\vspace{-2mm}
+The main results of the paper are based around two concepts: $\tau$-mixing \cite{dedecker2007weak}, which describes the dependence within the time series, and  $V$-statistics \cite{serfling80}, which constitute our test statistics. In this section, we review these topics, and introduce the concept of wild bootstrapped $V$-statistics, which will be the key ingredient in our test construction.
+%\vspace{-4mm}
+\paragraph{$\tau$-mixing.} The notion of $\tau$-mixing is used to characterise weak dependence. It is a less restrictive alternative to classical mixing coefficients, and is covered in depth in \cite{dedecker2007weak}. Let $\{Z_t,\mathcal{F}_t\}_{t \in \mathbb{N}}$  be a stationary sequence of integrable random variables, defined on a probability space $\Omega$ with a probability measure $P$ and a natural filtration $\mathcal{F}_t$. The process  is called $\tau$-dependent if 
+\begin{align*}
+\tau(r) &= \sup_{l \in \mathbb{N}} \frac 1 l \sup_{ r \leq i_1 \leq ... \leq i_l} \tau( \mathcal F_0,(Z_{i_1},...,Z_{i_l}) )  \overset{r \to \infty}{\longrightarrow} 0,\;\text{where} \\
+\tau(\mathcal{M},X) &=  \ev \left( \sup_{g \in \Lambda} \left| \int g(t) P_{X|\mathcal{M}}(dt) - \int g(t) P_X(dt) \right| \right)
+\end{align*}
+and $\Lambda$ is the set of all one-Lipschitz continuous real-valued functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough, this $X^*$ can be constructed (see Proposition \ref{prop:Coupling} in the Appendix). More information is provided in the Appendix \ref{append:differentMixing}.
+
+%  Note that this mixing definition differs from commonly used notions of mixing, such as $\alpha, \beta$, or $\phi$ mixing, some of which were required in the previous work \cite{chwialkowski2014kernel}. We describe in more detail how these notions of dependence are related in Appendix \ref{append:differentMixing}.
+%  
+%\vspace{-4mm}
+\paragraph{$V$-statistics.} The test statistics considered in this paper are always $V$-statistics. Given the observations $Z=\left\{Z_t\right\}_{t=1}^n$, a $V$-statistic of a symmetric function $h$ taking $m$ arguments is given by 
+\begin{equation}
+\label{def:Vstat}
+V(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} \nolimits h(Z_{i_1},...,Z_{i_m}),
+\end{equation}
+where $N^m$ is a Cartesian power of a set $N= \{1,...,n\}$. For simplicity, we will often drop the second argument and write simply $V(h)$. 
+%DS: commented as it does not appear anywhere in the main text...We will  denote the tuple $(i_1,...,i_m)$ by $i$.
+%i.e. $\sum_{i \in N^m} f(\cdot) \equiv \sum_{(i_1,...,i_m) \in N^m} f()$. 
+
+We will refer to the function $h$ as to the \emph{core} of the $V$-statistic $V(h)$. While such functions are usually called kernels in the literature, in this paper we reserve the term kernel for positive-definite functions taking two arguments. A core $h$ is said to be $j$-degenerate if for each $z_1,\ldots,z_j$ $\ev h(z_1,\ldots , z_j , Z_{j+1}^*,\ldots ,Z_m^*) = 0,$ where $Z_{j+1}^*,\ldots,Z_m^*$ are independent copies of $Z_1$. If $h$ is $j$-degenerate for all $j\leq m-1$, we will say that it is \emph{canonical}. For a one-degenerate core $h$, we define an auxiliary function $h_2$, called the second component of the core, and given by $h_2(z_1,z_2) = \ev h(z_1,z_2, Z_3^*,\ldots, Z_m^*).$ Finally we say that $nV(h)$ is a normalized $V$-statistic, and that a $V$-statistic with a one-degenerate core is a degenerate $V$-statistic.  This degeneracy is common to many kernel statistics when the null hypothesis holds \cite{gretton2012kernel,gretton_kernel_2008,sejdinovic2013kernel}.
+
+Our main results will rely on the fact that $h_2$ governs the asymptotic behaviour of normalized degenerate $V$-statistics. Unfortunately, the limiting distribution of such $V$-statistics is quite complicated - it is an infinite sum of \emph{dependent} $\chi^2$-distributed random variables, with a dependence  determined by the temporal dependence structure within the process $\{Z_t\}$ and by the eigenfunctions of a certain integral operator associated with $h_2$ \cite{i._s._borisov_orthogonal_2009,chwialkowski2014kernel}. Therefore, we propose a bootstrapped version of the $V$-statistics which will allow a consistent approximation of this difficult limiting distribution.  
+
+%\vspace{-4mm}
+\paragraph{Bootstrapped $V$-statistic.} 
+We will study two versions of the bootstrapped $V$-statistics  
+\begin{align}
+ V_{b1}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} \nolimits W_{i_1,n} W_{i_2,n} h(Z_{i_1},...,Z_{i_m}), \label{Vb1}\\ 
+ V_{b2}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m}  \nolimits \tilde W_{i_1,n}  \tilde W_{i_2,n} h(Z_{i_1},...,Z_{i_m}),\label{Vb2}
+\end{align}
+where $\{W_{t,n}\}_{1 \leq t \leq n }$ is an auxiliary wild bootstrap process and $\tilde W_{t,n} = W_{t,n} - \frac 1 n \sum_{j=1}^n W_{j,n}$. This auxiliary process, proposed by \cite{Shao2010,leucht_dependent_2013}, satisfies the following assumption:
+
+\emph{Bootstrap assumption:} $\{W_{t,n}\}_{1 \leq t \leq n }$ is a row-wise strictly stationary triangular array independent of all $Z_t$ such that $\ev W_{t,n}=0$ and $\sup_{n} \ev|W_{t,n}^{2+\sigma}| < \infty$ for some $\sigma > 0$. The autocovariance of the process is given by $\ev W_{s,n} W_{t,n}=\rho(|s-t|/l_n)$ for some function $\rho$, such that $\lim_{u \to 0} \rho(u) = 1$ and $\sum_{r=1}^{n-1} \rho(|r|/l_n)= O(l_n)$. The sequence $\left\{l_n\right\}$ is taken such that $l_n=o(n)$ but $\lim_{n \to \infty} l_n = \infty$. The variables $W_{t,n}$  are $\tau$-weakly dependent with coefficients $\tau(r) \leq C \zeta^{\frac{r} {l_n}}$ for $r=1,...,n$, $\zeta \in (0,1)$ and $C\in\mathbb R$.
+
+As noted in in \cite[Remark 2]{leucht_dependent_2013}, a simple realization of a process that satisfies this assumption is $W_{t,n} = e^{-1/l_n}W_{t-1,n} + \sqrt{1 -e^{-2/l_n}} \epsilon_t$
+where $W_{0,n}$ and $\epsilon_1,\ldots,\epsilon_n$ are independent standard normal random variables. For simplicity, we will drop the index $n$ and write $W_t$ instead of $W_{t,n}$. A process that fulfils the \emph{bootstrap assumption} will be called  \emph{bootstrap process}. Further discussion of the wild bootstrap is provided in the Appendix  \ref{wildintro}.
+% AG: removed paragraph break to save space
+The versions of the bootstrapped $V$-statistics in \eqref{Vb1} and \eqref{Vb2} were previously studied in \cite{leucht_dependent_2013} for the case of canonical cores of degree $m=2$. We extend their results to higher degree cores (common within the kernel testing framework), which are not necessarily one-degenerate. When stating a fact that applies to both $V_{b1}$ and $V_{b2}$, we will simply write $V_b$, and the argument $Z$ will be dropped when there is no ambiguity. 
+%\vspace{-2.5mm}
+\section{Asymptotics of wild bootstrapped $V$-statistics}\label{sec:main}
+%\vspace{-2.5mm}
+In this section, we present main Theorems that describe asymptotic behaviour of $V$-statistics. In the next section, these results will be used to construct kernel-based statistical tests applicable to dependent observations. Tests are constructed so that the  $V$-statistic is degenerate under the null hypothesis and non-degenerate under the alternative. Theorem \ref{th:mainOne} guarantees that the bootstrapped $V$-statistic will converge to the same limiting null distribution as the simple $V$-statistic. Following \cite{leucht_dependent_2013}, we will establish the convergence of the bootstrapped distribution to the desired asymptotic distribution in the Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}), and ensure that this distance approaches zero \emph{in probability} as $n\rightarrow\infty$. This two-part convergence statement is needed due to  the additional randomness introduced by the $W_{j,n}$.
+
+%since distributions of the bootstrapped statistics are random, 
+
+%AG: I modified and shortened the wording.
+
+%This notion can be  expressed  in terms of convergence in Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}. Indeed by \cite[Theorem 11.3.3]{dudley2002real}, since values of $V$-statistics are real numbers, convergence in distribution is equivalent to the convergence in Prokhorov metric. 
+
+\begin{Theorem}
+\label{th:mainOne}
+Assume that the stationary process $\{Z_t\}$ is $\tau$-dependent with $\tau(r) = O(r^{-6-\epsilon})$ for some $\epsilon>0$. If the core $h$ is a Lipschitz continuous, one-degenerate, and bounded function of $m$ arguments and its $h_2$-component is a positive definite kernel, then $\varphi(n \binom m 2 V_b(h,Z),n V(h,Z)) \to 0$ in probability as $n\to\infty$, where $\varphi$ is Prokhorov metric. 
+\end{Theorem}
+%\vspace{-2mm}
+\begin{proof}
+By  Lemma \ref{lem:equivBoot} and Lemma \ref{lem:equivVanila} respectively, $\varphi(n V_b(h),n V_b(h_2))$ and $\varphi(nV(h),n \binom m 2 V(h_2))$ converge to zero. By \cite[Theorem 3.1]{leucht_dependent_2013}, $n V_b(h_2)$ and $n V(h_2,Z)$ have the same limiting distribution, i.e., $\varphi(n V_b(h_2),n V(h_2,Z)) \to 0$ in probability under certain assumptions. Thus, it suffices to check these assumptions hold:
+\textit{Assumption A2.}
+(i) $h_2$ is one-degenerate and symmetric - this follows from Lemma  \ref{lem:Components}; 
+(ii) $h_2$ is a kernel - is one of the assumptions of this Theorem;
+(iii) $\ev h_2(Z_1,Z_1) \leq \infty$ - by Lemma \ref{stm:LipAndBound}, $h_2$ is bounded and therefore has a finite expected value;
+(iv) $h_2$ is Lipschitz continuous - follows from Lemma \ref{stm:LipAndBound}.
+\textit{Assumption B1.} $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$. Since $\tau(r) = O(r^{-6-\epsilon})$ then $\sum_{r=1}^n r^2 \sqrt{\tau(r)} \leq C \sum_{r=1}^n r^{-1 - \epsilon/2} \leq \infty$.
+\textit{Assumption B2.} This assumption about the auxiliary process $\{W_t\}$ is the same as our \textit{Bootstrap assumption}. 
+\end{proof}  
+
+On the other hand, if the $V$-statistic is not degenerate, which is usually true under the alternative, it converges to some non-zero constant. In this setting, Theorem \ref{th:mainTwo} guarantees that the bootstrapped $V$-statistic will converge to zero in probability. This property is necessary in testing, as it implies that the test thresholds computed using the bootstrapped $V$-statistics will also converge to zero, and so will the corresponding Type II error.    The following theorem is due to Lemmas \ref{lem:degb1} and \ref{lem:degb2}.
+\begin{Theorem}
+\label{th:mainTwo}
+Assume that the process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(r) = O(r^{-6-\epsilon})$. If the core $h$ is  a Lipschitz continuous, symmetric and bounded function of $m$ arguments,  then $n V_{b2}(h)$ converges in distribution to some non-zero random variable with finite variance, and $V_{b1}(h)$  converges to zero in probability. 
+\end{Theorem}
+Although both $V_{b2}$ and $V_{b1}$  converge to zero, the rate and the type of convergence are not the same: $n V_{b2}$ converges in law to some random variable while the behaviour of $n V_{b1}$ is unspecified. As a consequence, tests that utilize $V_{b2}$ usually give lower Type II error then the ones that use $V_{b1}$. On the other hand, $V_{b1}$ seems to better approximate $V$-statistic distribution under the null hypothesis. This agrees with our experiments in Section \ref{sec:Experiments} as well as with those in \cite[Section 5]{leucht_dependent_2013}).  
+
+
+\section{Applications to Kernel Tests}\label{sec:mmd_hsic}
+%\vspace{-2.5mm}
+In this section, we describe how the wild bootstrap for $V$-statistics can be used to construct kernel tests for independence and the two-sample problem, which are applicable to weakly dependent observations. We start by reviewing the main concepts underpinning the kernel testing framework.
+
+For every symmetric, positive definite function, i.e., \emph{kernel} $k:\mathcal{X}\times\mathcal{X}\to\mathbb{R}$,
+there is an associated reproducing kernel Hilbert space $\mathcal{H}_{k}$ \cite[p. 19]{BerTho04}.  The kernel embedding of a probability measure
+$P$ on $\mathcal{X}$ is an element $\mu_{k}(P)\in\mathcal{H}_{k}$,
+given by $\mu_{k}(P)=\int k(\cdot,x)\, dP(x)$ \cite{BerTho04,SmoGreSonSch07}.
+If a measurable kernel $k$ is bounded, the mean embedding $\mu_{k}(P)$
+exists for all probability measures on $\mathcal{X}$, and for many interesting
+bounded kernels $k$, including the Gaussian, Laplacian and inverse
+multi-quadratics, the kernel embedding $P\mapsto\mu_{k}(P)$ is injective.
+Such kernels are said to be \emph{characteristic} \cite{SriGreFukLanetal10}.
+The RKHS-distance $\left\Vert \mu_k(P_x)-\mu_k(P_y)\right\Vert_{{\mathcal H}_k}^2$ between embeddings of two probability measures $P_x$ and $P_y$
+is termed the Maximum Mean Discrepancy (MMD), and its empirical version serves as a popular statistic for non-parametric two-sample testing \cite{gretton2012kernel}.
+Similarly, given a sample of paired observations $\{(X_i,Y_i)\}_{i=1}^n\sim P_{xy}$, and kernels $k$ and $l$ respectively on $X$ and $Y$ domains, the RKHS-distance 
+$\left\Vert \mu_\kappa(P_{xy})-\mu_\kappa(P_x P_y)\right\Vert_{{\mathcal H}_{\kappa}}^2$ between embeddings of the joint distribution and of the product of the marginals, measures dependence between $X$ and $Y$. Here, $\kappa((x,y),(x',y'))=k(x,x')l(y,y')$ is the kernel on the product space of $X$ and $Y$ domains.
+This quantity is called Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}. When characteristic RKHSs are used, the HSIC is zero iff $X \indep Y$: this follows from \cite{Asimplercondition}.
+The  empirical statistic is written $\widehat{\text{HSIC}}_{\kappa} = \frac{1}{n^2}\text{Tr}(KHLH)$ for kernel matrices $K$ and $L$ and the centering matrix $H=I-\frac{1}{n}\mathbf{1}\mathbf{1}^\top$.
+
+
+%\vspace{-2mm}
+\subsection{Wild Bootstrap For MMD}
+%\vspace{-2mm}
+Denote the observations by $\{X_i\}_{i=1}^{n_x}\sim P_x$, and $\{Y_j\}_{j=1}^{n_y}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
+the alternative $\mathbf H_1: P_x\neq P_y$. In the case where samples have equal sizes, i.e., $n_x=n_y$, application of the wild bootstrap to MMD-based tests on dependent samples is straightforward: the empirical MMD can be written as a $V$-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by $h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2)$. It is clear that whenever $k$ is Lipschitz continuous and bounded, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product  $\left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}$. Under the null hypothesis, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, we can use the bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
+
+When $n_x\neq n_y$, however, it is no longer possible to write the empirical MMD
+%\begin{align*}
+%\widehat{\text{MMD}}_k=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}k(y_i,y_j)-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}k(x_i,y_j) 
+%\end{align*}
+as a one-sample $V$-statistic. We will therefore require the following bootstrapped version of MMD
+\begin{align}
+\widehat{\text{MMD}}_{k,b}&=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}k(y_i,y_j)\notag\\
+{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}k(x_i,y_j),\label{eq:mmdkb}
+\end{align}
+where $\tilde W_t^{(x)}=W_t^{(x)}-\frac{1}{n_x}\sum_{i=1}^{n_x}W_i^{(x)}$, $\tilde W_t^{(y)}=W_t^{(y)}-\frac{1}{n_y}\sum_{j=1}^{n_y}W_j^{(y)}$;  $\{W_t^{(x)}\}$ and $\{W_t^{(y)}\}$ are two auxiliary wild bootstrap processes that are independent of $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ and also independent of each other, both satisfying the bootstrap assumption in Section \ref{sec:background}.  
+The following Proposition shows that the bootstrapped statistic has the same asymptotic null distribution as the empirical MMD. The proof follows that of \cite[Theorem 3.1]{leucht_dependent_2013}, and is given in the Appendix.
+
+\begin{proposition}\label{prop:mmd}
+ Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
+ both be $\tau$-dependent with coefficients $\tau(r) =  O(r^{-6-\epsilon})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\varphi\left(\rho_x \rho_y n\widehat{\text{MMD}}_k, \rho_x \rho_y n\widehat{\text{MMD}}_{k,b}\right)\to 0$ in probability as $n\to\infty$, where $\varphi$ is the Prokhorov metric and $\widehat{\text{MMD}}_k$ is the MMD between empirical measures.
+\end{proposition}
+
+
+
+%\vspace{-2mm}
+\subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
+%\vspace{-2mm}
+%Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}, which can be interpreted as the distance between embeddings  of the joint distribution and the product of the marginals in a reproducing kernel Hilbert space (RKHS) \cite[Section 7]{gretton2012kernel}.  
+
+Using HSIC in the context of random processes is not new in the machine learning literature. For a 1-approximating functional of an absolutely regular process \cite{borovkova2001limit}, convergence in probability of the empirical HSIC to its population value was shown in \cite{smola_kernel_2008}. No asymptotic distributions were obtained, however, nor was a statistical test constructed.  The asymptotics of a normalized $V$-statistic were obtained in \cite{chwialkowski2014kernel}  for absolutely regular and $\phi$-mixing processes \cite{doukhan1994mixing}. Due to the intractability of the null distribution for the test statistic, the authors propose a procedure to approximate its null distribution using circular shifts of the observations leading to tests of instantaneous independence, i.e., of $X_t \indep Y_t$, $\forall t$. This was shown to be consistent under the null (i.e., leading to the correct Type I error), however consistency of the shift procedure under the alternative is a challenging open question (see \cite[Section A.2]{chwialkowski2014kernel} for further discussion).
+ In contrast, as shown below in Propositions \ref{prop:null} and \ref{prop:alternative} (which are direct consequences of the Theorems \ref{th:mainOne} and \ref{th:mainTwo}), the wild bootstrap guarantees test consistency under both hypotheses: null and alternative, which is a major advantage. 
+In addition,  the wild bootstrap can be used in constructing a test for the harder problem of determining independence across multiple lags simultaneously, similar to the one in \cite{besserve_statistical_2013}.
+
+Following symmetrisation, it is shown in \cite{gretton_kernel_2008,chwialkowski2014kernel} that the empirical HSIC can be written as a degree four $V$-statistic with core given by
+\begin{align*}
+h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)}) +  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})],  
+\end{align*}
+where we denote by $S_n$ the group of permutations over $n$ elements. Thus, we can directly apply the theory developed for higher-order $V$-statistics in Section \ref{sec:main}. 
+We consider two types of tests: instantaneous independence and independence at multiple time lags.
+
+%\vspace{-4mm}
+\paragraph{Test of instantaneous independence}
+%It was shown in \cite{gretton_measuring_2005,gretton_kernel_2008} that for IID random variables $V(h)$ is an estimator of distance between embeddings $ \parallel \mu_{XY} - mu_X \prod mu_y \parallel$. Using \ref{th:mainOne} we will show $V_b(Z)$ is a good estimator in case observations are temporally dependent. The main difficulty however lays in constructing   
+Here, the null hypothesis  $\mathbf{H_0}$ is that  $X_t$ and $Y_t$ are independent at all times $t$,  and the alternative hypothesis $\mathbf{H_1}$ is that they are dependent. 
+
+\begin{proposition}
+\label{prop:null}
+Under the null hypothesis, if the stationary process $Z_t=\left(X_t,Y_t\right)$ is $\tau$-dependent with a coefficient $\tau(r) = O\left(r^{-6-\epsilon}\right)$ for some $\epsilon>0$, then $\varphi(6 n V_b(h),n V(h))\to 0$ in probability, where $\varphi$ is the Prokhorov metric. 
+\end{proposition}
+\begin{proof}
+Since $k$ and $l$ are bounded and Lipschitz continuous, the core $h$ is bounded  and Lipschitz continuous. One-degeneracy under the null hypothesis was stated in \cite[Theorem 2]{gretton_kernel_2008}, and that $h_2$ is a kernel is shown in \cite[section A.2, following eq. (11)]{gretton_kernel_2008}. The result follows from Theorem \ref{th:mainOne}.
+\end{proof}
+
+The following proposition holds by the Theorem \ref{th:mainTwo}, since the core $h$ is  Lipschitz continuous, symmetric and bounded.
+\begin{proposition}
+\label{prop:alternative}
+If the stationary process $Z_t$ is $\tau$-dependent with a coefficient $\tau(r) = O\left(r^{-6-\epsilon}\right)$ for some $\epsilon>0$, then under the alternative hypothesis $n V_{b2}(h)$ converges in distribution to some random variable with a finite variance and $ V_{b1}$ converges to zero in probability. 
+\end{proposition}
+
+
+\begin{table}\caption{Rejection rates for two-sample experiments. {\bf MCMC}: sample size=500; a Gaussian kernel with bandwidth
+$\sigma=1.7$ is used; every second Gibbs sample is kept (i.e., after a pass
+through both dimensions). {\bf Audio}: sample sizes are $(n_x,n_y)=\{(300,200),(600,400),(900,600)\}$; a Gaussian kernel with bandwidth
+$\sigma=14$ is used. {\bf Both}: wild bootstrap
+uses blocksize of $l_n=20$; averaged over at least 200 trials. The Type II error for all tests was zero}
+\label{tab:gibbs_mmd}
+\centering{}%
+\begin{tabular}{|c|c|c|c|c|c|}
+\cline{2-6} 
+\multicolumn{1}{c|}{} & {\footnotesize experiment $\backslash$ method} & {\footnotesize permutation} & {\footnotesize $\widehat{\text{MMD}}_{k,b}$} & {\footnotesize $V_{b1}$} & {\footnotesize $V_{b2}$}\tabularnewline
+\hline 
+\textbf{\scriptsize MCMC} & {\footnotesize i.i.d. vs i.i.d. ($\mathbf{H}_{0}$)} & {\small .040} & {\small .025} & {\small .012}\textbf{\small{} } & {\small .070}\tabularnewline
+\cline{2-6} 
+ & {\footnotesize i.i.d. vs Gibbs ($\mathbf{H}_{0}$)} & {\small .528 } & {\small .100} & {\small .052} & {\small .105}\tabularnewline
+\cline{2-6} 
+ & {\footnotesize Gibbs vs Gibbs ($\mathbf{H}_{0}$)} & {\small .680 } & {\small .110} & {\small .060} & {\small .100}\tabularnewline
+\hline 
+\textbf{\scriptsize Audio} & {\footnotesize $\mathbf{H}_{0}$} & {\small \{.970,.965,.995\}} & {\small \{.145,.120,.114\}} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+\cline{2-4} 
+ & {\footnotesize $\mathbf{H}_{1}$} & {\small \{1,1,1\}} & {\small \{.600,.898,.995\}} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+\cline{1-4} 
+\end{tabular}
+\end{table}
+
+
+
+%\vspace{-4mm}
+\paragraph{Lag-HSIC}
+Propositions \ref{prop:null} and \ref{prop:alternative} also allow us to construct a test of time series independence that is similar to one designed by  \cite{besserve_statistical_2013}. Here, we will be testing against a broader null hypothesis:  $X_t$ and $Y_{t'}$ are independent for $|t-t'|<M$ for an arbitrary large but fixed $M$. In the Appendix, we show how to construct a test when $M\to\infty$, although this requires an additional assumption about the uniform convergence of cumulative distribution functions.
+
+Since the time series $Z_t=(X_t,Y_t)$ is stationary, it suffices to check whether there exists a dependency between $X_t$ and $Y_{t+m}$ for $-M \leq m \leq M$. Since each lag corresponds to an individual hypothesis, we will require a Bonferroni correction to attain a desired test level $\alpha$. We therefore define $q = 1-\frac{\alpha}{2M+1}$. The shifted time series will be denoted $Z_t^m =(X_t,Y_{t+m})$. Let $S_{m,n}=n V(h,Z^m)$ denote the value of the normalized HSIC statistic calculated on the shifted process $Z_t^m$. Let $F_{b,n}$ denote the empirical cumulative distribution function obtained by the bootstrap procedure using $n V_{b}(h,Z)$. The test will then reject the null hypothesis if the event $\mathcal A_n = \left\{ \max_{-M \leq m \leq M} S_{m,n} > F^{-1}_{b,n}(q) \right\}$ occurs. By a simple application of the union bound, it is clear that the asymptotic probability of the Type I error will be $\lim_{n\to\infty}P_{\,\mathbf{H_0}}\left(\mathcal A_n\right)\leq\alpha$. On the other hand, if the alternative holds, there exists some $m$ with $|m|\leq M$ for which $V(h,Z^m)=n^{-1} S_{m,n}$ converges to a non-zero constant. In this case  
+\begin{align}
+\label{eg:aletrnative1}
+&P_{\,\mathbf{H_1}}(\mathcal A_n)  \geq  P_{\,\mathbf{H_1}}( S_{m,n} > F^{-1}_{b,n}(q)) = P_{\,\mathbf{H_1}}( n^{-1} S_{m,n} > n^{-1} F^{-1}_{b,n}(q) ) \to 1
+\end{align}
+as long as $n^{-1} F^{-1}_{b,n}(q)\to 0$, which follows from the convergence of $V_{b}$ to zero in probability shown in Proposition \ref{prop:alternative}. Therefore, the Type II error of the multiple lag test is guaranteed to converge to zero as the sample size increases.
+%Since  $n^{-1} t$ converges to zero.\\
+%These observation result in the following test. We calculate an approximation of the cumulative distribution  . Under the null hypothesis, the Type I error is controlled by the bound from the equation \eqref{eg:null1}. If the alternative holds,  the control of the Type II error follows from the equation \ref{eg:aletrnative1}.\\
+Our experiments in the next Section demonstrate that while this procedure is defined over a finite range of lags, it results in tests  more powerful than the procedure for an infinite number of lags proposed in \cite{besserve_statistical_2013}. 
+We note that a procedure that works for an infinite number of lags, although possible to construct, does not add much practical value under the present assumptions. Indeed,  since the $\tau$-mixing assumption applies to the joint sequence $Z_t=(X_t,Y_t)$, dependence between $X_t$ and $Y_{t+m}$ is bound to disappear at a rate of $o(m^{-6})$, i.e., the variables both within and across the two series are assumed to become gradually independent at large lags.     

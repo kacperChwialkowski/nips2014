@@ -1,0 +1,1072 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips14submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsfonts}
+\usepackage{amssymb,amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{Theorem}{Theorem}
+\newtheorem{example}{Example}
+\newtheorem{statement}{Statement}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\usepackage{mathtools}
+
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+ \newcommand{\ev}{\mathcal{E}}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\title{Wild and Degenerate - Bootstrap For Kernel Methods}
+
+
+\author{
+David S.~Hippocampus\thanks{ Use footnote for providing further information
+about author (webpage, alternative address)---\emph{not} for acknowledging
+funding agencies.} \\
+Department of Computer Science\\
+Cranberry-Lemon University\\
+Pittsburgh, PA 15213 \\
+\texttt{hippo@cs.cranberry-lemon.edu} \\
+\And
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email} \\
+\AND
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email} \\
+\And
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email} \\
+\And
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email} \\
+(if needed)\\
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+%\nipsfinalcopy % Uncomment for camera-ready version
+\newcommand{\Hk}{\ensuremath{\mathcal{H}_k}}%
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+%Wild Bootstrap For Kernel Methods is awesome.
+
+A procedure is proposed for performing nonparametric tests
+based on kernel distribution embeddings, in the case where the variables
+being tested are time series. The approach makes use of a wild
+bootstrap procedure to obtain a test threshold, yielding
+a test with the correct Type I error, and a Type II error approaching 
+zero, as the number of samples increases.  The wild bootstrap 
+ applies to all kernel tests based on U-statistics, which
+are degenerate under the null hypothesis, and non-degenerate elsewhere 
+(the present work treats both two-sample and independence testing).
+Further, it is possible to test dependence between time series which might
+occur  at any time lag, rather than at a given fixed lag.
+In experiments, the wild bootstrap gives strong performance
+on synthetic examples, pitch perception data, 
+and in  performance benchmarking for the Gibbs sampler.
+\end{abstract}
+
+
+%I assume that after reading a section in the introduction a reader will have basic understanding of what a wild bootstrap is and why is it useful. He will be also informed about the following contributions
+%\begin{itemize}
+%\item Wild Bootstrap For Higher Order $V$-statistics - application to HSIC and three variables interaction
+%\item Test for 'total' independence of two time series as KCSD and experimental results
+%\item (?) Outline of how two sample can be used to test  MCMC convergence and experimental premise that it is feasible.    
+%\end{itemize}  
+
+
+\section{Introduction}
+Statistical tests based on embeddings of original samples into Reproducing kernel Hilbert space are well established and applied in a wide variety of machine learning tasks including two sample tests \cite{gretton2012kernel}, tests of independence \cite{gretton_measuring_2005}, conditional independence  \cite{fukumizu2007kernel}, and higher order interaction \cite{sejdinovic2013kernel}. Although relatively new, these tests have already influenced research beyond machine learning and proved to be useful tools in domains such as genomics \cite{Schweikert2013}, steganography \cite{Solanki2008} and econometrics \cite{zaremba2014measures}.       
+However, for most of these tests, the consistency is guaranteed if and only if the observations are independent and identically distributed. Indeed, it was shown that when the independence assumption is violated and the observations arise from an autoregressive process, kernel-based tests yield faulty results \cite{chwialkowski2014kernel}. On the other hand, the assumption of independence does not hold in many real-world datasets, including those arising in neuroscience and finance. The i.i.d. restriction also limits the use of kernel tests in convergence diagnostics for MCMC algorithms. 
+
+Given two random processes we propose a procedure that takes into account temporal dependence within signal and adjusts kernel-based test accurately. We build upon observation that a fair number of kernel-based tests e.g. HSIC, MMD, Lancaster interaction can be written as normalized $V$-statistics i.e. 
+\[
+\frac{1} {n^m-1} \sum_{1\leq i_1,...,i_m \leq n} f(Z_{i_1},...,Z_{i_m}).
+\]
+Inspired by \cite{leucht_dependent_2013},\cite{BerTho04} we propose a method of external randomization, called wild bootstrap.                     
+
+Main result of this paper, which shows wild bootstrap method consistency, allows on the spot adjustment of exisitng kernel-based test for random processes. As an illustration we show how to construct two sample MMD test for random processes. Our experiments suggest that such test could be used e.g. to diagnose Markov Chain convergence. Further we construct a test of time series dependence similar to one proposed by \cite{besserve_statistical_2013} showing improvements in terms of detection errors.            
+
+\section{Background}\label{sec:background}
+
+Three elements are required to formulate the main results of the paper: notions of $\tau$-mixing \cite{dedecker2007weak}, $V$-statistics \cite{serfling80}, and bootstraped $V$-statistics. In this section, we review these topics.
+
+\paragraph{$\tau$-mixing.} The notion of $\tau$-mixing is used to characterise weak dependence. It is a less restrictive alternative to classical mixing coefficients, and is covered in depth in \cite{dedecker2007weak}. Let $\{Z_t,\mathcal{F}_t\}_{t \in \mathbb{N}}$  be a stationary sequence of random variables defined on a probability space $\Omega$ with a probability measure $P$ and a natural filtration $\mathcal{F}_t$. The process  is called $\tau$-dependent if 
+\begin{align*}
+\tau(r) &= \sup_{l \in \mathbb{N}} \frac 1 l \sup_{ r \leq i_1 \leq ... \leq i_l} \tau( \mathcal F_0,(Z_{i_1},...,Z_{i_l}) )  \overset{r \to \infty}{=} 0 \text{ , where} \\
+\tau(\mathcal{M},X) &=  \ev \left( \sup_{g \in \Lambda} \left| \int g(t) P_{X|\mathcal{M}}(dt) - \int g(t) P_X(dt) \right| \right)
+\end{align*}
+and $\Lambda$ is the set of all one-Lipschitz real-valued continuous functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough such $X^*$ can be constructed (see Proposition \ref{prop:Coupling} in the Appendix).  
+
+\paragraph{V-statistics.} Tests statistics considered in this paper are always $V$ statistics with so-called degenerate cores. The aim of this paragraph is to  establish  necessary notation. Given the observations $Z=\left\{Z_t\right\}_{t=1}^n$, a $V$-statistic of a symmetric function $h$ taking $m$ arguments is given by 
+\begin{equation}
+\label{def:Vstat}
+V(h,Z) = \frac{1}{n^m} \sum_{(i_1,...,i_m) \in N^m} h(Z_{i_1},...,Z_{i_m}),
+\end{equation}
+where $N^m$ is a Cartesian power of a set $N= \{1,...,n\}$. For simplicity, we will often drop the second argument and write simply $V(h)$. We will also denote the tuple $(i_1,...,i_m)$ by $i$. %i.e. $\sum_{i \in N^m} f(\cdot) \equiv \sum_{(i_1,...,i_m) \in N^m} f()$. 
+
+We will refer to the function $h$ as to the \emph{core} of the $V$-statistic $V(h)$. While such functions are usually called kernels in the literature, we will reserve the term kernel for positive-definite functions taking two arguments. A core $h$ is said to be $j$-degenerate if for each $z_1,\cdots,z_j$ 
+\begin{equation}
+\ev h(z_1,\cdots , z_j , Z_{j+1}^*,\cdots ,Z_m^*) = 0,
+\end{equation}
+where $Z_m^*$ are independent copies of $Z_0$. If $h$ is $j$-degenerate for all $j\leq m-1$, we will say that it is \emph{canonical}. For a one-degenerate core $h$, we define an auxiliary function $h_2$, called the second component of the core and given by 
+\begin{equation}
+h_2(z_1,z_2) = \ev h(z_1,z_2, Z_3^*,\cdots, Z_{j+1}^*,\cdots ,Z_m^*).
+\end{equation}
+Finally we say that $nV(h)$ is a normalized $V$-statistics and that a degenerate $V$-statistics is a $V$-statistics with a one-degenerate core. Our main results will rely on the fact that $h_2$ governs the asymptotic behaviour of normalized degenerate $V$-statistics. Unfortunately, limiting distribution of such $V$-statistics is quite convoluted - it is infinite sum of $\chi^2$ \emph{dependent} random variables, with a dependence determined by a temporal dependence structure within the process $Z$ and eigenfunctions of $h_2$. Therefore we propose a bootstraped versions of $V$ statistics which allows to mimic this difficult limiting distribution.  
+
+
+\paragraph{Bootstrapped V-statistic.} 
+We will study the following two versions of the bootstrapped $V$-statistics  
+\begin{align}
+ V_{b1}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} W_{i_1,n} W_{i_2,n} h(Z_{i_1},...,Z_{i_m}), \label{Vb1}\\ 
+ V_{b2}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} \tilde W_{i_1,n}  \tilde W_{i_2,n} h(Z_{i_1},...,Z_{i_m}),\label{Vb2}
+\end{align}
+Where $\{W_{t,n}\}_{1 \leq t \leq n }$ is an auxiliary wild bootstrap process and $\tilde W_{t,n} = W_{t,n} - \frac 1 n \sum_{j=1}^n W_{j,n}$. This process, proposed by \cite{Shao2010,leucht_dependent_2013}, satisfies the following assumption.\\
+\textit{Bootstrap assumption:} $\{W_{t,n}\}_{1 \leq t \leq n }$ is a row-wise strictly stationary triangular array independent of all $Z_t$ such that $\ev W_{t,n}=0$, $\sup_{n} \ev|W_{t,n}^{2+\sigma}| < \infty$ for some $\sigma > 0$. Further, the auto-covariance $\ev W_{s,n} W_{t,n}=\rho(|s-t|/l_n)$ for some function $\rho$, such that $\lim_{u \to 0} \rho(u) = 1$ and $\sum_{r=1}^{n-1} \rho(|r|/l_n)= O(l_n)$. Sequence $\left\{l_n\right\}$ is taken such that and $l_n=o(n)$ but $\lim_{n \to \infty} l_n = \infty$. Furthermore, the variables $W_{t,n}$  are $\tau$-weakly dependent with coefficients $\tau(r) \leq K \zeta^{\frac{r} {l_n}}$ for $r=1,...,n$ and $\zeta \in (0,1)$. \\
+A simple realization of such process is given by 
+\begin{align}
+W_{t,n} = e^{-1/l_n}W_{t-1,n} + \sqrt{1 -e^{-2/l_n}} \epsilon_t \label{OU-wild}
+\end{align}
+where $W_{0,n}$ and $\epsilon_t$ are i.i.d. standard normal random variables. 
+
+For simplicity, we will drop the index $n$ and write $W_t$ instead of $W_{t,n}$. Also, when stating a fact that applies to both $V_{b1}$ and $V_{b2}$ we will simply write $V_b$, and as for vanilla $V$ statistics, we will occasionally drop argument $Z$. Note that such versions of the bootstrapped $V$-statistics were previously studied in \cite{leucht_dependent_2013} for the case of cores of degree two. We extend their results to higher degree cores, not eccentrically 1-degenerate.\\
+
+\section{Main results}\label{sec:main}
+In this section, we introduce main Theorems that describe asymptotic behaviour of vanilla and bootstraped $V$-statistics. In further sections, those results are used to construct kernel-based statistical tests applicable to dependent observations. All of those test are constructed in such a way that under a null hypothesis the considered $V$-statistics is degenerate. Theorem \ref{th:mainOne} guarantees that in such case the bootstraped $V$ statistics will converge to limiting  distribution of the vanilla $V$-statistic. This property can be easily expressed  in terms of convergence in Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}. Indeed by \cite[Theorem 11.3.3]{dudley2002real}, since values of $V$-statistics are real numbers, convergence in law to the same probability law is equivalent to convergence in Prokhorov metric. 
+
+\begin{Theorem}
+\label{th:mainOne}
+Assume that the stationary process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(i) = O(i^{-6-\epsilon})$ for some $\epsilon>0$. If the core $h$ is Lipschitz continuous, one-degenerate, and bounded function of $m$ arguments and its $h_2$-component is a positive definite kernel, then $\lim_{n \to \infty} \varphi(n \binom m 2 V_b(h,Z),n V(h,Z)) = 0$, where $\varphi$ is Prokhorov metric. 
+\end{Theorem}
+
+\begin{proof}
+By Lemma \ref{lem:equivVanila} and Lemma \ref{lem:equivBoot} respectively, $n V_b(h)- \binom m 2 n V_b(h_2)$ and $nV(h)-n V(h_2)$ converge to zero in probability. By \cite[Theorem 3.1]{leucht_dependent_2013} $n V_b(h_2)$ and $n V(h_2,Z)$ have the same limiting distribution ($\varphi(n V_b(h_2),n V(h_2,Z)) \to 0$) under certain assumption. Thus, it suffices to check these assumptions hold:
+
+\textit{Assumption A2.}
+\begin{enumerate}[label=\roman*]
+\item $h_2$ is one-degenerate and symmetric - this follows from the Lemmas  \ref{stm:coreDegeneracy} and \ref{lem:symetric}. 
+\item $h_2$ is a kernel - this follows from the assumptions of this Theorem.
+\item $\ev h_2(Z_0,Z_0) \leq \infty$ - by Lemma \ref{stm:LipAndBound}, $h_2$ is bounded and therefore has a finite expected value.
+\item  $h_2$ is Lipschitz continuous - follows from Lemma \ref{stm:LipAndBound}.
+\end{enumerate}
+
+\textit{Assumption B1.} $\sum_{i=1}^n i^2 \sqrt{\tau(i)} < \infty$. Since $\tau(i) = i^{-6-\epsilon}$ then $\sum_{i=1}^n i^2 \sqrt{\tau(i)} = \sum_{i=1}^n i^{-1 - \epsilon/2} \leq \infty$. 
+
+\textit{Assumption B2.} This assumption, about the wild bootstrap process $\{W_t\}$, is the same as assumption \textit{Bootstrap assumption} from the paragraph 'Bootstrap process'. Note that the process $W_t$ in \eqref{OU-wild} was proposed and proved to satisfy this assumption in \cite[Remark 2]{leucht_dependent_2013}.
+\end{proof}  
+
+On the other hand if $V$-statistic is not degenerate, which is usually a case under the alternative hypothesis, it converges to some non-zero constant. In such a setting Theorem \ref{th:mainTwo} guaranties that bootstrapped $V$-statistics will converge to zero. This most pleasant property allows type II error to converge to zero.    
+\begin{Theorem}
+\label{th:mainTwo}
+Assume that the process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(i) = O(i^{-6-\epsilon})$. If the core $h$ is  Lipschitz continuous, symmetric and bounded function of $m$ arguments  then $n V_{b2}(h)$ converges in distribution to some non zero random variable with finite variance  and $V_{b1}(h)$  converges to zero in probability. 
+\end{Theorem}
+\begin{proof}
+ The proof follows from Lemmas \ref{lem:degb1} and \ref{lem:degb2}.
+\end{proof}
+although both $V_{b2}$ and $V_{b1}$  converge to zero, the rate and type of conveyance is not the same. Indeed, $n V_{b2}$ converges in law to some random variable while the behaviour of $n V_{b1}$ is unspecified. As a consequence, tests that utilize $V_{b2}$ usually give lower type II error then the ones that use $V_{b1}$. On the other hand, $V_{b1}$ seems to approximate $V$-statistic distribution under the null hypothesis better (Section \ref{sec:Experiments} ,\cite[Section 4.3]{leucht_dependent_2013}).  
+
+\section{Applications to Kernel Tests}
+In this Section, we describe how the developed theory of wild bootstrap for degenerate V-statistics can be used to construct kernel tests for the two-sample problem and for independence that are applicable to weakly dependent observations. We start by reviewing the main concepts underpinning the kernel testing framework.
+
+For every symmetric, positive definite function, i.e., \emph{kernel}) $k:\mathcal{X}\times\mathcal{X}\to\mathbb{R}$,
+there is an associated reproducing kernel Hilbert space $\mathcal{H}_{k}$ \cite[p. 19]{BerTho04}.  Kernel embedding of a probability measure
+$P$ on $\mathcal{X}$ is an element $\mu_{P}\in\mathcal{H}_{k}$,
+given by $\mu_{P}=\int k(\cdot,x)\, dP(x)$ \cite{BerTho04,SmoGreSonSch07}.
+If a measurable kernel $k$ is bounded, the mean embedding $\mu_{k}(P)$
+exists for all probability measures on $\mathcal{X}$ and for many interesting
+bounded kernels $k$, including the Gaussian, Laplacian and inverse
+multi-quadratics, the kernel embedding $P\mapsto\mu_{P}$ is injective.
+Such kernels are said to be \emph{characteristic} \cite{SriGreFukLanetal10}.
+RKHS-distance $\left\Vert \mu_k(P_x)-\mu_k(P_y)\right\Vert_{{\mathcal H}_k}^2$ between embeddings of two probability measures $P_x$ and $P_y$
+is termed Maximum Mean Discrepancy (MMD), and its empirical version serves as a popular statistic for non-parametric two-sample testing \cite{gretton_kernel_2012}.
+Similarly, given a sample of paired observations $\{(X_i,Y_i)\}_{i=1}^n\sim P_{xy}$, and kernels $k$ and $l$ respectively on $X$ and $Y$ domains, RKHS-distance 
+$\left\Vert \mu_\kappa(P_{xy})-\mu_\kappa(P_x P_y)\right\Vert_{{\mathcal H}_{\kappa}}^2$ between embeddings of the joint distribution and of the product of the marginals measures dependence between $X$ and $Y$. Here, $\kappa((x,y),(x',y'))=k(x,x')l(y,y')$ is the kernel on the product space of $X$ and $Y$ domains.
+This quantity is called Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}. When adequate RKHSs are used, the HSIC is zero iff the variables are independent \cite{SriGreFukLanetal10}. 
+Its empirical version, which collapses to an easily interpretable form
+\begin{align}
+ \widehat{\text{HSIC}}_k = \frac{1}{n^2}\text{Tr}(KHLH),\label{eq:empHSIC}
+\end{align}
+for kernel matrices $K$ and $L$ and the centering matrix $H=I-\frac{1}{n}\mathbf{1}\mathbf{1}^\top$, is a popular statistic for nonparametric tests of independence \cite{gretton_kernel_2008}.
+
+
+\subsection{Wild Bootstrap For MMD}
+Denote the observations by $\{X_i\}_{i=1}^{n_x}\sim P_x$, and $\{Y_j\}_{j=1}^{n_y}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
+the alternative $\mathbf H_1: P_x\neq P_y$. In the case where samples have equal sizes, i.e., $n_x=n_y$, application of the wild bootstrap from \cite{leucht_dependent_2013} to MMD-based tests on dependent samples is straightforward. Namely, it is readily seen that the empirical MMD can be written as a V-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by:
+\[
+h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2). 
+\]
+It is clear that whenever $k$ is Lipschitz continuous and bounded, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product: 
+\begin{align*}
+h(z_1,z_2) = \left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}. 
+\end{align*}
+Under the null hypothesis $P_x=P_y$, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, one can use bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
+
+However, when $n_x\neq n_y$, it is no longer possible to write the empirical MMD
+\begin{align*}
+\widehat{\text{MMD}}_k=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}k(y_i,y_j)-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}k(x_i,y_j) 
+\end{align*}
+as a one-sample V-statistic. We will therefore require the following bootstrapped version of MMD
+\begin{align*}
+\widehat{\text{MMD}}_{k,b}&=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}k(y_i,y_j)\\
+{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}k(x_i,y_j), 
+\end{align*}
+where $\tilde W_t^{(x)}=W_t^{(x)}-\frac{1}{n_x}\sum_{i=1}^{n_x}W_i^{(x)}$, $\tilde W_t^{(y)}=W_t^{(y)}-\frac{1}{n_y}\sum_{j=1}^{n_y}W_j^{(y)}$;  $\{W_t^{(x)}\}$ and $\{W_t^{(y)}\}$ are two auxiliary wild bootstrap processes that are independent of $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ and also independent of each other, both satisfying the bootstrap assumption in Section \ref{sec:background}.  
+The following Proposition shows that the bootstrapped statistic has the same null distribution as the empirical MMD.
+
+\begin{proposition}\label{prop:mmd}
+ Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
+ both be $\tau$-dependent with coefficients $\tau(i) =  O(i^{-6-\epsilon})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\rho_x \rho_y n\widehat{\text{MMD}}_k$ and $\rho_x \rho_y n\widehat{\text{MMD}}_{k,b}$ converge to the same distribution as $n\to\infty$.
+\end{proposition}
+The proof follows almost directly from that of \cite[Theorem 3.1]{leucht_dependent_2013} and is given in the Appendix.
+
+
+\subsection{Wild Bootstrap For HSIC}
+%Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}, which can be interpreted as the distance between embeddings  of the joint distribution and the product of the marginals in a reproducing kernel Hilbert space (RKHS) \cite[Section 7]{gretton_kernel_2012}.  
+Under the null hypothesis, the empirical HSIC in \eqref{eq:empHSIC} is a degenerate V-statistic, and its distribution is an infinite sum of independent $\chi^2$-variables \cite{gretton_kernel_2008}. In the case where the samples $Z_t=(X_t,Y_t)$ are drawn from a random process, the analysis of the asymptotic behaviour of HSIC requires substantially more effort than in the i.i.d. case. While \cite{smola_kernel_2008} have established the convergence in probability of the HSIC statistic to its population value, no asymptotic distributions were obtained, and the statistic was not used in hypothesis testing. \cite{chwialkowski2014kernel} have shown normalized $V$-statistic convergence and proposed a procedure to approximate its null distribution using circular shifts of the observations leading to tests of instantaneous independence, i.e., of $X_t \indep Y_t$, $\forall t$. However, this procedure has no theoretical guarantees to mimic the correct asymptotic distribution under the alternative. 
+
+The major advantage of the wild bootstrap method is that it guarantees test consistency under both hypotheses: null and alternative. In addition, it allows to construct test that addresses the harder problem of testing independence across all time lags simultaneously, similarly to one in \cite{besserve_statistical_2013}.
+
+Following symmetrisation, it can be shown that the empirical HSIC in \eqref{eq:empHSIC} can be written as a degree four V-statistic with core given by
+\begin{align*}
+h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)}) +  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})],  
+\end{align*}
+where we denoted by $S_n$ the group of permutations over $n$ elements. Thus, we can directly apply the theory developed for higher-order V-statistics in Section \ref{sec:main}. 
+Applicability of methodology to time series data allows us to consider two types of tests: instantaneous independence and independence at all time lags.
+
+\subsubsection{Test of instantaneous independence}
+%It was shown in \cite{gretton_measuring_2005,gretton_kernel_2008} that for IID random variables $V(h)$ is an estimator of distance between embeddings $ \parallel \mu_{XY} - mu_X \prod mu_y \parallel$. Using \ref{th:mainOne} we will show $V_b(Z)$ is a good estimator in case observations are temporally dependent. The main difficulty however lays in constructing   
+Here, the null hypothesis  $\mathbf{H_0}$ is that  $X_t$ and $Y_t$ are independent at all times $t$,  and the alternative hypothesis $\mathbf{H_1}$ is that they are dependent. 
+
+\begin{proposition}
+\label{prop:null}
+If the stationary process $Z_t$ is $\tau$-dependent with a coefficient $\tau(i) = i^{-6-\epsilon}$ for some $\epsilon>0$ then under the null hypothesis $6 n V_b(h)$ and $n V(h)$ converge to the same distribution. 
+\end{proposition}
+\begin{proof}
+Since both $k$ and $l$ are bounded and differentiable then the core $h$ is bounded  and Lipschitz continuous. Finally, one-degeneracy under the null hypothesis was proved in \cite{gretton_kernel_2008} and the fact that $h_2$ is a kernel was shown in \cite{chwialkowski2014kernel}. The proof is then a simple application of Theorem \ref{th:mainOne}.
+\end{proof}
+
+ \begin{proposition}
+ \label{prop:alternative}
+If the stationary process $Z_t$ is $\tau$-dependent with a coefficient $\tau(i) = i^{-6-\epsilon}$ for some $\epsilon>0$ then under the alternative hypothesis $n V_{b2}(h)$ converges in distribution to some random variable with a finite variance and $ V_{b1}$ converges to zero. 
+\end{proposition}
+\begin{proof}
+Core $h$ is  Lipschitz continuous, symmetric and bounded and therefore the Proposition holds by Theorem \ref{th:mainTwo}. 
+\end{proof}
+
+\subsubsection{Lag-HSIC}
+Propositions \ref{prop:null} and \ref{prop:alternative} also allow us to construct a test of time series independence that is similar to one designed by  \cite{besserve_statistical_2013}. Here, we will be testing against a broader null hypothesis: for all times $t$, $t'$, $X_t$ and $Y_{t'}$ are independent.
+
+Since the time series $Z_t=(X_t,Y_t)$ is stationary, it suffices to check if there exists a dependency between $X_t$ and $Y_{t+k}$ for $-f_n \leq k \leq f_n$ where $\{f_n\}$ is an increasing sequence of positive numbers such that $f_n=o(n)$, but $\lim_{n\to\infty}f_n=\infty$. With increasing sample size $n$, we cover a wider range of lags. Since each lag corresponds to an individual hypothesis, we will require a multiple hypothesis testing correction to attain a desired test level $\alpha$. We therefore define a sequence of quantiles given by $q_{\alpha,n} = 1-\frac{\alpha}{2f_n+1}$. The shifted time series will be denoted $Z_t^k =(X_t,Y_{t+k})$. Further, let $S_{k,n}=n V(h,Z^k)$ be value of the HSIC statistic calculated on the shifted process $Z_t^k$. Finally let $F_n$ and $F$ denote respectively the finite-sample and the limiting distribution under the null hypothesis of the $S_{0,n} = n V(h,Z)$ (or, equivalently, of any $S_{k,n}$ since the null hypothesis holds).
+
+Let us assume that we have computed the empirical $q_{\alpha,n}$-quantile of the null distribution, denoted by $t^*_{q_{\alpha,n}}$. The null hypothesis will then be rejected in the event
+\begin{align*}
+\mathcal A_{F,n} = \left\{ \max_{-f_n \leq k \leq f_n} S_{k,n} > t^*_{q_{\alpha,n}} \right\}.
+\end{align*}  
+Denote $\mathcal A_F = \lim_{n \to \infty} \mathcal A_{F,n}$. Our Theorem \ref{th:mainOne} implies that both $t^*_{q_{\alpha,n}}$ and $F_n^{-1}(q_{\alpha,n})$ converge to $F^{-1}(q_{\alpha,n})$. We will assume that $|q_{\alpha,n}-F_n(t^*_{q_{\alpha,n}})|=o(\frac{1}{n^r})$, for some $r>0$, which follows from the Barry-Esseen-type argument for degenerate $V$-statistics on a $\tau$-mixing process, but the proof of such result and the specific convergence rates are beyond the scope of this work. Then, by continuity and sub-additivity of probability, the asymptotic Type I error is given by 
+\begin{align}
+\label{eq:type1}
+&P_{H_0}(\mathcal A_F) = \lim_{n \to \infty} P_{H_0}( \mathcal A_{F,n}) \leq \lim_{n \to \infty}  \sum_{-f_n \leq k \leq f_n} P_{H_0}(S_{k,n} >t^*_{q_{\alpha,n}}) = \\  
+&\lim_{n \to \infty} (2f_n+1) \left(1-F_n(t^*_{q_{\alpha,n}})\right) \leq \lim_{n \to \infty} (2f_n+1) \left( 1 - (1-\frac{\alpha}{2f_n+1}) + \frac C {n^r}\right)= \alpha, 
+\end{align}
+as long as $f_n=o(n^r)$. %For the penultimate equation we have assumed that $S_{k,n}$ has cumulative distribution equal to $F$. This assumption could be easily removed should one apply Berry-Esseen like bound for degenerate $V$-statistics with $\tau$-mixing process. No such bound exist in the literature but its existence follows form the proof of the  \cite[Theorem 2.1]{leucht_dependent_2013}; the proof of such bound is however beyond the scope of this work.
+ 
+On the other hand if null hypothesis does not hold, there exists $k$ for which $n^{-1} S_{k,n}$ converges to some positive constant. Unfortunately if the alternative hypothesis holds one can not approximate distribution $F$. We can however show that for any cumulative distribution function $G$, such that if $X \sim G$ and $\ev X^2 < \infty$ the following holds 
+\begin{align*}
+&P(\mathcal A_G) = \lim_{n \to \infty} P(\mathcal A_{G,n}) \leq \lim_{n \to \infty} P( S_{k,n} > G^{-1}(q_{\alpha,n}) ) = \lim_{n \to \infty} P( n^{-1} S_{k,n} > n^{-1} G^{-1}(q_{\alpha,n}) ) =1.
+\end{align*}
+The last equality follows from Lemma  \ref{lem:FoverN}, which shows that $n^{-1} G^{-1}(q_{\alpha,n})$ converges to zero, and from the fact that  $\frac 1 n S_{k,n}$ converges to some positive constant.  
+
+\begin{lemma}
+\label{lem:FoverN}
+If $X \sim G$ is a random variable such that $\ev X^2 <\infty$, $q_{\alpha,n} = 1-\frac{\alpha}{2f_n+1}$ and $f_n=o(n)$ then $n^{-1} G^{-1}(q_{\alpha,n}) \to 0$.
+\end{lemma}  
+\begin{proof}
+ First observe that by Markov inequality $P(X \geq t) \leq \frac {\ev X^2} {t} $ and therefore $G(t) > g(t) = 1 - \frac {\ev X^2} {t}$.  Therefore, on the interval   $(\ev X,1)$,  $ \ G^{-1}(x) < g^{-1}(x) = \frac{\ev X^2}{1-x}$. As a result 
+ \begin{align}
+ \label{eg:aletrnative}
+ n^{-1} G^{-1}(q_{\alpha,n})  \leq  n^{-1} g^{-1}(q_{\alpha,n})  =n^{-1}  \frac{\ev X^2} { 1 - (1 -\frac {\alpha} {2f_n+1})}= \frac{(2f_n+1) \ev X^2  }{\alpha n} \overset{n \to \infty}{\longrightarrow} 0.
+ \end{align} 
+\end{proof}
+These observation result in the following test. We calculate an approximation of the cumulative distribution function $F$ using $nV_{b2}(h)$. Under the null hypothesis, the Type I error is controlled by the bound from the equation \eqref{eq:type1}. If the alternative holds, cumulative distribution function obtained from sampling $nV_{b2}(h)$ is $G$ (possibly different from $F$). By proposition \ref{prop:alternative}, $\int x^2 G(dx) < \infty$, and thus the control of the Type II error follows from the equation \ref{eg:aletrnative}. 
+
+\section{Experiments}
+\label{sec:Experiments}
+
+\paragraph{MMD for MCMC diagnostics}
+To assess performance of wild bootstrap in two sample testing, we consider the situation where samples $\{X_i\}$ and $\{Y_i\}$ are bivariate and both have the identical marginal distribution given by
+$P=\mathcal{N}\left(\left[\protect\begin{array}{cc}
+0 & 0\protect\end{array}\right],\left[\protect\begin{array}{cc}
+15.5 & 14.5\protect\\
+14.5 & 15.5
+\protect\end{array}\right]\right)$.
+However, they could have arisen either as independent samples or as output of the Gibbs sampler with stationary distribution $P$. 
+Table \ref{tab:gibbs_mmd} shows the Type I error under the significance level $\alpha=0.05$. It is clear that in the case where at least one of the samples is a Gibbs chain, the vanilla permutation test has a Type I error much larger than $\alpha$, since the null distribution is misspecified. 
+The wild bootstrap using $V_{b1}$ (without artificial degeneration) yields the correct Type I error control in these cases. Consistent with findings in \cite[Section 5]{leucht_dependent_2013}, $V_{b1}$ mimics the null distribution better than $V_{b2}$. In a similar setup where $\{Y_i\}$ was taken from a distribution with the same covariance structure but with the mean set to $\mu= \left[\protect\begin{array}{cc}
+2.5 & 0\protect\end{array}\right]$, none of the tests made any Type II errors over 160 trials.
+
+
+\begin{table}
+\caption{Type I error for independent
+samples and Gibbs chains with identical marginal distributions; sample size=500, averaged over 200 trials. Wild bootstrap
+uses blocksize of $l_n=20$. All tests use a gaussian kernel with bandwidth
+$\sigma=1.7$. Every second Gibbs sample is kept (i.e., after a pass
+through both dimensions).}
+\label{tab:gibbs_mmd}
+
+\centering{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+$X$ vs $Y$ & vanilla & $V_{b1}$ & $V_{b2}$\tabularnewline
+\hline 
+ i.i.d. vs i.i.d.  & .040 & \textbf{.012}  & .070\tabularnewline
+\hline 
+i.i.d. vs Gibbs & .528  & \textbf{.052} & .105\tabularnewline
+\hline 
+Gibbs vs Gibbs & .680  & \textbf{.060} & .100\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\paragraph{Lag-HSIC}
+The KCSD test \cite{besserve_statistical_2013} is, to our knowledge, the only algorithm to conducts a pairwise independence for time series. In the experiments we compare lag-HSIC with KCSD on two kinds of processes - one  inspired by econometrics and one from the the article which proposed the KCSD test. 
+
+In the lag-HSIC the amount of lags under the examination was equal to the maximum of ten and a logarithm of the sample size. We have used Gaussian kernels with widths estimated by the median heuristic. The cumulative distribution of the $V$ statistics  was approximated by samples from $n V_{b2}$. In particular we have fitted the generalized Pareto distribution to model the tail of the distribution  (\cite{pickands1975statistical} shows that for a large class of underlying distribution functions such an approximation is valid).
+
+The first process is a pair of two time series which share common variance.   
+\begin{align}
+\label{eq:dynamics2}
+ X_t = \epsilon_{1,k} \sigma_k^2, \quad  Y_t = \epsilon_{2,k}  \sigma_k^2,  \quad \sigma_k^2 = 1 + 0.45(X_t^2 + Y_t^2 ).
+\end{align}
+The above set of equations is an instance of the VEC dynamics \cite{bauwens_multivariate_2006} which might be used to model e.g. volatility on the FOREX market. Left panel of the Figure \ref{fig:phaseAndVar} presents the type II error rate, for KCSD it remains on the same level of 90 \% while for  the lag-HSIC it gradually drops to zero. The type I error, which we calculated by sampling two pairs of processes $(X_{t,1},Y_{t,1})$, $(X_{t,2},Y_{t,2})$ and performing both tests on the pair $(X_{t,1},Y_{t,2})$, was around 5\% for both of the tests. Since KCSD is controlled by quite a lot parameters we can not guarantee that we have calibrated it correctly. \\
+Fortunately this was not a case for the processes sampled according to dynamics proposed by \cite{besserve_statistical_2013}      
+\begin{alignat}{2}
+  \quad X_k &= cos(\phi_{k,1})   &\quad  \phi_{k,1} &= \phi_{k-1,1} + 0.1\epsilon_{1,k} + 2 \pi f_1 T_s \label{eg:dymamics1a} \\  
+  Y_k &= [2+Csin(\phi_{k,1})]cos(\phi_{k,2})  &   \phi_{k,2} &= \phi_{k-1,2} + 0.1\epsilon_{2,k} + 2 \pi f_2 T_s \label{eg:dymamics1b}
+\end{alignat}
+ \cite{besserve_statistical_2013} reports that HSCI for iid samples performs faulty with parameters $C=.4$, $f_1=4Hz$,$f_2=20Hz$, and frequency $\frac {1} {T_s} = 100 Hz$. We compared performance of the KCSD algorithm, with parameters set to vales recommended in \cite{besserve_statistical_2013}, and the lag-HSIC algorithm. The lag-HSIC the type II error, presented in the right panel of the  Figure \ref{fig:phaseAndVar}, is substantially lower then the KCSD error. Most oddly, KCSD error seems to converge to zero in steps - it might be that dependence at 'simple' phases is revealed by looking only at 210 samples, while 'difficult'  phases require 250 or more samples.   
+ 
+ \begin{figure}
+\centering  
+\includegraphics[width=1\textwidth]{varAndPhase.pdf}
+\caption{The left panel presents type I and II error of the lag-HISC and KCSD algorithms for process following dynamics given by the equation \eqref{eq:dynamics2}, whereas the errors for process with dynamics given by equation \eqref{eg:dymamics1a} and \eqref{eg:dymamics1b} are shown in the right panel. X axis is indexed by the time series length i.e. sample size.}
+\label{fig:phaseAndVar}
+\end{figure}
+\small
+\bibliographystyle{plain}
+\bibliography{nips14Bib}
+
+\newpage
+\normalsize
+\appendix
+\section{Proofs}
+
+\subsection{Auxiliary results }
+\label{label:aux}
+The following section lists all auxiliary Lemmas required to prove main results. We had to extract common parts from the proof of main Theorems in order to make them readable. Therefore we recommend reading Lemma \ref{lem:Components} and the note about notation underneath it first, then main proofs from the sections \ref{sec:prMainOne} and \ref{sec:prMainTwo} and finally this list of Lemmas. 
+
+\begin{proposition}{\cite[p.259, Equation 2.1]{leucht_dependent_2013}}
+\label{prop:Coupling}
+If process  $\{Z_t,\mathcal{F}_t\}_{t \in \mathbb{N}}$  is $\tau$-dependent and $\mathcal{F}$ is rich enough (see \cite[Lemma 5.3]{dedecker2007weak}), then there exists, for all $t<t_1<...<t_l$, $l \in \mathbb N$, a random vector $(Z_{t_1}^*,...,Z_{t_l}^*)$ that is independent of $\mathcal F_t$, has the same distribution  as $(Z_{t_1},...,Z_{t_l})$ and 
+\begin{align*}
+\ev \norm{(Z_{t_1}^*,...,Z_{t_l}^*) - (Z_{t_1},...,Z_{t_l})}_1 \leq l \tau(t_1-t).
+\end{align*}
+\end{proposition}
+
+\begin{lemma}
+\label{lem:complicated}
+Let $\{Z_i,\mathcal{F}_i\}$ be a $\tau$-mixing sequence,$\{ \delta_i \}$ a sequence of $i.i.d$ random variables independent of filtration $\mathcal{F}$, a non-deceasing sequence $(i_1\leq ... \leq i_m)$, a positive integer $k$ such that $1 < k<m$ and some random vector $(Z_{i_1},...,Z_{i_m})$. Further let $A = (Z_{i_1},...,Z_{i_{k-1}})$, $B= Z_{i_k}$ and $C=(Z_{i_{k+1}},...,Z_{i_{m}})$,  $\mathcal{F_A} =\mathcal{F}_{k-1}$, $\mathcal{F_B}  =\mathcal{F}_{k}$. There exist independent random variables $B^*$ and $C^*$, independent of $\mathcal{F_A}$, such that  
+\begin{align}
+\ev |B-B^*| = \tau(i_{k} -i_{k+1}) \text{ and } \frac{1} {m-k} \ev \parallel C-C^* \parallel_1 \leq \tau(i_{k+1}-i_k) 
+\end{align}    
+\end{lemma}
+
+
+\begin{proof}
+We first use use  \cite[Equation 2.1]{leucht_dependent_2013}] (also \cite[Lemma 5.3]{dedecker2007weak}) to construct $C^*$ such that $\frac{1} {m-k}  \ev \parallel C-C^* \parallel_1 \leq (m-k) \tau(i_{k+1}-i_k)$. By construction $C^*$ is independent of $\mathcal{F_B}$. Since $ \mathcal{F_A} \subset \mathcal{F_B}$ and $ \sigma(B) \subset \mathcal{F_B}$ and $C^* \indep (\sigma(\delta_k) $, then $C^* \indep  (\mathcal{F_A} \vee \sigma(B)  \vee \sigma(\delta_k)  )$. Next by \cite[Lemma 5.2]{dedecker2007weak} we construct $B^*$  such  that $\ev |B-B^*| = \tau(i_{k} -i_{k+1})$, and $B^*$  independent  of $\mathcal{F_A}$ but $\mathcal{F_A} \vee \sigma(B) \vee \sigma(\delta_k)$ measurable. Since   $\sigma(C^*) \indep (\mathcal{F_A} \vee \sigma(B) \vee \sigma(\delta)) $ then $C^*$ and $B^*$ are independent. Finally both $C^*$ and $B^*$ are independent of $\mathcal{F_A}$   
+\end{proof}
+
+\begin{lemma}
+\label{lem:Components}
+Any core $h$ can be written as a sum of canonical cores $h_1,...,h_m$ and a constant $h_0$
+\begin{align*}
+h(z_1,...,z_m) &=   h_m(z_1,...,z_m) + \sum_{1 \leq i_1 < ...<i_{m-1} \leq m } h_{m-1}(z_{i_1},...,z_{i_{m-1}}) \\ 
+    & + ... + \sum_{1 \leq i_1 < i_2 \leq m } h_2(z_{i_1},z_{i_2}) + \sum_{1 \leq i \leq m} h_1(z_i)+h_0
+\end{align*} 
+\end{lemma}
+
+\begin{proof}
+To show this we define auxiliary functions
+\[
+ g_c(z_1,...z_c) = \ev h(z_1,...,z_c,Z_{c+1}^*,...,Z_{m}^*)
+\]
+for each $c=0,...,m-1$ and put $g_m=h$.  
+
+Canonical functions that allow core decomposition are 
+\begin{align}
+   h_0 &= g_0, \\  
+   h_1(z_1) &= g_1(z_1) -h_0,\\
+   h_2(z_1,z_2) &= g_2(z_1,z_2)  - h_1(z_1) - h_1(z_2)-h_0, \\  
+   h_3(z_1,z_2,z_3) &= g_3(z_1,z_2,z_3) - \sum_{1 \leq i < j \leq 3 } h_2(z_i,z_j) - \sum_{1\leq i \leq 3} h_1(z_i)-h_0, \\ 
+   \cdots &, \\
+   h_m(z_1,...,z_m) &= g_m(z_1,...,z_m) - \sum_{1 \leq i_1 < ...<i_{m-1} \leq m } h_{m-1}(z_{i_1},...,z_{i_{m-1}}) \\ 
+    & - ... - \sum_{1 \leq i_1 < i_2 \leq m } h_2(z_{i_1},z_{i_2}) - \sum_{1 \leq i \leq m} h_1(z_i)-h_0.\\
+\end{align}
+Lemma \ref{lem:symetric} shows that functions $h_c$ are symmetric (and therefore cores) and Lemma \ref{stm:coreDegeneracy} shows that they are canonical.  
+\end{proof}
+
+\textbf{ We call $h_1,...,h_m$ components of a core $h$. We do not call $h_0$ a component, its simply a constant.}
+ 
+ 
+ 
+ 
+\begin{lemma}
+\label{lem:symetric}
+Components of a core $h$ are symmetric functions.
+\end{lemma}
+\begin{proof}
+We will use induction by components' index to show that $h_c$ is symmetric. $h_1$ is a function of one argument, hence it is symmetric. Suppose that for each $c' < c$ component $h_{c'}$ is symmetric. Each sum 
+ \begin{align}
+  \sum_{1 \leq i_1 < ...<i_{c} \leq c } h_{c'}(z_{i_1},...,z_{i_{c'}}) 
+ \end{align}
+is symmetric with respect to arguments $z_1,...,z_c$. $g_c(z_1,...,z_c)$ symmetry follows from $h$ symmetry. Hence function 
+\begin{align}
+   h_c(z_1,...,z_c) &= g_c(z_1,...,z_c) - \sum_{1 \leq i_1 < ...<i_{c-1} \leq c } h_{c-1}(z_{i_1},...,z_{i_{c-1}}) \\ 
+    & - ... - \sum_{1 \leq i_1 < i_2 \leq c } h_2(z_{i_1},z_{i_2}) - \sum_{1 \leq i \leq c} h_1(z_i) - h_0.\\
+\end{align}
+is symmetric as a sum of expressions symmetric with respect to  arguments $z_1,...,z_c$. 
+\end{proof}
+
+
+
+
+
+
+\begin{lemma}
+\label{stm:coreDegeneracy}
+ A component of a core $h$ is a canonical core.
+\end{lemma}
+\begin{proof}
+ We will use induction by components' index to show that $h_c$ is canonical. Expected value of the first component is zero, indeed $\ev h_1(Z_1^*)= \ev h(Z_1^*,...,Z_m^*)  -h_0= 0$. Suppose that for all $c'$ smaller then $c$ degeneracy holds. If  $\ev h_c(z_1,...,z_{c-1},Z_c^*)=0$ then for any $k$, $\ev h_c(z_1,...,Z_k^*,...,z_{c})=0$ since $h_c$ is symmetric, hence it is enough to show that $\ev h_c(z_1,...,z_{c-1},Z_c^*)=0$. Consider a sum
+\begin{align}
+  &\sum_{1 \leq i_1 < ...<i_{c'} \leq c }   h_{c'}(z_{i_1},...,z_{i_{c'}}) = \\
+  \sum_{1 \leq i_1 < ...<i_{c'} \leq c-1 }  &h_{c'}(z_{i_1},...,z_{i_{c'}}) +  \sum_{1 \leq i_1 < ...<i_{c'-1} < c }  h_{c'}(z_{i_1},...,z_{c}).
+\end{align}
+The left hand side sum $\sum_{1 \leq i_1 < ...<i_{c'} \leq c-1 } h_{c'}(z_{i_1},...,z_{i_{c'}})$ does not contain term $z_c$ so integration with respect to $Z_c^*$ does not affect it. On the other hand, by the inductive assumption $\ev \sum_{1 \leq i_1 < ...<i_{c'-1} < c }  h_{c'}(z_{i_1},...,Z_{c}^*) = 0$ and by $g_c$ definition $\ev g_c(z_1,...,Z_{c}^*) =  g_{c-1}(z_1,...,z_{c-1})$. Using these observations we simplify 
+\begin{align}
+  \ev h_c(z_1,...,Z_{c}^*) &=  g_{c-1}(z_1,...,z_{c-1}) -  \sum_{1 \leq i_1 < ...<i_{c-1} \leq c-1 } h_{c-1}(z_{i_1},...,z_{i_{c-1}}) \\
+   & - ... -  \sum_{1 \leq i_1 < i_2 \leq c-1 }   h_2(z_{i_1},z_{i_2}) -  \sum_{i=1}^{c-1}  h_1(z_i)  - h_0.\\
+\end{align}
+Since the  set  $ \{1 \leq i_1 < ...<i_{c-1} \leq c-1 \}$ contains only one sequence we can write  
+\begin{align}
+   \ev h_c(z_1,...,Z_{c}^*) &= -  h_{c-1}(z_{i_1},...,z_{i_{c-1}}) + \big[ g_{c-1}(z_1,...,z_{c-1})  \\
+   & - ... -  \sum_{1 \leq i_1 < i_2 \leq c-1 }   h_2(z_{i_1},z_{i_2}) -  \sum_{i=1}^{c-1}  h_1(z_i) - h_0\big] =0.\\
+\end{align}
+For this nice simplification we have used the definition of the component $h_{c-1}$.
+\end{proof}
+
+
+
+
+
+
+\begin{lemma}
+\label{stm:LipAndBound}
+ If $h$ is bounded and Lipschitz continuous core then its components are also bounded and Lipschitz continuous.
+\end{lemma}
+\begin{proof}
+ Note that 
+\begin{align}
+g_c(z_1,...z_c) = \ev h(z_1,...,z_c,Z_{c+1}^*,...,Z_{m}^*) \leq \ev \parallel h \parallel_{\infty}.  
+\end{align}
+To prove boundedness  we use induction - we assume that components with low index are bounded and use the fact that sum of bounded functions is bounded to obtain the required results.
+We prove Lipschitz continuity similarly, first by showing that $g_c(z_1,...z_c)$ are Lipschitz continuous with the same coefficient as the core $h$ and then by using the fact that sum of Lipschitz continuous functions  is  Lipschitz continuous.
+\end{proof}
+
+
+
+
+
+\begin{lemma}
+\label{lem:summingLema}
+If $1 \leq  j_k,r_j \leq m$ are disjoint sequences with respectively $q$ and $m-q$ elements, such that elements in each sequence are unique then
+\begin{align}
+\sum_{i \in N^m} f(Z_{i_{j_1}},...,Z_{i_{j_q}}) = n^{m-q} \sum_{i \in N^q} f(Z_{i_1},...,Z_{i_q})
+\end{align}
+\end{lemma}
+\begin{proof}
+\begin{align}
+&\sum_{i \in N^m} f(Z_{i_{j_1}},...,Z_{i_{j_q}}) = \sum_{1 \leq i_{j_1},...,i_{j_q} \leq n}  \sum_{1 \leq i_{r_1},...,i_{r_{m-q}} \leq n} f(Z_{i_{j_1}},...,Z_{i_{j_q}}) = \\
+&\sum_{1 \leq i_{j_1},...,i_{j_q} \leq n}  \left( f(Z_{i_{j_1}},...,Z_{i_{j_q}})  \sum_{1 \leq i_{r_1},...,i_{r_{m-q}} \leq n} 1 \right) =\\
+&n^{m-q} \sum_{1 \leq i_{j_1},...,i_{j_q} \leq n}   f(Z_{i_{j_1}},...,Z_{i_{j_q}})  =n^{m-q} \sum_{i \in N^q} f(Z_{i_1},...,Z_{i_q}).
+\end{align}
+\end{proof}
+
+
+
+
+\begin{lemma}
+\label{stm:decomposition}
+ V-statistic of a core function h can be written as a sum of  V-statistics with canonical cores
+\begin{align}
+  V(h) = V(h_m) + \binom m 1 V(h_{m-1}) + ...+ \binom {m} {m-2} V(h_{2}) + \binom {m} {m-1} V(h_{1}) + h_0.
+ \end{align}
+\end{lemma}
+\begin{proof}
+\begin{align}
+V(h)& = \frac{1} {n^m} \sum_{i \in N^m} h(Z_{i_1},...,Z_{i_m}) = \\
+& \frac{1} {n^m}  \sum_{i \in N^m}   \left( h_m(Z_1,...,Z_m) + \sum_{1 \leq j_1 < ...<j_{m-1} \leq m } h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{m-1}}}) \right. \\ 
+    & \left. + ... + \sum_{1 \leq j_1 < j_2 \leq m } h_2(Z_{i_{j_1}},Z_{i_{j_2}}) + \sum_{1 \leq j \leq m} h_1(Z_{i_j}) + h_0\right) \overset{L.\ref{lem:summingLema}}{=\joinrel=} \\
+    & \frac{1} {n^m}  \sum_{i \in N^m}   h_m(Z_1,...,Z_m) +  \binom m 1 \frac{1} {n^{m-1}}  \sum_{i \in N^{m-1}} h_{m-1}(Z_{i_1},...,Z_{i_{m-1}}) + \\
+    & + ... + \binom {m} {m-2} \frac{1} {n^2}  \sum_{i \in N^2} h_2(Z_{i_1},Z_{i_2}) +  \binom {m} {m-1} \frac{1} {n} \sum_{i \in N} h_1(Z_i) + h_0= \\
+    &V(h_m) + \binom m 1 V(h_{m-1}) + ...+ \binom {m} {m-2} V(h_{2}) + \binom {m} {m-1} V(h_{1}) + h_0.
+\end{align}
+\end{proof}
+
+
+
+\begin{lemma}
+\label{lem:start}
+ If $h$ is a canonical and Lipschitz continuous core of three arguments then
+ \begin{align}
+ \lim_{n \to \infty} \frac{1}{n^2} \sum_{i \in N^{m}} |\ev   h(Z_{i_1},Z_{i_2},Z_{i_3})| =0.
+\end{align}
+converges to zero in probability.
+\end{lemma}
+
+\begin{proof}
+We change summing order, it is useful to think of index $b$ as 'beginning', $e$ as 'end' and $m$ as 'middle'. 
+ \begin{align}
+ \label{eq:143}
+ \sum_{i \in N^{m}} |\ev   h(Z_{i_1},Z_{i_2},Z_{i_3})| =  3! \sum_{b=1}^n \sum_{e=b}^n \sum_{b \leq m \leq e }^n |\ev   h(Z_b,Z_m,Z_e)|.
+\end{align}
+For each $b,m,e$, $|\ev   h(Z_b,Z_m,Z_e)| \leq 2 \tau(max(e-m,m-b))$. To see that suppose that $m-b>e-m$. Then by \cite[Equation 2.1]{leucht_dependent_2013}] there exists random vector $(Z_m^*,Z_e^*)$ independent of $Z_b$ such that $\frac 1 2 \ev \parallel (Z_m^*,Z_e^*) - (Z_m,Z_e) \parallel \leq \tau(m-b)$. Furthermore 
+\begin{align}
+ |\ev   \left(   h(Z_b,Z_m,Z_e^*) -  h(Z_b,Z_m,Z_e^*) + h(Z_b,Z_m^*,Z_e^*) \right) | \leq  \\
+ |\ev   \left(   h(Z_b,Z_m,Z_e^*) -  h(Z_b,Z_m,Z_e^*) \right) |+ |\ev h(Z_b,Z_m^*,Z_e^*) | \leq Lip(h) 2\tau(m-b) +0, 
+\end{align}
+since $\ev h(Z_b,Z_m^*,Z_e^*)=0$. Similar reasoning for case $m-b<e-m$ proofs that $|\ev   h(Z_b,Z_m,Z_e)| \leq 2 Lip(h) \tau(max(e-m,m-b))$. Since $max(e-m,m-b)>(e-b)/2$   equation \eqref{eq:143} 
+\begin{align}
+12 Lip(h) \sum_{b=1}^n \sum_{e=b}^n \sum_{b \leq m \leq e }^n \tau((e-b)/2) \leq 12 Lip(h) \sum_{b=1}^n \sum_{e=b}^n (e-b) \frac{8} {(e-b)^3} \leq \\
+96 Lip(h) \sum_{b=1}^n \sum_{e=b}^n \frac{1} {(e-b)^2} = O(n).
+\end{align}
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:missingBit}
+ If $h$ is a canonical and Lipschitz continuous core of four or more arguments then
+\begin{align}
+ \lim_{n \to \infty} \frac{1}{n^{m-2}} \sum_{i \in N^{m}} |\ev   h(Z_{i_1},...,Z_{i_m})| =0.
+\end{align}
+converges to zero in probability.
+\end{lemma}
+
+\begin{proof}
+ The proof follows proof by \cite[Lemma 3]{arcones1998law}. 
+\begin{align}
+ \sum_{i \in N^{m}} |\ev   h(Z_{i_1},...,Z_{i_m})| = \sum_{\pi \in S_m} \sum_{1 \leq i_1< ...\leq i_m \leq n} |\ev   h(Z_{i_{\pi(1)}},...,Z_{i_{\pi(m)}})|
+\end{align}
+ where $S_m$ is group of permutations of $m$ elements.  Let, $g=\lfloor m/2 \rfloor$ , $j_1 = i_2 - i_1$ , let $j_l = min(i_{2l-1} - i_{2l-2} , i_{2l} - i_{2l-1} )$ for $2 \leq l \leq g$  and let $j_g = i_m - i_{m-1}$ if $m$ is even. If $j_1=max(j_1,...,j_g)$ we use \cite[Equation 2.1]{leucht_dependent_2013}] and obtain (reasoning same as in Lemma \ref{lem:start} )
+ \begin{align}
+  |\ev   h(Z_{i_{\pi(1)}},...,Z_{i_{\pi(m)}})| \leq \tau(j_1). 
+ \end{align}
+Same reasoning holds if $j_g = max(j_1,...,j_g)$ and $m$ is even. In other case there exists $1 < k \leq g$ for which maximum is obtained.  We use Lemma \ref{lem:complicated} to see that 
+\begin{align}
+&  |\ev   h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}},Z_{i_{2k+1}},...,Z_{i_m})| = \\ 
+&  | \ev \left( h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}},Z_{i_{2k+1}},...,Z_{i_m}) - h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}}^*,Z_{i_{2k+1}}^*,...,Z_{i_m}^*)+ \right. \\
+& \left. +h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}}^*,Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**}) \right) | \leq\\
+&   \ev  |h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}},Z_{i_{2k+1}},...,Z_{i_m}) - h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}}^*,Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**})| + 0 \leq \\
+&Lip(h)  \tau(j_k).
+\end{align}
+For last inequality we have used that $h$ is canonical and that $Z_{i_{2k}}^*$ is independent of $(Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**})$ and $Z_{i_1},...,Z_{i_{2k-1}}$
+\begin{align}
+ h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}}^*,Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**}) = 0,
+\end{align}
+and 
+\begin{align}
+&\ev |h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}},Z_{i_{2k+1}},...,Z_{i_m}) - h(Z_{i_1},...,Z_{i_{2k-1}},Z_{i_{2k}}^*,Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**})| \leq \\
+& Lip(h) \left( \ev |Z_{i_{2k}} - Z_{i_{2k}}^{*}| + \ev \parallel (Z_{i_{2k+1}},...,Z_{i_m})- (Z_{i_{2k+1}}^{**},...,Z_{i_m}^{**}) \parallel_1  \right) \leq \\
+&Lip(h)  \left( \tau(i_{2k}-i_{2k-1}) + \tau(i_{2k+1}-i_{2k})   \right) \leq Lip(h)  \tau(j_k). 
+\end{align}
+
+Now assume again that $j_1 = max(j_1,...,j_g)$ and $i_2=i_1+w$. Observe that $i_1$ can take at most $n$ positions and position of $i_2$ is fixed. If $i_3-i_2 \leq i_4- i_3$ then $i_3 \leq w +i_2$ and therefore $i_3$ can take at most $w$ values and $i_4$ can take at most $n$ values. On the other hand if  $i_3-i_2 \geq i_4- i_3$ then $i_4$ can take at most $w$ values and $i_3$ can take at most $n$ values. Proceeding in this way we obtain that the possible values for the variables $i_1 \leq ... \leq i_m$. In case $m$ is even number of combinations of $i_1 \leq ... \leq i_m$ is smaller than $n^{g}w^{g-1}$ and in case $m$ is odd number of combinations is smaller than $n^g w^{g}$. 
+
+If $j_k=max(j_1,...,j_g)$ for $1 < k \leq g$ similar reasoning holds - we bound number of combinations for the first triple $(i_1,i_2,i_3)$, second triple $(i_3,i_4,i_5)$ etc. 
+
+Since values of $w$ vary in the range $1$ to $n-1$ we have 
+\begin{align}
+ \sum_{\pi \in S_m} \sum_{1 \leq i_1< ...\leq i_m \leq n} |\ev   h(Z_{i_{\pi(1)}},...,Z_{i_{\pi(m)}})|  \leq c n^g (1 + \sum_{w=1}^{n-1} w^{g} \tau(g)) \\ leq
+ c n^g (1 + \sum_{w=1}^{n-1} w^{g-3-\epsilon} ) = O( n^{2g-2-\epsilon}) \leq o( n^{m-2} ).
+\end{align}
+ 
+\end{proof}
+
+
+
+
+\begin{corollary}
+\label{lem:auxAsymp1}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments, then 
+\begin{align}
+ \lim_{n \to \infty} \frac{1}{n^{m-1}} \sum_{i \in N^{m}} |\ev   h(Z_{i_1},...,Z_{i_m})| =0.
+\end{align}
+\end{corollary}
+%\begin{proof}
+
+% Let $i_{max}$ be a maximal element of a index set $\{i_1,...,i_{m}\}$. Using the fact that $h$ is Lipschitz continuous and canonical we derive 
+% \begin{align}
+%  & \frac{1}{n^{m-1}} \sum_{i \in N^{m}} |\ev   h(Z_{i_{max}},...)|\leq  \\
+%  &\frac{1}{n^{m-1}} \sum_{i \in N^{m}}   |\ev   \left[h(Z_{i_{max}},...) - h(Z_{i_{max}}^*,...)\right] + \ev h(Z_{i_{max}}^*,...) | = \\
+%  &  \frac{1}{n^{m-1}} \sum_{i \in N^{m}} |\ev   \left[h(Z_{i_{max}},...) - h(Z_{i_{max}}^*,...)\right] |  \leq \\
+%  &  Lip(h) \frac{1}{n^{m-1}} \sum_{i \in N^{m}}  \ev|Z_{i_{max}} - Z_{i_{max}}^*| \leq  Lip(h) \frac{1}{n^{m-1}} \sum_{i \in N^{m}} \tau(i_{max}).
+% \end{align}
+% $\ev h(Z_{i_{max}}^*,...)=0$ follows from $h$ degeneracy. Inequality  
+% \begin{align}
+%  \ev|Z_{i_{max}} - Z_{i_{max}}^*| \leq \tau(i_{max}).
+% \end{align}
+% is a consequence of $\tau$-mixing properties from \cite{leucht_dependent_2013} (TODO maybe more precise). Finally 
+% \begin{align}
+% \lim_{n \to \infty} Lip(h) \frac{1}{n^{m-1}} \sum_{i \in N^{m}} \tau(i_{max}) \leq  Lip(h) \lim_{n \to \infty} \frac{1}{n^{m-1}} \sum_{i \in N^{m}} i_{max}^{-3} = 0.
+% \end{align}
+% To see that we change summing order to sum over $m$ dimensional dices for each $1 \leq i \leq n$ (which is already a rough approximation, since we could have summed over 'edges' of those dices )
+% \begin{align}
+% \sum_{i \in N^{m}} i_{max}^{-3} \leq  \sum_{1 \leq i \leq n} i^{-3} i^m =\sum_{1 \leq i \leq n} i^{m-3} \leq C n^{m-2}.
+% \end{align}
+%\end{proof}
+
+
+
+\begin{corollary}
+\label{lem:auxAsymp1a}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments and $Q_{i_1,...,i_m}$ is a random variable independent of the vector $(Z_{i_1},...,Z_{i_m})$ with expected value smaller then $C$ then 
+\begin{align}
+ \lim_{n \to \infty} \frac{1}{n^{m-1}} \sum_{i \in N^{m}} \ev Q_{i_1,...,i_m}   h(Z_{i_1},...,Z_{i_m}) =0.
+\end{align}
+\end{corollary}
+\begin{proof}
+We use Lemma \ref{lem:auxAsymp1} to see that 
+\begin{align}
+\lim_{n \to \infty} \frac{1}{n^{m-1}} \sum_{i \in N^{m}} \ev Q_{i_1,...,i_m}   h(Z_{i_1},...,Z_{i_m}) \leq 
+\lim_{n \to \infty} \frac{1}{n^{m-1}} C \sum_{i \in N^{m}} | \ev h(Z_{i_1},...,Z_{i_m})| =0.
+\end{align}
+\end{proof}
+
+
+
+
+\begin{lemma}
+\label{lem:auxAsymp2}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments, then
+\[
+  \lim_{n \to \infty}\frac{1} {n^{2m-2}}   \sum_{i \in N^{2m}} \ev |h(Z_{i_1},...,Z_{i_m})h(Z_{i_{m+1}},...,Z_{i_{2m}})| = 0.
+\]
+\end{lemma}
+\begin{proof}
+Let $g(z_{i_1},...,z_{i_m},z_{i_{m+1}},...,z_{i_{2m}})=h(z_{i_1},...,z_{i_m})h(z_{i_{m+1}},...,z_{i_{2m}})$. We may assume that all arguments are ordered i.e. $i_1 \leq ... \leq i_m$ and  $i_{m+1} \leq ... \leq i_{2m}$. $g$ is almost canonical - it is not canonical only in case that $i_k=i_{m+k}$ for $1 \leq k \leq m$. There is only $n^m$ such tuples so for this case we can put $g=0$ - the limit will be the same since $\frac{n^m}{n^{2m-2}}$ converges to zero.
+
+For the modified $g$ we apply Lemma \ref{lem:missingBit}.
+% Let $i_{max}$ be a maximal element of a index set $\{i_1,...,i_{2m}\}$. We may assume that index $i_{max}$ is encountered in the first instance of $h$. Using the fact that the $h$ is bounded by $C_1$, Lipschitz continuous and canonical we derive 
+% \begin{align}
+%  &  \frac{1}{n^{2m-2}} \sum_{i \in N^{2m}} | \ev h(Z_{i_{max}},...)h(...) | = \\
+%  &  \frac{1}{n^{2m-2}} \sum_{i \in N^{2m}} | \ev \left[h(Z_{i_{max}},...)h(...) - h(Z_{i_{max}}^*,...)h(...)\right] + \ev h(Z_{max}^*,...)h(...)| = \\
+%  &  \frac{1}{n^{2m-2}} \sum_{i \in N^{2m}} | \ev \left[(h(Z_{i_{max}},...)h(...) - h(Z_{i_{max}}^*,...)h(...)\right] +0| \leq \\
+%  &  \frac{1}{n^{2m-2}} \sum_{i \in N^{2m}} C_1| \ev \left[h(Z_{i_{max}},...) - h(Z_{i_{max}}^*,...)\right]|  \leq \\
+%  &  \frac{1}{n^{2m-2}} C_1 \sum_{i \in N^{2m}} Lip(h) \ev |Z_{i_{max}} - Z_{i_{max}}^*| \leq   \frac{1}{n^{2m-2}} C_1 Lip(h) \sum_{i \in N^{2m}} \tau(i_{max}).
+% \end{align}
+% The thesis of this lemma follows form   
+% \begin{align}
+%  \frac{1}{n^{2m-2}} \sum_{i \in N^{2m}} \tau(i_{max}) \leq 2m \frac{1}{n^{2m-2}} \sum_{1 \leq  i \leq n }  i^{-3} i^{2m-1}  = O( n^{-1}).
+% \end{align}
+% The first inequality follows from the fact that there exists less than $ 2m i^{2m-1}$ tuples with an maximal element equal to $i$ and the mixing coefficient is such that  $\tau(i) = o(i^{-3})$. 
+\end{proof}
+
+
+
+
+
+\begin{corollary}
+\label{lem:auxAsymp2a}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments and $Q_{i_1,...,i_2m}$ is a random variable independent of $(Z_{i_1},...,Z_{i_m})$ with expected value smaller then $C$ then 
+\begin{align}
+  \lim_{n \to \infty}\frac{1} {n^{2m-2}} \ev  \sum_{i \in N^{2m}}  Q_{i_1,...,i_{2m}} h_{m}(Z_{i_1},...,Z_{i_m})h_{m}(Z_{i_{m+1}},...,Z_{i_{2m}}) = 0.
+\end{align}
+\end{corollary}
+
+
+\begin{lemma}
+\label{lem:higherVstats}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments and $Q_{i_1,...,i_m}$ is a random variable independent of the vector $(Z_{i_1},...,Z_{i_m})$ with the expected value smaller then $C$ then for any component $h_c$ of more than two arguments
+\begin{align}
+\lim_{n \to \infty} \frac {1} {n^{m-1}} \sum_{i \in N^m}  \sum_{1 \leq j_1<...<j_c < m} \ev Q_{i_{j_1},...,i_{j_c}}   h_c(Z_{i_{j_1}},...,Z_{i_{j_c}}) \overset{P}{=} 0.
+\end{align}
+\end{lemma}
+\begin{proof}
+For each  $1 \leq j_1<...<j_c < m$  simplify
+\begin{align}
+& \frac {1} {n^{m-1}} \sum_{i \in N^m}  \ev Q_{i_{j_1},...,i_{j_c}}   h_c(Z_{i_{j_1}},...,Z_{i_{j_c}}) = \frac {1} {n^{m-1}} \sum_{i \in N^m}  \ev Q_{i_{j_1},...,i_{j_c}}   \ev h_c(Z_{i_{j_1}},...,Z_{i_{j_c}}) \leq \\
+&C \frac {1} {n^{m-1}} \sum_{i \in N^m} \ev    h_c(Z_{i_{j_1}},...,Z_{i_{j_c}}) \overset{L.\ref{lem:summingLema}}{=\joinrel=}  C \frac {1} {n^{m-c-1}} \sum_{i \in N^c} \ev    h_c(Z_{i_{1}},...,Z_{i_{c}}) =: S_n.
+\end{align}
+Using Lemmas \ref{lem:auxAsymp1} and \ref{lem:auxAsymp2} respectively we show that $\ev S_n$ and $\ev S_n^2$ converges to zero, which implies that $S_n$ converges to zero in probability. 
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:higherVstats2}
+If $h$ is a canonical and Lipschitz continuous core of three or more arguments then for any component $h_c$ of more than two arguments  
+\begin{align}
+\lim_{n \to \infty} n V(h_c) = 0.
+\end{align}
+\end{lemma}
+\begin{proof}
+Put $Q_{i_1,...,i_m}=1$ and use Lemma \ref{lem:higherVstats}.
+\end{proof}
+
+
+
+
+
+\begin{lemma}
+\label{lem:meanWi}
+\begin{align}
+\lim_{n \to \infty} \frac 1 n \sum_{i=1}^n W_i \overset{P}{=} 0.
+\end{align}
+\end{lemma}
+\begin{proof}
+By the definition of $W_i$, $\ev (\sum_{i=1}^n W_i)^2 = O(n l_n)$,  $\lim_{n \to \infty} \frac {l_n}{n} =0 $ and $\ev \sum_{i=1}^n W_i = 0$. Therefore $\frac{1} {n} \sum_{i=1}^{n}W_i$ converges to zero in probability.
+\end{proof}
+
+
+
+
+
+\begin{lemma}
+\label{lem:toZeroWi}
+Let $f$ be a one-degenerate, Lipschitz continuous function of at least two arguments, integrable with respect to $Z_1$. Further assume that $f_2$ is a kernel. Then for a positive integer $p$
+\begin{align}
+\lim_{n \to \infty } n V(f) \left( \frac 1 n \sum_{i=1}^n W_i \right)^p =0
+\end{align}
+\end{lemma}
+
+\begin{proof}
+By  the Lemma \ref{lem:meanWi} $\frac{1} {n} \sum_{i=1}^{n}W_i$ converges to zero in probability. Therefore we only need to show that $ \frac {1}{n^{c-1}} \sum_{i \in N^c} f(Z_{1_1},...,Z_{1_c}) $ converges. 
+
+In case $f$ has two arguments  \cite[Theorem 2.1]{leucht_dependent_2013} assures that $n V(f)$  converges to some  random variable. In other case we use Theorem \ref{th:mainOne} to see that $n V(f)$ converges. 
+\end{proof}
+
+\begin{lemma}
+\label{lem:oneWtrick}
+If $h$ is a symmetric, Lipschitz continuous, degenerate and bounded function of tow arguments. Then 
+\begin{align}
+\frac{1}{n} \sum_{i \in N^2} W_{i_1} h(Z_{i_1},Z_{i_2}) 
+\end{align}
+converges.
+\end{lemma}
+
+\begin{proof}
+\begin{align}
+\label{eq:h2eq1}
+& \frac{1}{n} \sum_{i \in N^2} W_{i_1}  h(Z_{i_1},Z_{i_3}) = \frac 1 4 (V_{-} + V_{+}) \text{ where,} \\   
+V_{-} &= n^{-1} \sum_{i \in N^2} (W_{i_1}-1)h(Z_{i_1},Z_{i_2})(W_{i_2}-1), \\
+V_{+} &= n^{-1} \sum_{i \in N^2}  (W_{i_1}+1)h(Z_{i_1},Z_{i_2})(W_{i_2}+1), \\ 
+\end{align}
+are normalized V statistics that converge. To see that we use Lemma \ref{lem:convergence2012} with $g_{+}(x)=x+1$ and $g_{-}(x)=x-1$ respectively. The only non-trivial assumption is that $\ev|g_{+}(W_i)|^k < \infty$ and $\ev|g_{-}(W_i)|^k<\infty$  - this follows from $\ev |W_i|^k$. 
+\end{proof}
+
+
+
+
+\begin{lemma}
+\label{lem:convergence2012}
+Let $x=(w,z)$ and suppose $f(x_1,x_2) = g(w_1)g(w_2) h(z_1,z_2)$ where$g$ is differentiable, $\ev |g(W_1)|^k \leq \infty$ for all $k$ and $h$ is symmetric, Lipschitz continuous, degenerate and bounded. Then 
+\begin{align}
+n V(f)= \frac 1 n \sum_{i,j} f(X_i,X_j) = \frac 1 n \sum_{i,j} g(W_i) g(W_j) h(Z_i,Z_j) 
+\end{align}
+converges to zero.   
+\end{lemma}
+\begin{proof}
+We use  \cite[Theorem 2.1]{leucht2012degenerate} to show that $n V(f)$ converges that requires checking assumptions $\textit{A1 - A3}$ 
+
+\textit{Assumption A1.} Point (i) requires that the process $(W_n,Z_n)$ is a strictly stationary sequence of $\mathbb{R}^d$-values random variables such that $\ev \parallel (W_n,Z_n) \parallel_1 < \infty$ - this is met. For the point (ii) we put $\delta=\frac 5 6$ and check
+\begin{align}
+\sum_{r=1}^{\infty} r \tau(r)^{\delta} \leq \sum_{r=1}^{\infty} r r^{-3 \frac{5}{6}} = \sum_{r=1}^{\infty} r^{-\frac{3}{2}} < \infty. 
+\end{align}
+
+\textit{Assumption A2.} Point (i) requires that the function $f$ is symmetric, measurable and
+degenerate. Symmetry and measurability are obvious and for the degeneracy we calculate 
+\begin{align}
+\ev g(W_1) g(w) h(Z_1,z) =  \ev g(W_1) g(w) \ev h(Z_1,z) = 0.
+\end{align}  
+
+ Point (ii) requires that for $\nu > (2-\delta)/(1-\delta) = 7$ (since we have chosen $\delta=\frac 5 6$).
+\begin{align}
+\sup_{k \in \mathbf{N}} \ev |f(X_1,X_k)|^{\nu} < \infty \text{ and } \sup_{k \in \mathbf{N}} \ev |f(X_1,X_k^*)|^{\nu} < \infty
+\end{align}
+Both requirements are met since $h$ is bounded and the process $g(W_i)$ has finite moments.
+
+\textit{Assumption A3.} Function $f$ is Lipschitz continuous - this is met since $g$ is differentiable and $h$ is Lipschitz continuous.   
+\end{proof}
+
+
+
+
+\begin{lemma}
+\label{stmt:obviousD}
+\begin{align}
+\sum_{i=1}^n \tilde W_i = \sum_{i=1}^n  \left( W_i - \frac 1 n \sum_{i=j}  W_j \right) = 0. 
+\end{align}
+\end{lemma}
+
+\begin{lemma}
+\label{lem:convergenceProblem}
+If $f$ is canonical, Lipschitz continuous, bounded and differentiable then a random variable 
+\begin{align}
+\frac 1 n  \sum_{1 \leq i,j \leq n} \tilde W_i \tilde W_j f(Z_i,Z_j)
+\end{align}
+converges.
+\end{lemma}
+
+\begin{proof}
+\begin{align}
+&\frac 1 n \sum_{1 \leq i,j \leq n} \tilde W_i \tilde W_j f(Z_i,Z_j) = \frac 1 n \sum_{1 \leq i,j \leq n} \left( W_i - \sum_{a=1}^n W_a \right) \left( W_i - \sum_{b=1}^n W_b \right) f(Z_i,Z_j) =\\
+&\frac 1 n \sum_{1 \leq i,j \leq n} W_i W_j f(Z_i,Z_j)  - \left( \frac 2 n \sum_{1 \leq i,j \leq n} f(Z_i,Z_j) \right) \left( \frac 1 n \sum_{b=1}^n W_b \right)  + \left( \frac 1 n  \sum_{1 \leq i,j \leq n} f(Z_i,Z_j) \right) \left( \frac 1 n \sum_{b=1}^n W_b \right)^2.
+\end{align}
+Last two terms converge to zero since $\left( \frac 1 n \sum_{b=1}^n W_b \right)$ converges to zero (by Lemma \ref{stmt:obviousD}). The first term converges due to Lemma \ref{lem:convergence2012}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% Proof of the Theorem  \ref{th:mainOne} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Proof of the Theorem  \ref{th:mainOne}} 
+ \label{sec:prMainOne}
+ 
+\begin{lemma}
+\label{lem:equivVanila}
+Assume that the stationary process $Z_t$ is $\tau$-dependent with a coefficient $\tau(i) = i^{-6-\epsilon}$ for some $\epsilon>0$. If core $h$ is Lipschitz continuous, one-degenerate, bounded, and its $h_2$ component is a kernel then its normalized $V$ statistic limiting distribution is proportional to its second component normalized $V$-statistic distribution. Shortly    
+\begin{align}
+\lim_{n \to \infty} n V(h) \overset{d}{=} \binom m 2 \lim_{n \to \infty}  n V(h_2). 
+\end{align}
+\end{lemma}
+\begin{proof}
+Statement \ref{stm:decomposition} shows how to write core  $h$ as a sum of its components $h_i$ ,
+\begin{align}
+  n V(h) = n V(h_m) + \binom m 1 n V(h_{m-1}) + ...+ \binom {m} {m-2} n V(h_{2}) + \binom {m} {m-1} n V(h_{1}).
+\end{align}
+By Lemma \ref{stm:LipAndBound} all components of $h$ are bounded and Lipschitz continuous. Since $h$ is one-degenerate, component $h_1(z)$ is equal to zero everywhere
+\begin{align}
+h_1(z) = \ev h(z,Z_{2}^*,...,Z_{m}^*)=0. 
+\end{align}
+
+By Lemma \ref{lem:higherVstats2}, for $c \geq 3$, $n V(h_{c})$  converges to zero in probability. Therefore the behaviour of $V(h)$ is governed by $V(h_2)$.
+\end{proof}
+
+
+
+
+\begin{lemma}
+\label{lem:equivBoot}
+Assume that the stationary process $Z_t$ is $\tau$-dependent with a coefficient $\tau(i) = i^{-6-\epsilon}$ for some $\epsilon>0$. If core $h$ is Lipschitz continuous, one-degenerate, bounded, and its $h_2$ component is a kernel then its normalized and bootstrapped $V$ statistic limiting distribution is same its second component normalized and bootstrapped $V$-statistic distribution. Shortly
+\begin{align}
+\lim_{n \to \infty} n V_b(h) \overset{d}{=} \binom m 2 \lim_{n \to \infty}  n V_b(h_2). 
+\end{align}
+\end{lemma}
+\begin{proof}
+We show that the proposition holds for $V_{b1}$ and then we prove that difference between $V_{b1}$ and $V_{b2}$ converges to zero in probability - the concept is to \cite{leucht_dependent_2013}.   
+
+\textbf{$V_{b1}$ convergence.} We write core  $h$ as a sum of components $h_i$ ( $h_1$ is equal to zero and therefore omitted). This unfortunately requires quite cumbersome notation with multiple indexes.
+\begin{align}
+\label{eq:bootstrapedOne}
+ n V_{b1}(h)& = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \Big[ W_{i_1} W_{i_2}   h_m(Z_{i_1},...,Z_{i_m})  + \\ 
+ & \sum_{1 \leq j_1 < ...<j_{m-1} \leq m } W_{i_1} W_{i_2} h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{m-1}}})   + ... + \sum_{1 \leq j_1 < j_2 \leq m } W_{i_1} W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) \Big].
+\end{align}
+Consider a sum associated with $h_2$
+\begin{align}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  \sum_{1 \leq j_1 < j_2 \leq m } W_{i_1} W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}).
+\end{align}
+Fix $j_1,j_2$. If $j_1 \neq 1$,  $j_2 \neq 2$ then the sum 
+\begin{align}
+\label{eq:difference}
+&\frac{1} {n^{m-1}}  \sum_{i \in N^m}   W_{i_1} W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) \overset{L.\ref{lem:summingLema}}{=\joinrel=}   \frac{1} {n^3}  \sum_{i \in N^4}   W_{i_1} W_{i_2} h_2(Z_{i_3},Z_{i_4}) = \\
+& \left( \frac{1}{n}   \sum_{ i \in N^2} h_2(Z_{i_1},Z_{i_2}) \right) (\frac{1}{n} \sum_{i=1}^{n}W_i)^2 \overset{L. \ref{lem:toZeroWi}}{\longrightarrow} 0.  
+\end{align}
+converges to zero in probability. If $j_1 = 1$ and  $j_2 \neq 2$, then the sum  
+\begin{align}
+\label{eq:h2eq1}
+&\frac{1} {n^{m-1}}  \sum_{i \in N^m}  W_{i_1} W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}})  \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^2}  \sum_{i \in N^3}   W_{i_1} W_{i_3} h_2(Z_{i_1},Z_{i_3}) = \\
+& \left( \frac{1}{n} \sum_{i \in N^2} W_{i_1}  h_2(Z_{i_1},Z_{i_2}) \right) \left( \frac 1 n \sum_{i=1}^{n}W_i \right) \overset{L.\ref{lem:meanWi},\ref{lem:oneWtrick}  }{\longrightarrow} 0,  
+\end{align}
+converges to zero in probability. The  sum associated with $h_c$ for $c>2$
+\begin{align}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  \sum_{1 \leq j_1 < ... < j_c \leq m } W_{i_1} W_{i_2} h_2(Z_{i_{j_1}},...,Z_{i_{j_c}}) \overset{L. \ref{lem:higherVstats}  }{\longrightarrow} 0
+\end{align}
+converges to zero in probability as well.
+
+Therefore 
+\begin{align}
+\lim_{n \to \infty} n V_b(h) \overset{d}{=}  \lim_{n \to \infty} \sum_{i \in N^2} W_{i_1}W_{i_2} h_2(Z_{i_1},Z_{i_2}) 
+\end{align}
+what proofs the proposition for $V_{b1}$.
+
+
+\textbf{$V_{b1}$ convergence.} To prove that  $V_{b2}$ converges to the same distribution as $V_{b1}$ we investigate the difference
+\begin{align}
+&V_{b1} - V_{b2} = \frac{1} {n^{m-1}} \sum_{i \in N^m} W_{i_1}W_{i_2} h(Z_{i_1},...,Z_{i_m}) - \frac{1} {n^{m-1}} \sum_{i \in N^m} \tilde W_{i_1} \tilde W_{i_2} h(Z_{i_1},...,Z_{i_m}) = \\
+&\frac{1} {n^{m-1}} \sum_{i \in N^m} W_{i_1}W_{i_2} h(\cdot) - \frac{1} {n^{m-1}} \sum_{i \in N^m}  (W_{i_1} -\frac 1 n \sum_{j=1}^n W_j ) (W_{i_2} -\frac 1 n \sum_{j=1}^n W_j ) h(\cdot) = \\
+&-\left(\frac 2 n \sum_{j=1}^n W_j \right) \left( \frac{1} {n^{m-1}} \sum_{i \in N^{m}} W_{i_1} h(Z_{i_1},...,Z_{i_m}) \right) + \\
+& \quad \quad \quad + \left(\frac{1} {n^{m-1}} \sum_{i \in N^{m}}  h(Z_{i_1},...,Z_{i_m}) \right) \left(\frac 1 n \sum_{j=1}^n W_j \right)^2.
+\end{align} 
+The second term
+\begin{align}
+\left(\frac{1} {n^{m-1}} \sum_{i \in N^{m}}  h(Z_{i_1},...,Z_{i_m}) \right) \left(\frac 1 n \sum_{j=1}^n W_j \right)^2 \overset{L. \ref{lem:toZeroWi}}{\longrightarrow} 0 
+\end{align}
+converges in probability. Therefore we only need to show that the first term converges to zero
+\begin{align}
+\label{eq:firstTerm}
+\left(\frac 2 n \sum_{j=1}^n W_j \right) \left( \frac{1} {n^{m-1}} \sum_{i \in N^{m}} W_{i_1} h(Z_{i_1},...,Z_{i_m}) \right).
+\end{align}
+Since $\frac 2 n \sum_{j=1}^n W_j$ converges to zero (by Lemma \ref{lem:meanWi}) we only nee to show that $\frac{1} {n^{m-1}} \sum_{i \in N^{m}} W_{i_1} h(Z_{i_1},...,Z_{i_m})$ converges. Using decomposition for Lemma \ref{lem:Components} we write
+\begin{align}
+\label{eq:xyz}
+&\frac{1} {n^{m-1}} \sum_{i \in N^{m}} W_{i_1} h(Z_{i_1},...,Z_{i_m}) =\frac{1} {n^{m-1}}  \sum_{i \in N^m}  \Big[ W_{i_1}    h_m(Z_{i_1},...,Z_{i_m})  + \\ 
+ & \sum_{1 \leq j_1 < ...<j_{m-1} \leq m } W_{i_1}  h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{m-1}}})   + ... + \sum_{1 \leq j_1 < j_2 \leq m } W_{i_1}  h_2(Z_{i_{j_1}},Z_{i_{j_2}}) \Big].
+\end{align}
+Term containing $h_2$ can be written as
+\begin{align}
+&\frac{1} {n^{m-1}} \sum_{i \in N^{m}} \sum_{1 \leq j_1 < j_2 \leq m } W_{i_1}  h_2(Z_{i_{j_1}},Z_{i_{j_2}}) = \\
+&= \left\{
+ \begin{array}{lr}
+    n^{-1} \sum_{i \in N^{2}}  W_{i_1}  h_2(Z_{i_1},Z_{i_2}) : j_1=1 \text{ or } j_1=2 \\
+    \left( n^{-1} \sum_{i \in N^{2}}   h_2(Z_{i_1},Z_{i_2}) \right) \left( \frac 1 n \sum_{j=1}^n W_j \right) : \text{ otherwise }. 
+  \end{array}
+\right.
+\end{align}
+In the first case ($j_1=1$  or $j_1=2$ ) Lemma \ref{lem:oneWtrick} assures convergence. In the second case we use Lemma \ref{lem:toZeroWi} to show convergence to zero. 
+Other terms with $h_c$ for $c>2$
+\begin{align}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m} \sum_{1 \leq j_1 < ...<j_{c} \leq m } W_{i_1}  h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{c}}}) \overset{L. \ref{lem:higherVstats}}{\longrightarrow} 0 
+\end{align}
+in probability.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   ALTERNATIVE    %%%%%%%%%%%%%%%%%
+\subsection{Proof of the Proposition \ref{prop:alternative}}
+\label{sec:prMainTwo}
+
+
+
+\begin{lemma}
+\label{lem:degb1}
+$nV_{b2}(h)$ converges to some non-zero random variable with finite variance.
+\end{lemma}
+
+\begin{proof}
+Using decomposition from the Lemma \ref{lem:Components} we write core  $h$ as a sum of components $h_c$ and $h_0$  
+\begin{align}
+\label{eq:bootstrapedOne}
+ &n V_{b2}(h) = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \Big[h_0  \tilde W_{i_1} \tilde W_{i_2} + \sum_{1 \leq j \leq m } \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_j})    \\ 
+ &\sum_{1 \leq j_1 < j_2 \leq m } \tilde W_{i_1} \tilde W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) + ... +  \tilde W_{i_1} \tilde W_{i_2}   h_m(Z_{i_1},...,Z_{i_m}) \Big].
+\end{align}
+We examine terms of the aboves sum starting form the one with $h_0$ - it is equal to zero
+\begin{align}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  h_0  \tilde W_{i_1} \tilde W_{i_2}   \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac 1 n h_0 \sum_{i \in N^2} \tilde W_{i_1} \tilde W_{i_2} = \frac 1 n h_0 \left( \sum_{i=1} \tilde W_i \right)^2  \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align}  
+Term with $h_1$ is zero as well, to see that fix $j$ and consider 
+\begin{align}
+T_{j} = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_j}).  
+\end{align}  
+If $j=1$ then
+\begin{align}
+T_{1} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n}  \sum_{i \in N^2}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_1}) =  \frac{1} {n}  \left( \sum_{i=1}^n  \tilde W_i h_1(Z_i) \right) \left( \sum_{i=1} \tilde W_i \right) \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align}
+If $j=2$ the same reasoning holds and if $j>2$
+\begin{align}
+T_{j} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^2}  \sum_{i \in N^3}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_3}) =  \frac{1} {n}  \left( \sum_{i=1}^n h_1(Z_i) \right) \left( \sum_{i=1} \tilde W_i \right)^2 \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align}
+Term containing $h_2$ 
+\begin{align}
+T_{j_1,j_2} = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \tilde W_{i_1} \tilde W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}})
+\end{align}
+is not zero. In the Lemma \ref{lem:convergenceProblem}  we show that for $j_1=1$ and $j_2=2$ it  converges to some non-zero variable. For $j_1 = 1$ and $j_2 > 2$ we have
+\begin{align}
+T_{1,j_2} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^2}  \sum_{i \in N^3}  \tilde W_{i_1} \tilde W_{i_2} h_2(Z_{i_1},Z_{i_{j_2}}) = \frac{1} {n^2} \left( \sum_{i \in N^2}  \tilde W_{i_1}  h_2(Z_{i_1},Z_{i_2}) \right) \left( \sum_{i=1} \tilde W_i \right)  \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align}
+Exactly the same argument works for $T_{j_2,1}$. If both $j_1 \neq 1$ and $j_2 \neq 2$ then 
+\begin{align}
+T_{j_1,j_2} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^3}  \sum_{i \in N^4}  \tilde W_{i_1} \tilde W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) = \frac{1} {n^3} \left( \sum_{i \in N^2}   h_2(Z_{i_{j_1}},Z_{i_{j_2}})\right) \left( \sum_{i=1} \tilde W_i \right)^2 \overset{L.\ref{stmt:obviousD}}{=\joinrel=}0.
+\end{align}   
+Terms containing $h_c$ for $c>2$ 
+\begin{align}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m} \sum_{1 \leq j_1 < ...<j_{c} \leq m } \tilde W_{i_1} \tilde W_{i_2}  h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{c}}}) \overset{L. \ref{lem:higherVstats}}{\longrightarrow} 0 
+\end{align}
+converge to zero in probability.
+ \end{proof}
+  
+\begin{lemma}
+\label{lem:degb2}
+$ V_{b1}$ converges to zero in probability.  
+\end{lemma}  
+\begin{proof}
+The expected value and variance of $V_{b1}$ converge to 0, therefore $V_{b1}$ converges to zero in probability. 
+%\begin{align}
+%& V_{b1} = \frac {1} { n^{m}}\sum_{i \in N^m} W_{i_1} W_{i_2} h(Z_{i_1},...,Z_{i_m}) \leq \parallel h \parallel_{\infty}  \frac {1} { n^{m} \sum_{i \in N^m} W_{i_1} W_{i_2}  \leq \\
+%\end{align}
+\end{proof}  
+  
+  \subsection{Proof of Proposition \ref{prop:mmd} }
+  \begin{proposition}
+ Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
+ both be $\tau$-dependent with coefficients $\tau(i) = o(\frac{1}{i^3})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\rho_x \rho_y n\widehat{\text{MMD}}_k$ and $\rho_x \rho_y n\widehat{\text{MMD}}_{k,b}$ converge to the same distribution as $n\to\infty$.
+\end{proposition}
+  \begin{proof}
+  Since $\widehat{\text{MMD}}_k$ is just the MMD between empirical measures
+using kernel $k$, it must be the same as the empirical MMD $\widehat{\text{MMD}}_{\tilde k}$ with centred kernel $\tilde{k}(x,x')=\left \langle k(\cdot,x)-\ev k(\cdot,X), k(\cdot,x')-\ev k(\cdot,X) \right \rangle_{\Hk}$ according to \cite[Theorem 22]{SejSriGreFuk13}. Using the Mercer expansion, we can write
+\begin{align*}
+\rho_x \rho_y n\widehat{\text{MMD}}_k & = \rho_{x}\rho_{y}n\sum_{r=1}^{\infty}\lambda_{r}\left(\frac{1}{n_{x}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})-\frac{1}{n_{y}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\right)^{2}\\
+ & = \sum_{r=1}^{\infty}\lambda_{r}\left(\sqrt{\frac{\rho_{y}}{n_{x}}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})-\sqrt{\frac{\rho_{x}}{n_{y}}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\right)^{2},
+\end{align*}
+where $\{\lambda_r\}$ and $\{\Phi_r\}$ are the eigenvalues and the eigenfunctions of the integral operator $f\mapsto \int f(x)\tilde k(\cdot,x)dP_x(x)$ on $L_2(P_x)$. Similarly as in \cite[Theorem 2.1]{leucht_dependent_2013}, the above converges in distribution to $\sum_{r=1}^\infty \lambda_r Z_r^2$, where $\{Z_r\}$ are marginally standard normal, jointly normal and given by $Z_r=\sqrt{\rho_x}A_r-\sqrt{\rho_y}B_r$. $\{A_r\}$ and $\{B_r\}$ are in turn also marginally standard normal and jointly normal, with a dependence structure induced by that of $\{X_t\}$ and $\{Y_t\}$ respectively. This suggests individually bootstrapping each of the terms $\Phi_{r}(x_{i})$ and $\Phi_{r}(y_{j})$, giving rise to 
+\begin{align*}
+\widehat{\text{MMD}}_{\tilde k, b}&=\sum_{r=1}^{\infty}\lambda_{r}\left(\frac{1}{n_{x}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})\tilde W_i^{(x)}-\frac{1}{n_{y}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\tilde W_j^{(y)}\right)^{2}\\
+{}&=\quad\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}\tilde k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}\tilde k(y_i,y_j)\\
+{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}\tilde k(x_i,y_j). 
+\end{align*}
+Now, since $\tilde k$ is degenerate under the null distribution, the first two terms (after appropriate normalization) converge in distribution to $\rho_x\sum_{r=1}^\infty \lambda_r A_r^2$ and  $\rho_y\sum_{r=1}^\infty \lambda_r B_r^2$ by \cite[Theorem 3.1]{leucht_dependent_2013} as required. The last term follows the same reasoning - it suffices to check part (b) of \cite[Theorem 3.1]{leucht_dependent_2013} (which is trivial as processes $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ are assumed to be independent of each other) and apply the continuous mapping theorem to obtain convergence to $-2\sqrt{\rho_x\rho_y}\sum_{r=1}^\infty \lambda_r A_rB_r$ implying that $\widehat{\text{MMD}}_{\tilde k, b}$ has the same limiting distribution as $\widehat{\text{MMD}}_{k}$.
+While we cannot compute $\tilde k$ as it depends on the underlying probability measure $P_x$. However, it is readily checked that due to the empirical centering of processes $\{\tilde W_t^{(x)}\}$ and $\{\tilde W_t^{(y)}\}$, $\widehat{\text{MMD}}_{\tilde k, b}=\widehat{\text{MMD}}_{k, b}$, which proves the claim. Note that the result fails to be valid for non-empirically centred wild bootstrap processes.
+\end{proof}
+  
+%\bibliographystyle{plain}
+%\bibliography{nips14Bib}
+\end{document}

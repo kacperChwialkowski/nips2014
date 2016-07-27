@@ -1,0 +1,366 @@
+\documentclass[landscape,a0]{a0poster_csml_v2}
+% NOTE: to remove logo from title, just use \headerNoLogo option below
+% Options (don't put spaces between options!)
+% portrait and landscape: format of the page 
+% A0, A1, A2, A3, A4 : size of the poster
+
+% compared to the old mpi poster style, two things have changed: 
+% - it now can be compiled with both (ps)latex and pdflatex
+% - there are different variants for headers: one with the mpi logos, 
+%   and one where you can include arbitrary files as logos (or have no
+%   logos at all). 
+% 
+
+
+% if you want to use pdflatex, then include the commands:
+\usepackage[pdftex]{graphicx,color}
+\DeclareGraphicsExtensions{.pdf}
+% if you want to use (ps)latex, then include the commands: 
+%\usepackage{graphics}
+%\DeclareGraphicsExtensions{.eps}
+
+
+\usepackage{amssymb,amsmath,bbold}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{verbatim}
+\usepackage{caption}
+%custom packages
+\usepackage{amssymb,amsmath}
+
+
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+
+%custom commands
+\newcommand{\ev}{\mathcal{E}}
+\newtheorem{theorem}{Theorem}
+
+% size of the columns of the poster, relative to the width of the
+% whole poster: 
+\renewcommand{\columnfrac}{.3}% i.e. want three columns
+\newcommand{\half}{\frac{1}{2}}
+
+
+
+%Kenji macros
+\newcommand{\hS}{\widehat{C}} %empirical covariance
+\newcommand{\pS}{C} %population covariance
+\newcommand{\hlam}{\widehat{\lambda}}
+\newcommand{\lam}{\lambda}
+
+
+
+\usepackage{natbib}
+
+
+\begin{document}
+\begin{poster}
+
+%------------------------------------------------------------
+% header: 
+%------------------------------------------------------------
+
+% Additionally to the 'normal' font size commands as
+% \tiny,\small,\large\ (look them up in a latex book) there are now
+% the fonts \veryHuge, \VeryHuge, \VERYHuge
+
+%title: 
+\savebox{\PosterTitle}{\VeryHuge Optimal Kernel Choice for Large-Scale Two-Sample Tests}
+%authors:
+\savebox{\PosterAuthor}{\Large 
+Arthur Gretton,$^{1,3}$ Bharath Sriperumbudur,$^1$ Dino Sejdinovic,$^1$  Heiko Strathmann$^2$, Sivaraman Balakrishnan$^4$, Massimiliano Pontil$^2$, Kenji Fukumizu$^5$}
+%addresses:
+\savebox{\PosterAddress}{\large 
+$^1$Gatsby Unit and $^2$CSD, CSML, UCL, UK; $^3$MPI for Intelligent Systems, Germany;
+ $^4$ Carnegie Mellon University; $^5$ Institute of Statistical Mathematics}
+
+% Logos: 
+
+% you can either use the standard MPI header 
+% (make sure the logo files logo_mpi.pdf and logo_kyb.pdf are in your
+% latex path):
+\headerMpi 
+
+% or you can use a header without any logos: 
+%\headerNoLogo 
+
+% or you can enter your own logos and use them in the header:
+% (make sure the figures are in the path):
+%\newcommand{\LeftLogoFile}{example_logo.pdf}
+%\newcommand{\RightLogoFile}{example_logo.pdf}
+%\headerCustomLogo
+
+
+
+% the new color can then be used with the command \color{name}
+%\definecolor{anewcolor}{rgb}{0.5,0,0}
+%\newcommand{\ulescolor}{\bf \color{anewcolor}}
+\definecolor{mpigreen}{rgb}{0.3,0.61,0.59}
+\definecolor{mpigrey}{rgb}{0.86,0.85,0.83}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{brightgreen}{rgb}{0,1,0}
+\definecolor{palepink}{rgb}{1.0,0.4,0.4}
+\definecolor{anublue}{rgb}{0,0.5,0.9}
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{engPink}{cmyk}{0.0,0.4,0.44,0.33}
+
+
+\newcommand{\Mpigreen}[1]{\color{mpigreen}{#1}\color{black}}
+\newcommand{\Mpigrey}[1]{\color{mpigrey}{#1}\color{black}}
+\newcommand{\Red}[1]{\color{red}{#1}\color{black}}
+\newcommand{\Brightgreen}[1]{\color{brightgreen}{#1}\color{black}}
+\newcommand{\Palepink}[1]{\color{palepink}{#1}\color{black}}
+\newcommand{\Anublue}[1]{\color{anublue}{#1}\color{black}}
+\newcommand{\Blue}[1]{\color{blue}{#1}\color{black}}
+\newcommand{\Engpink}[1]{\color{engPink}{#1}\color{black}}
+
+
+
+%Maths macros
+\newcommand{\bdatax}{\mathbf{X}}
+\newcommand{\bdatay}{\mathbf{Y}}
+\newcommand{\bdata}{\mathbf{Z}}
+
+\newcommand{\Eb}{\mathbf{E}}
+\newcommand{\Ex}{\mathbf{E}}
+\renewcommand{\Pr}{\boldsymbol{\mathsf{P}}}
+\newcommand{\Qr}{\boldsymbol{\mathsf{Q}}}
+
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+
+%DEBUG: re-introduce when compiling on laptop
+%\renewcommand{\Re}{\mathbb{R}}
+\newcommand{\Nat}{\mathbb{N}}
+
+\newcommand{\sx}{\mathsf{x}}
+\newcommand{\sy}{\mathsf{y}}
+\newcommand{\sz}{\mathsf{z}}
+
+
+% ------------------------------------------------------------
+% first column: 
+% ------------------------------------------------------------
+% Attention: between the end of one column and the begin of the next
+% column must not be spaces - otherwise latex thinks that it has to
+% make a pagebreak... see below how I did it!
+
+
+\begin{PosterColumn} % this creates a column, you have to care yourself
+% that it doesn't get too long for the poster
+%
+
+% the old pbox command does not exist any more, as it hacked the ps
+% file (which of course does not work any more with pdflatex). So
+% please use this one instead: 
+%
+\PosterBox{Is Blue independent of Green?}
+\includegraphics[width=0.9\textwidth]{./start.pdf} 
+%%%%%%%%%%%%%%%%
+
+
+% ------------------------------------------------------------
+\PosterBox{Background}
+% ------------------------------------------------------------
+\Blue{{\bf Random processes:}}
+\begin{itemize}
+ \item $(Z_t,\mathcal{F}_t)_{t \in \mathbb{N}}$  is a strictly stationary sequence of random variables and  such that $Z_t=(X_t,Y_t)$. 
+ \item \textbf{$\beta$-mixing, absolute regularity} 
+ \begin{equation*}
+\beta(m) = \frac 1 2 \sup_n \sup \sum_{i=1}^{I} \sum_{j=1}^{J}  |P(A_i \cap B_j) - P(A_i)P(B_j) |.
+\end{equation*}
+ The second supremum in the $\beta(m)$ definition is taken over all pairs of finite partitions $\{A_1,\cdots,A_I\}$  and $\{B_1,\cdots,B_J\}$ of the sample space such that $A_i \in \mathcal{A}_{1}^{n}$ and $B_j \in \mathcal{A}_{n+m}^{\infty}$, and $\mathcal{A}_{b}^{c}$ is a sigma field spanned by a subsequence, $\mathcal{A}_{b}^{c} = \sigma(Z_b,Z_{b+1}, ..., Z_{c})$. 
+ \item \textbf{$\phi$-mixing, uniform mixing} 
+ 
+\begin{equation*}
+\phi(m) = \sup_n  \sup_{A \in \mathcal{A}_{1}^{n} } \sup_{B \in \mathcal{A}_{n+m}^{\infty}}  |P(B|A) - P(B)|.
+\end{equation*}
+\end{itemize}
+
+
+
+\vspace{1cm}
+\Blue{{\bf Hilbert Schmidt Independence Criterion:}}
+
+Let $k$ and $l$ be characteristic, continuous, translation invariant kernels, vanishing at infinity. Define 
+
+\begin{align*}
+h(z_1,z_2,z_3,z_4) = k(x_{1},x_{2}) [  l(y_{1},y_{2})+  l(y_{3},y_{4}) - 2  l(y_{2},y_{3})].
+\end{align*}
+
+
+\begin{theorem}
+\begin{align*}
+X_1 \independent Y_1  \Rightarrow \int h(z_1,z_2,z_3,z_4) P(dZ_1) P(dZ_2) P(dZ_3) P(dZ_4) =0 , \\
+\neg (X_1 \independent Y_1)  \Rightarrow \int h(z_1,z_2,z_3,z_4) P(dZ_1) P(dZ_2) P(dZ_3) P(dZ_4) >0.
+\end{align*}
+\end{theorem}
+
+\vspace{1cm}
+\Blue{{\bf The degenerate $V$-statistic:}}
+
+A symmetric $h$
+\begin{gather*}
+h_{sym}(z_1,z_2,z_3,z_4) = \\ \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)})+  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})] .
+\end{gather*}
+\begin{gather*}
+X_1 \independent Y_1  \Rightarrow \int h_{sym}(Z_1,Z_2,Z_3,z_4) P(dZ_1) P(dZ_2) P(dZ_3) = 0. 
+\end{gather*}
+A test statistics
+\begin{align*}
+V_n = \frac{1}{n^4} \sum_{1 \leq i_1, i_2,i_3, i_4 \leq n} h_{sym}(Z_{i_1},Z_{i_2},Z_{i_3},Z_{i_4}).
+\end{align*}
+
+\end{PosterColumn}
+%%%
+% ------------------------------------------------------------
+% second column: 
+% ------------------------------------------------------------
+%
+\begin{PosterColumn} % this creates a column, you have to care yourself
+% that it doesn't get too long for the poster
+
+
+
+% ------------------------------------------------------------
+\PosterBox{Main result}
+% ------------------------------------------------------------
+\Blue{{\bf $X_t$ and $Y_t$ are independent}}
+\begin{theorem}
+If $ X_1$ and $Y_1$ are independent then, under some technical assumptions, and for mixing of an order $o(m^{-3})$
+
+\begin{equation*}
+  \lim_{n \to \infty} n \cdot V_n \stackrel{D}{=} \sum_{j=1}^{\infty} \lambda_{j} \tau_{j}^2,
+\end{equation*}
+
+where $\parallel \lambda_{j} \parallel_{1} \leq \infty$, $\lambda_{j} \geq 0 $, $\{ \tau_j \}_{j \in \mathbb{N}}$ are Gaussian, 
+
+\begin{equation*}
+ \ev \tau_a \tau_b = \ev e_a(Z_1) e_b(Z_1) + \sum_{j=1}^{\infty} \left[ \ev e_a(Z_1)e_b(Z_{j+1}) + \ev e_b(Z_1)e_a(Z_{j+1}) \right].
+\end{equation*}
+
+with $\{e_i \}_{i \in \mathbb{N}}$ determined by $h$ and distribution of $Z_1$. 
+\end{theorem}
+\vspace{1cm}
+\Blue{{\bf Autoregressive process vs IID}}
+
+\begin{minipage}[c]{0.5\textwidth}
+ \Blue{ { blue}}
+ \begin{align*}
+  X_t = e^{-0.05}X_{t-1} + \sqrt{1-e^{-0.1}} \epsilon_{1,t}\\
+  Y_t= e^{-0.05}Y_{t-1} + \sqrt{1-e^{-0.1}} \epsilon_{2,t}
+ \end{align*}
+ 
+ \Red{ {red}}
+  \begin{align*}
+  X_t = \epsilon_{1,t}\\
+  Y_t=  \epsilon_{2,t}
+ \end{align*}
+
+\end{minipage}
+%
+\begin{minipage}[c]{0.5\textwidth}
+\includegraphics[width=\textwidth]{./histograms.pdf} 
+\end{minipage}
+
+\vspace{1cm}
+\Blue{{\bf $X_t$ and $Y_t$ dependent}}
+\begin{theorem}
+If $ X_1$ and $Y_1$ are dependent then, under some technical assumptions
+\begin{equation*}
+  \lim_{n \to \infty}   V_n \stackrel{P}{=} a >0,
+\end{equation*}
+\end{theorem}
+As a result
+\begin{align*}
+ P( n V_n > q_{.95}) = P( V_n > q_{.95}/n) \to 1. 
+\end{align*}
+\PosterBoxSmall{
+\Blue{{Testing procedure}}~
+Pick desired quantile $q$ and check if $n V_n > q$.
+}
+
+ \textbf{Permutation Bootstrap - faulty}
+  \begin{align*}
+  \left( \begin{array}{ccccc}
+X_1 & \cdots & X_k & \cdots & X_n \\
+Y_{\pi(1)} & \cdots & Y_{\pi(k)} & \cdots & Y_{\pi(n)} 
+\end{array} \right) \text{ e.g. }
+  \left( \begin{array}{ccccc}
+X_1 & \cdots & X_{750} & \cdots & X_{1500} \\
+Y_{1117} & \cdots & Y_{314} & \cdots & Y_{51} 
+\end{array} \right) 
+  \end{align*}
+Permutation bootstrap samples from the \Red{red } distribution which is well suited for IID observations without temporal dependency.   
+  
+\textbf{Circular Shift - OK}
+\begin{align*}
+  \left( \begin{array}{ccccc}
+X_1 & \cdots & X_k & \cdots & X_n \\
+Y_{1 \dotplus m} & \cdots & Y_{k \dotplus m} & \cdots & Y_{n \dotplus m} 
+\end{array} \right) \text{ e.g. for $m$=50 }
+  \left( \begin{array}{ccccc}
+X_1 & \cdots & X_{750} & \cdots & X_{1500} \\
+Y_{51} & \cdots & Y_{800} & \cdots & Y_{50} 
+\end{array} \right) 
+  \end{align*}
+  
+If $X_t$ and $Y_t$ are independent, circular Shift bootstrap samples from the \Blue{blue } distribution.
+\end{PosterColumn}
+\begin{PosterColumn}
+
+
+
+\PosterBox{Experiments}
+\Blue{{\bf Artificial time series }}
+\begin{align*}
+\label{eq:AR1}
+X_t = a X_{t-1} + \epsilon_t \text{, }Y_t = a Y_{t-1} + \eta_t,
+\end{align*}
+ \begin{minipage}[c]{0.6\textwidth}
+\includegraphics[width=\textwidth]{./algo/out.pdf}
+ \end{minipage}
+%
+\begin{minipage}[c]{0.4\textwidth}
+\includegraphics[width=\textwidth]{./noise.pdf}
+\end{minipage}
+ 
+ 
+ \vspace{1cm}
+ \Blue{{\bf Results on the time series }}\\
+ \begin{minipage}[c]{0.49\textwidth}
+ \includegraphics[width=\textwidth]{./fp.pdf}
+ 
+ {\small False positive rate for the Shift HSIC and the Bootstrap HSIC. The sample size was $1200$, and results were averaged over $300$ repetitions.}
+ \end{minipage}
+ %
+ \begin{minipage}[c]{0.49\textwidth}
+ \includegraphics[width=\textwidth]{./truePositive.pdf}
+ 
+ {\small True positive rate for the Shift HSIC, the Bootstrap HSIC and correlation based test: sample size $1200$, results averaged over $300$ repetitions.  The red star shows  KCSD performance at $4\times$ the HSIC sample size.}
+ 
+ \end{minipage}
+
+ %
+ %
+etc
+
+
+
+%\bibliographystyle{plainnat}
+%\tiny
+%\bibliography{/.amd_mnt/steinlach/export/home/kyb/agbs/arthur/bertie/arthur/mpi/bibfile/trunk/bibfile.bib}
+%\bibliography{/home/arthur/arthur/mpi/bibfile/trunk/bibfile.bib}
+%\bibliography{shortEntryBib}
+
+
+\end{PosterColumn}
+%%%
+\end{poster}
+\end{document}
+

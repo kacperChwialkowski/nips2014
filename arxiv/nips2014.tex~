@@ -1,0 +1,100 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips14submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsfonts}
+\usepackage{amssymb,amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{mathtools}
+
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{Theorem}{Theorem}
+\newtheorem{example}{Example}
+\newtheorem{statement}{Statement}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem*{proposition*}{Proposition}
+
+
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+ \newcommand{\ev}{E}
+\newcommand{\iid}{\overset{i.i.d.}{\sim}}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+\title{A Wild Bootstrap for Degenerate Kernel Tests}
+
+\author{
+Kacper Chwialkowski \\
+Department of Computer Science\\
+University College London\\
+London, Gower Street, WC1E 6BT \\
+\texttt{kacper.chwialkowski@gmail.com} \\
+\And
+Dino Sejdinovic \\
+Gatsby Computational Neuroscience Unit, UCL \\
+17 Queen Square, London WC1N 3AR \\
+\texttt{dino.sejdinovic@gmail.com} \\
+\AND
+Arthur Gretton \\
+Gatsby Computational Neuroscience Unit, UCL \\
+17 Queen Square, London WC1N 3AR \\
+\texttt{arthur.gretton@gmail.com} \\
+}
+
+
+\nipsfinalcopy % Uncomment for camera-ready version
+\newcommand{\Hk}{\ensuremath{\mathcal{H}_k}}%
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+%Wild Bootstrap For Kernel Methods is awesome.
+
+A wild bootstrap method for nonparametric hypothesis tests based on kernel distribution embeddings is proposed. This
+  bootstrap method is used to construct provably consistent tests that apply to random
+  processes, for which the naive permutation-based bootstrap
+  fails. It applies to a large group of kernel tests
+  based on V-statistics, which are degenerate under the null
+  hypothesis, and non-degenerate elsewhere. To illustrate this
+  approach, we construct a two-sample test, an instantaneous independence
+  test and a multiple lag independence test for time series.  In experiments, the wild
+  bootstrap gives strong performance on synthetic examples, on audio
+  data, and in performance benchmarking for the Gibbs sampler. The code is available at 
+  \url{https://github.com/kacperChwialkowski/wildBootstrap}.    
+
+\end{abstract}
+
+
+
+\vspace{-4mm}
+
+\input{nips2014_mainBody.tex}
+
+
+\vspace{-2mm}
+\input{nips2014_experiments}
+
+\small
+\bibliographystyle{plain}
+\bibliography{nips14Bib}
+
+\newpage
+\normalsize
+\appendix
+\input{nips2014_appendix}
+
+  
+%\bibliographystyle{plain}
+%\bibliography{nips14Bib}
+\end{document}

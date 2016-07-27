@@ -1,0 +1,95 @@
+%% LyX 2.0.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{babel}
+\begin{document}
+Let $\left\{ Z_{t}\right\} $ be a $\tau$-dependent stationary process
+with $\tau(r)=O(r^{-6-\epsilon}).$ Let $h$ be a bounded Lipschitz
+continuous function of $m\geq3$ arguments (not necessarily symmetric)
+such that $\forall j\in\left\{ 1,\ldots,m\right\} $, 
+\begin{equation}
+\mathbb{E}h(z_{1},\ldots,z_{j-1},Z_{j},z_{j+1},\ldots,z_{m})=0.\label{eq: canonical_nonsymmetric}
+\end{equation}
+Then, 
+\begin{eqnarray*}
+\sum_{i\in[n]^{m}}\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & = & O\left(n^{\left\lfloor \frac{m}{2}\right\rfloor }+n^{2\left\lfloor \frac{m}{2}\right\rfloor -4-\epsilon}\right).
+\end{eqnarray*}
+
+
+The proof uses the same technique as (!reference to Arcones, Lemma
+3). We will focus on ordered $m$-tuples $1\leq i_{1}\leq\ldots\leq i_{m}\leq n$,
+and by considering all possible permutations of their indices, we
+obtain an upper bound 
+\begin{eqnarray}
+\sum_{i\in[n]^{m}}\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & \leq & \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|,\label{eq: ABCLemma_firstInequality}
+\end{eqnarray}
+where (strict) inequality stems from the fact that the $m$-tuples
+$i$ with some coinciding entries appear multiple times on the right.
+Now denote $s=\left\lfloor \frac{m}{2}\right\rfloor +1$ and
+\[
+j_{1}=i_{2}-i_{1};\; j_{l}=\min\left\{ i_{2l}-i_{2l-1},i_{2l-1}-i_{2l-2}\right\} ,\; l=2,\ldots,s-1;\;\; j_{s}=i_{m}-i_{m-1}.
+\]
+Let $w(i)=\max\left\{ j_{1},\ldots,j_{s}\right\} $, i.e., $w(i)$
+corresponds to the largest minimum gap between an individual entry
+in the ordered $m$-tuple $i$ and its neighbours. For example, $w\left(\left[1,2,5,9,9\right]\right)=3$.
+Note that $w(i)=0$ means that no entry in $i$ appears exactly once.
+Let us assume that the maximum $w(i)=w>0$ is obtained at $j_{r}$
+for some $r\in\left\{ 1,\ldots,s\right\} $. Let us partition the
+vector $\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)$ into three parts:
+\begin{eqnarray*}
+A & = & \left(Z_{i_{1}},\ldots,Z_{i_{2r-2}}\right),\; B=Z_{i_{2r-1}},\; C=\left(Z_{i_{2r}},\ldots,Z_{i_{m}}\right).
+\end{eqnarray*}
+Note that if $r=1$, $A$ is empty and if $r=s$ and $m$ is odd,
+$C$ is empty but this does not change our arguments below. Using
+Lemma 6, we can construct $B^{*}$ and $C^{*}$ that are independent
+of $A$ and independent of each other and 
+\begin{equation}
+\mathbb{E}\left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{*}\right)\right\Vert _{1}\leq m\tau\left(w\right).\label{eq: ABCLemma_property1}
+\end{equation}
+Because $B^{*}$ consists of a singleton and is independent of both
+$A$ and $C^{*}$, (\ref{eq: canonical_nonsymmetric}) implies 
+\begin{equation}
+\mathbb{E}h(A,B^{*},C^{*})=0.\label{eq: ABCLemma_property2}
+\end{equation}
+Thus, for $w(i)=w>0$, we have that
+\begin{eqnarray*}
+\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & \leq & \mathbb{E}\left|h\left(A,B,C\right)-h\left(A,B^{*},C^{*}\right)\right|+\left|\mathbb{E}h(A,B^{*},C^{*})\right|\\
+ & \leq & \text{Lip}(h)\mathbb{E}\left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{*}\right)\right\Vert _{1}+0\\
+ & \leq & m\text{Lip}(h)\tau(w).
+\end{eqnarray*}
+Finally, if the entries within the ordered $m$-tuple $i$ are permuted,
+$L_{1}$-norm in (\ref{eq: ABCLemma_property1}) remains the same
+and (\ref{eq: ABCLemma_property2}) still holds, so also $\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\leq m\text{Lip}(h)\tau(w)$
+$\forall\pi\in S_{m}$ and 
+\[
+\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\leq m!m\text{Lip}(h)\tau(w).
+\]
+Let us upper bound the number of ordered $m$-tuples $i$ with $w(i)=w$.
+$i_{1}$ can take $n$ different values, but since $i_{2}\leq i_{1}+w$,
+$i_{2}$ can take at most $w+1$ different values. For $2\leq l\leq s-1$,
+since $\min\left\{ i_{2l}-i_{2l-1},i_{2l-1}-i_{2l-2}\right\} \leq w$,
+we can either let $i_{2l-1}$ take up to $n$ different values and
+let $i_{2l}$ take up to $w+1$ different values (if $i_{2l}-i_{2l-1}\leq i_{2l-1}-i_{2l-2}$)
+or let $i_{2l-1}$ take up to $w+1$ different values and let $i_{2l}$
+take up to $n$ different values (if $i_{2l}-i_{2l-1}>i_{2l-1}-i_{2l-2}$),
+upper bounding the total number of choices for $\left[i_{2l-1},i_{2l}\right]$
+by $2n(w+1)$. Finally, the last term $i_{m}$ can always have at
+most $w+1$ different values. This brings the total number of $m$-tuples
+with $w(i)=w$ to at most $2^{\ensuremath{s-2}}n^{s-1}(w+1)^{s}$.
+Thus, the number of $m$-tuples with $w(i)=0$ is $O(n^{s-1})$ and
+since $h$ is bounded, we have
+\begin{eqnarray*}
+ &  & \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\\
+ &  & \qquad\leq O(n^{s-1})+\sum_{w=1}^{n-1}\;\sum_{\underset{w(i)=w}{i\in[n]^{m}}:}\;\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\\
+ &  & \qquad\quad\leq O(n^{s-1})+2^{\ensuremath{s-2}}m!m\text{Lip}(h)n^{s-1}\sum_{w=1}^{n-1}(w+1)^{s}\tau(w)\\
+ &  & \qquad\quad\quad\leq O(n^{s-1})+Cn^{s-1}\sum_{w=1}^{n-1}w^{s-6-\epsilon}\\
+ &  & \qquad\quad\quad\quad\leq O(n^{s-1})+O(n^{2s-6-\epsilon}),
+\end{eqnarray*}
+which proves the claim. We have used $\tau(w)=O(w^{-6-\epsilon})$
+and collated the constants into $C$.
+\end{document}

@@ -1,0 +1,18 @@
+We thank the reviewers for their comments, and for their kind assessment of our work. We agree with reviewers 1-3 regarding their suggested improvements to the clarity of the presentation, which we will implement in a final version.
+
+Multiple reviewers asked for an introduction and illustration of tau mixing and the wild bootstrap.  We are happy to add a brief overview of the relevant ideas as a section in the appendix.
+
+As a comment on computational cost: as in the original HSIC and MMD tests for i.i.d. data, the computational cost of the wild bootstrap approach scales quadratically in the number of samples, and linearly in the number of bootstrap iterations (in the i.i.d. case, these were permutations of the data).   The main alternative approaches are the lagged bootstrap of [7], which has the same scaling with data and number of bootstraps, and the spectrogram approach of [4] (note, however, that both these alternative approaches apply only to the independence testing case).  The cost of [4] is comparable to our approach, however the statistical power of [4] was much weaker on the data we examined.
+
+In terms of the original technical contributions of the paper: The results in [18] apply to statistics having two arguments. Theorem 1 extends these results to the case of m arguments, and proposition 1 further extends these results to multi-sample statistics. Further, Theorem 2 shows consistency of the statistic under the alternative, which was shown only for particular examples in [18], and not as a general result. We will clarify these points in the final version.
+
+Specific comments, Rev. 2
+
+"type I control": we agree with the reviewer regarding our use of this term. Indeed, our analysis applies to the type I error in the asymptotic regime.
+
+Correlated Rademacher processes have been used in the wild bootstrap literature, however it would need to be checked that these processes satisfy the requirements for the proof of Leucht and Neumann, or alternatively, that this proof could be adapted for the correlated Rademacher case. We use a particular Gaussian process (the O-U process) as recommended in [18], which does satisfy the relevant mixing conditions.
+
+Improved clarity in experimental results: we will improve the presentation in our final manuscript.
+
+Replacement of Bonferoni correction: we have been looking into a couple of ideas, including  the asymptotics of the maximum of the statistics across lags and the sum. However the analysis remains difficult, and is ongoing. The idea of using a wild bootstrap on top of these statistics is also an interesting one, and we will look into it. That said, the Bonferroni correction, despite being conservative, still performs well in the examples we looked at.
+

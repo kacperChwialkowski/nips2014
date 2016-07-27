@@ -1,0 +1,581 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\left\{ Z_{t}\right\} $
+\end_inset
+
+ be a 
+\begin_inset Formula $\tau$
+\end_inset
+
+-dependent stationary process with 
+\begin_inset Formula $\tau(r)=O(r^{-6-\epsilon}).$
+\end_inset
+
+ Let 
+\begin_inset Formula $h$
+\end_inset
+
+ be a bounded Lipschitz continuous function of 
+\begin_inset Formula $m\geq3$
+\end_inset
+
+ arguments (not necessarily symmetric) such that 
+\begin_inset Formula $\forall j\in\left\{ 1,\ldots,m\right\} $
+\end_inset
+
+, 
+\begin_inset Formula 
+\begin{equation}
+\mathbb{E}h(z_{1},\ldots,z_{j-1},Z_{j},z_{j+1},\ldots,z_{m})=0.\label{eq: canonical_nonsymmetric}
+\end{equation}
+
+\end_inset
+
+Then, 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i\in[n]^{m}}\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & = & O\left(n^{\left\lfloor \frac{m}{2}\right\rfloor }+n^{2\left\lfloor \frac{m}{2}\right\rfloor -4-\epsilon}\right).
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The proof uses the same technique as (!reference to Arcones, Lemma 3).
+ We will focus on ordered 
+\begin_inset Formula $m$
+\end_inset
+
+-tuples 
+\begin_inset Formula $1\leq i_{1}\leq\ldots\leq i_{m}\leq n$
+\end_inset
+
+, and by considering all possible permutations of their indices, we obtain
+ an upper bound 
+\begin_inset Formula 
+\begin{eqnarray}
+\sum_{i\in[n]^{m}}\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & \leq & \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|,\label{eq: ABCLemma_firstInequality}
+\end{eqnarray}
+
+\end_inset
+
+where (strict) inequality stems from the fact that the 
+\begin_inset Formula $m$
+\end_inset
+
+-tuples 
+\begin_inset Formula $i$
+\end_inset
+
+ with some coinciding entries appear multiple times on the right.
+ Now denote 
+\begin_inset Formula $s=\left\lfloor \frac{m}{2}\right\rfloor +1$
+\end_inset
+
+ and
+\begin_inset Formula 
+\[
+j_{1}=i_{2}-i_{1};\; j_{l}=\min\left\{ i_{2l}-i_{2l-1},i_{2l-1}-i_{2l-2}\right\} ,\; l=2,\ldots,s-1;\;\; j_{s}=i_{m}-i_{m-1}.
+\]
+
+\end_inset
+
+Let 
+\begin_inset Formula $w(i)=\max\left\{ j_{1},\ldots,j_{s}\right\} $
+\end_inset
+
+, i.e., 
+\begin_inset Formula $w(i)$
+\end_inset
+
+ corresponds to the largest minimum gap between an individual entry in the
+ ordered 
+\begin_inset Formula $m$
+\end_inset
+
+-tuple 
+\begin_inset Formula $i$
+\end_inset
+
+ and its neighbours.
+ For example, 
+\begin_inset Formula $w\left(\left[1,2,5,9,9\right]\right)=3$
+\end_inset
+
+.
+ Note that 
+\begin_inset Formula $w(i)=0$
+\end_inset
+
+ means that no entry in 
+\begin_inset Formula $i$
+\end_inset
+
+ appears exactly once.
+ Let us assume that the maximum 
+\begin_inset Formula $w(i)=w>0$
+\end_inset
+
+ is obtained at 
+\begin_inset Formula $j_{r}$
+\end_inset
+
+ for some 
+\begin_inset Formula $r\in\left\{ 1,\ldots,s\right\} $
+\end_inset
+
+.
+ Let us partition the vector 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)$
+\end_inset
+
+ into three parts:
+\begin_inset Formula 
+\begin{eqnarray*}
+A & = & \left(Z_{i_{1}},\ldots,Z_{i_{2r-2}}\right),\; B=Z_{i_{2r-1}},\; C=\left(Z_{i_{2r}},\ldots,Z_{i_{m}}\right).
+\end{eqnarray*}
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+Note that if 
+\begin_inset Formula $r=1$
+\end_inset
+
+, 
+\begin_inset Formula $A$
+\end_inset
+
+ is empty and if 
+\begin_inset Formula $r=s$
+\end_inset
+
+ and 
+\begin_inset Formula $m$
+\end_inset
+
+ is odd, 
+\begin_inset Formula $C$
+\end_inset
+
+ is empty but this does not change our arguments below.
+ Using Lemma 6, we can construct 
+\begin_inset Formula $B^{*}$
+\end_inset
+
+ and 
+\begin_inset Formula $C^{*}$
+\end_inset
+
+ that are independent of 
+\begin_inset Formula $A$
+\end_inset
+
+ and independent of each other and 
+\begin_inset Formula 
+\begin{equation}
+\mathbb{E}\left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{*}\right)\right\Vert _{1}\leq m\tau\left(w\right).\label{eq: ABCLemma_property1}
+\end{equation}
+
+\end_inset
+
+Because 
+\begin_inset Formula $B^{*}$
+\end_inset
+
+ consists of a singleton and is independent of both 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $C^{*}$
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq: canonical_nonsymmetric"
+
+\end_inset
+
+ implies 
+\begin_inset Formula 
+\begin{equation}
+\mathbb{E}h(A,B^{*},C^{*})=0.\label{eq: ABCLemma_property2}
+\end{equation}
+
+\end_inset
+
+Thus, for 
+\begin_inset Formula $w(i)=w>0$
+\end_inset
+
+, we have that
+\begin_inset Formula 
+\begin{eqnarray*}
+\left|\mathbb{E}h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & \leq & \mathbb{E}\left|h\left(A,B,C\right)-h\left(A,B^{*},C^{*}\right)\right|+\left|\mathbb{E}h(A,B^{*},C^{*})\right|\\
+ & \leq & \text{Lip}(h)\mathbb{E}\left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{*}\right)\right\Vert _{1}+0\\
+ & \leq & m\text{Lip}(h)\tau(w).
+\end{eqnarray*}
+
+\end_inset
+
+Finally, if the entries within the ordered 
+\begin_inset Formula $m$
+\end_inset
+
+-tuple 
+\begin_inset Formula $i$
+\end_inset
+
+ are permuted, 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+-norm in 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq: ABCLemma_property1"
+
+\end_inset
+
+ remains the same and 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq: ABCLemma_property2"
+
+\end_inset
+
+ still holds, so also 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\leq m\text{Lip}(h)\tau(w)$
+\end_inset
+
+ 
+\begin_inset Formula $\forall\pi\in S_{m}$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\[
+\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\leq m!m\text{Lip}(h)\tau(w).
+\]
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+Let us upper bound the number of ordered 
+\begin_inset Formula $m$
+\end_inset
+
+-tuples 
+\begin_inset Formula $i$
+\end_inset
+
+ with 
+\begin_inset Formula $w(i)=w$
+\end_inset
+
+.
+ 
+\begin_inset Formula $i_{1}$
+\end_inset
+
+ can take 
+\begin_inset Formula $n$
+\end_inset
+
+ different values, but since 
+\begin_inset Formula $i_{2}\leq i_{1}+w$
+\end_inset
+
+, 
+\begin_inset Formula $i_{2}$
+\end_inset
+
+ can take at most 
+\begin_inset Formula $w+1$
+\end_inset
+
+ different values.
+ For 
+\begin_inset Formula $2\leq l\leq s-1$
+\end_inset
+
+, since 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\min\left\{ i_{2l}-i_{2l-1},i_{2l-1}-i_{2l-2}\right\} \leq w$
+\end_inset
+
+, we can either let 
+\begin_inset Formula $i_{2l-1}$
+\end_inset
+
+ take up to 
+\begin_inset Formula $n$
+\end_inset
+
+ different values and let 
+\begin_inset Formula $i_{2l}$
+\end_inset
+
+ take up to 
+\begin_inset Formula $w+1$
+\end_inset
+
+ different values (if 
+\begin_inset Formula $i_{2l}-i_{2l-1}\leq i_{2l-1}-i_{2l-2}$
+\end_inset
+
+) or let 
+\begin_inset Formula $i_{2l-1}$
+\end_inset
+
+ take up to 
+\begin_inset Formula $w+1$
+\end_inset
+
+ different values and let 
+\begin_inset Formula $i_{2l}$
+\end_inset
+
+ take up to 
+\begin_inset Formula $n$
+\end_inset
+
+ different values (if 
+\begin_inset Formula $i_{2l}-i_{2l-1}>i_{2l-1}-i_{2l-2}$
+\end_inset
+
+), upper bounding the total number of choices for 
+\begin_inset Formula $\left[i_{2l-1},i_{2l}\right]$
+\end_inset
+
+ by 
+\begin_inset Formula $2n(w+1)$
+\end_inset
+
+.
+ Finally, the last term 
+\begin_inset Formula $i_{m}$
+\end_inset
+
+ can always have at most 
+\begin_inset Formula $w+1$
+\end_inset
+
+ different values.
+ This brings the total number of 
+\begin_inset Formula $m$
+\end_inset
+
+-tuples with 
+\begin_inset Formula $w(i)=w$
+\end_inset
+
+ to at most 
+\begin_inset Formula $2^{\ensuremath{s-2}}n^{s-1}(w+1)^{s}$
+\end_inset
+
+.
+ Thus, the number of 
+\begin_inset Formula $m$
+\end_inset
+
+-tuples with 
+\begin_inset Formula $w(i)=0$
+\end_inset
+
+ is 
+\begin_inset Formula $O(n^{s-1})$
+\end_inset
+
+ and since 
+\begin_inset Formula $h$
+\end_inset
+
+ is bounded, we have
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\\
+ &  & \qquad\leq O(n^{s-1})+\sum_{w=1}^{n-1}\;\sum_{\underset{w(i)=w}{i\in[n]^{m}}:}\;\sum_{\pi\in S_{m}}\left|\mathbb{E}h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|\\
+ &  & \qquad\quad\leq O(n^{s-1})+2^{\ensuremath{s-2}}m!m\text{Lip}(h)n^{s-1}\sum_{w=1}^{n-1}(w+1)^{s}\tau(w)\\
+ &  & \qquad\quad\quad\leq O(n^{s-1})+Cn^{s-1}\sum_{w=1}^{n-1}w^{s-6-\epsilon}\\
+ &  & \qquad\quad\quad\quad\leq O(n^{s-1})+O(n^{2s-6-\epsilon}),
+\end{eqnarray*}
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+which proves the claim.
+ We have used 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\tau(w)=O(w^{-6-\epsilon})$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ and collated the constants into 
+\begin_inset Formula $C$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,3729 @@
+#LyX file created by tex2lyx 2.1
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+
+\usetheme{Szeged}
+\usecolortheme{seagull}
+
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{caption}
+%custom packages
+\usepackage{relsize}
+
+
+\definecolor{g}{rgb}{0.3,0.61,0.59}
+
+
+\newcommand{\independent}{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\newcommand{\trans}{^{\scriptscriptstyle \top}}
+
+
+
+%custom commands
+\newcommand{\ev}{\mathbb{E}}
+
+%\usepackage[pdftex]{graphicx}
+
+\title{A Wild Bootstrap for Degenerate Kernel Tests}
+\author{Kacper Chwialkowski \inst{1} \and Dino Sejdinovic \inst{2} \and Arthur Gretton \inst{2}}
+\institute[UCL]{\inst{1} UCL, Computer Science \and %
+                      \inst{2} UCL, Gatsby Computational Neuroscience Unit}
+
+\titlegraphic{
+    %\includegraphics[width=2cm]{csml_logo_vector2.pdf}\hspace*{4.75cm}~%
+   \includegraphics[width=2cm]{wildBootstrapImages/csml_logo_vector2.pdf}
+}
+
+\end_preamble
+\options xcolor={dvipsnames}
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding utf8
+\fontencoding T1
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+titlepage
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/arthur6.jpg
+	width 50theight%
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+ Arthur 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/dino.JPG
+	width 50theight%
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+ Dino 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Maximum Mean Discrepancy for Random Processes
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.8
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/introDep.pdf
+	height 80theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+Is 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $ \color{blue} P$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ the same distribution as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $\color{red} Q$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ ? 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Statistical Tests for Random Processes
+\end_layout
+
+\begin_layout Standard
+Where one can use Maximum Mean Discrepancy ? 
+\end_layout
+
+\begin_layout Itemize
+Markov chains diagnostics 
+\end_layout
+
+\begin_layout Itemize
+Change point detection 
+\end_layout
+
+\begin_layout Standard
+Other tests 
+\end_layout
+
+\begin_layout Itemize
+Hilbert Schmidt Independence Criterion 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Dependency structure in financial markets 
+\end_layout
+
+\begin_layout Itemize
+Brain region activation 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Three Variables Interaction 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Maximum Mean Discrepancy for i.i.d observations
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.8
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/introNoDep.pdf
+	height 80theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+Is 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $ \color{blue} P$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ the same distribution as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $\color{red} Q$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ ? 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset FormulaMacro
+\newcommand{\kpp}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KPP.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\kqq}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KQQ.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\kpq}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KPQ.pdf}}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Similarity
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+K_{{\color{blue}P,P}}=
+\begin{bmatrix}
+	k( {\color{blue}X_1},{\color{blue}X_1)} &   \ldots & k({\color{blue}X_1},{\color{blue}X_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{blue}X_n},{\color{blue}X_1})  &  \ldots & k({\color{blue}X_n},{\color{blue}X_n})
+\end{bmatrix} = 
+\begin{matrix}
+\kpp
+\end{matrix}
+\\
+K_{{\color{red}Q,Q}}=
+\begin{bmatrix}
+	k({\color{red}Y_1},{\color{red}Y_1)} &   \ldots & k({\color{red}Y_1},{\color{red}Y_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{red}Y_n},{\color{red}Y_1})  &  \ldots & k({\color{red}Y_n},{\color{red}Y_n})
+\end{bmatrix}= 
+\begin{matrix}
+\kqq
+\end{matrix}
+\\
+K_{{\color{red}P},{\color{blue}Q}}=
+\begin{bmatrix}
+	k({\color{blue}X_1},{\color{red}Y_1}) &   \ldots & k({\color{blue}X_1},{\color{red}Y_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{blue}X_n},{\color{red}Y_1})  &  \ldots & k({\color{blue}X_n},{\color{red}Y_n})
+\end{bmatrix}=
+\begin{matrix}
+\kpq
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\gram}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/Gram.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\gramn}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/Gramn.pdf}}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Similarity
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+{\color{blue} P} \neq {\color{red} Q} \Rightarrow 
+\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{red}P},{\color{blue}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} = 
+\begin{matrix}
+\gram
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\begin_inset Formula \begin{align*}
+{\color{blue} P }= {\color{red} Q} \Rightarrow
+\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} = 
+\begin{matrix}
+\gramn
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Quantifying Similarity
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+ V_n = \overline{ K_{{\color{blue}P,P}}} + \overline{ K_{{\color{red}Q,Q}} } - 2 \overline{  K_{{\color{blue}P,\color{red}Q}} }
+\end{align*}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/altAndNull.pdf
+	width 55text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+newcommand*{
+\backslash
+Scale}[2][4]{
+\backslash
+scalebox{#1}{
+\backslash
+ensuremath{#2}}}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Putting Hands on 
+\begin_inset Formula $V_n$
+\end_inset
+
+ Distribution 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \[W= (-1,1,1,\quad \cdots \quad,-1,-1,-1)\]
+\end_inset
+
+
+\begin_inset Formula \begin{align*}
+&{\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} } & \odot
+&\begin{bmatrix}
+\Scale[2] {W \trans{W}}
+\end{bmatrix} &= 
+&\begin{bmatrix}
+\Scale[2] ?
+\end{bmatrix} \\
+&\begin{matrix}
+\gram
+\end{matrix} &\odot
+&\begin{matrix}
+\kpp
+\end{matrix} &=
+&\begin{matrix} 
+\gramn
+\end{matrix} \\
+&\begin{matrix}
+\gramn
+\end{matrix} &\odot
+&\begin{matrix}
+\kpp
+\end{matrix} &=
+&\begin{matrix} 
+\gramn
+\end{matrix} \\
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Estimation of 
+\begin_inset Formula $V_n$
+\end_inset
+
+ via Permutation
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+ V_{n,p} = \overline{ {\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} }  \odot
+\begin{bmatrix}
+\Scale[2] {W \trans{W}}
+\end{bmatrix}}
+\end{align*}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf1.pdf
+	width 55text%
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Back to the Difficult Problem
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.8
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/introDep.pdf
+	height 80theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+Is 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $ \color{blue} P$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ the same distribution as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[5]
+\begin_inset Formula $\color{red} Q$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+
+\backslash
+[1em]
+\end_layout
+
+\end_inset
+
+ ? 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Memory of the Processes
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.6
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/processes.pdf
+	width 100text%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.4
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[2]
+\begin_inset Formula \[Q_t =  \mathbf{ \color{red} 0.14} Q_{t-1} + 0.98\epsilon_t\]
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ Processes with different memory 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[2]
+\begin_inset Formula \[Z_t=   \mathbf{ \color{red} 0.97} Z_{t-1} +  0.22\epsilon_t.\]
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout AlertBlock
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+The distribution of the 
+\begin_inset Formula $V$
+\end_inset
+
+-statistics is primary driven by memory
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf1.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf2.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf3.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.4$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf4.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.5$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf5.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.6$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf6.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.7$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf7.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.8$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/permfail_ecdf8.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset FormulaMacro
+\newcommand{\kppmem}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KPPmem.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\kqqmem}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KQQmem.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\kpqmem}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/KPQmem.pdf}}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Similarity for Random Processes
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+K_{{\color{blue}P,P}}=
+\begin{bmatrix}
+	k( {\color{blue}X_1},{\color{blue}X_1)} &   \ldots & k({\color{blue}X_1},{\color{blue}X_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{blue}X_n},{\color{blue}X_1})  &  \ldots & k({\color{blue}X_n},{\color{blue}X_n})
+\end{bmatrix} = 
+\begin{matrix}
+\kppmem
+\end{matrix}
+\\
+K_{{\color{red}Q,Q}}=
+\begin{bmatrix}
+	k({\color{red}Y_1},{\color{red}Y_1)} &   \ldots & k({\color{red}Y_1},{\color{red}Y_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{red}Y_n},{\color{red}Y_1})  &  \ldots & k({\color{red}Y_n},{\color{red}Y_n})
+\end{bmatrix}= 
+\begin{matrix}
+\kqqmem
+\end{matrix}
+\\
+K_{{\color{blue}P,\color{red}Q}}=
+\begin{bmatrix}
+	k({\color{blue}X_1},{\color{red}Y_1}) &   \ldots & k({\color{blue}X_1},{\color{red}Y_n})\\
+	\vdots &  \ddots & \vdots\\
+	k({\color{blue}X_n},{\color{red}Y_1})  &  \ldots & k({\color{blue}X_n},{\color{red}Y_n})
+\end{bmatrix}=
+\begin{matrix}
+\kpqmem
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\grammem}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/Grammem.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\gramnmem}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/Gramnmem.pdf}}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Gram Matrices
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+{\color{blue} P} \neq {\color{red} Q} \quad \quad \Rightarrow 
+\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} = 
+\begin{matrix}
+\grammem
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\begin_inset Formula \begin{align*}
+{\color{blue} P }= {\color{red} Q} \quad \quad \Rightarrow 
+\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} = 
+\begin{matrix}
+\gramnmem
+\end{matrix}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Permutation Test for Random Processes 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \[W= (-1,1,1,\dots,-1,-1,-1)\]
+\end_inset
+
+
+\begin_inset Formula \begin{align*}
+&{\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} } & \odot
+&\begin{bmatrix}
+\Scale[2] {W \trans{W}}
+\end{bmatrix} &= 
+&\begin{bmatrix}
+\Scale[2] ?
+\end{bmatrix} \\
+&\begin{matrix}
+\grammem
+\end{matrix} &\odot
+&\begin{matrix}
+\kpp
+\end{matrix} &=
+&\begin{matrix} 
+\gramn
+\end{matrix} \\
+&\begin{matrix}
+\gramnmem
+\end{matrix} &\odot
+&\begin{matrix}
+\kpp
+\end{matrix} &=
+&\begin{matrix} 
+\gramn
+\end{matrix} \\
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+If 
+\begin_inset Formula ${\color{blue} P} = {\color{red} Q}$
+\end_inset
+
+ Permutation Approach Fails
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/Gramnmem.pdf
+	height 4.5cm
+
+\end_inset
+
+ 
+\begin_inset Caption LongTableNoNumber
+
+\begin_layout Standard
+The actual matrix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/Gramn.pdf
+	height 4.5cm
+
+\end_inset
+
+ 
+\begin_inset Caption LongTableNoNumber
+
+\begin_layout Standard
+Matrix generated via permutation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%
+\backslash
+frame{
+\backslash
+frametitle{Permutation bootstrap approximation of ${
+\backslash
+color{PineGreen} V}$}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%
+\backslash
+includegraphics[width=0.9
+\backslash
+textwidth, height=0.8
+\backslash
+textheight]{wildBootstrapImages/permfail_ecdf9.pdf} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Wild Bootstrap
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset FormulaMacro
+\newcommand{\wildAlt}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/wildAlt.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\wildNull}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/wildNull.pdf}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\wildMatrix}{\mathord{\includegraphics[height=2cm]{wildBootstrapImages/wildmatrix.pdf}}}
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Wild Bootstrap
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/markowChain.jpg
+	height 1.5cm
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+&{\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix} } & \odot
+&{\begin{bmatrix}
+	W\trans{W}  &  -W\trans{W}\\
+	-W\trans{W}  &  W\trans{W}
+\end{bmatrix} }&= 
+&\begin{bmatrix}
+\Scale[2] ?
+\end{bmatrix} \\
+&\begin{matrix}
+\grammem
+\end{matrix} &\odot
+&\begin{matrix}
+\wildMatrix
+\end{matrix} &=
+&\begin{matrix} 
+\wildAlt
+\end{matrix} \\
+&\begin{matrix}
+\gramnmem
+\end{matrix} &\odot
+&\begin{matrix}
+\wildMatrix
+\end{matrix} &=
+&\begin{matrix} 
+\wildNull
+\end{matrix} \\
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+If 
+\begin_inset Formula ${\color{blue} P} = {\color{red} Q}$
+\end_inset
+
+ the Wild Bootstrap Approach Works!
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/Gramnmem.pdf
+	height 4cm
+
+\end_inset
+
+ 
+\begin_inset Caption LongTableNoNumber
+
+\begin_layout Standard
+The actual matrix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wildNull.pdf
+	height 4cm
+
+\end_inset
+
+ 
+\begin_inset Caption LongTableNoNumber
+
+\begin_layout Standard
+Matrix generated via 
+\series bold
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+wild bootstrap
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Estimation of 
+\begin_inset Formula $V_n$
+\end_inset
+
+ via the Wild Bootstrap
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/markowChain.jpg
+	height 1.5cm
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align*}
+\Scale[1.5]{V_{n,w}=\overline{
+\begin{bmatrix}
+	K_{{\color{blue}P,P}}  &   K_{{\color{blue}P,\color{red}Q}}\\
+	K_{{\color{red}Q},{\color{blue}P}}  &  K_{{\color{red}Q,Q}}
+\end{bmatrix}   \odot
+\begin{bmatrix}
+	W\trans{W}  &  -W\trans{W}\\
+	-W\trans{W}  &  W\trans{W}
+\end{bmatrix} }}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf1.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf2.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf3.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.4$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf4.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.5$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf5.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.6$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf6.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.7$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf7.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FrameTitle
+Memory 
+\begin_inset Formula $0.8$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/wild_ecdf8.pdf
+	width 90text%
+	height 80theight%
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%
+\backslash
+frame{
+\backslash
+frametitle{Wild Bootstrap Approximation - ${
+\backslash
+color{Plum} V_{b}}$ distribution}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%
+\backslash
+includegraphics[width=0.9
+\backslash
+textwidth, height=0.8
+\backslash
+textheight]{wildBootstrapImages/wild_ecdf9.pdf} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+MCMC M.D. Experiment
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.4
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/mcmc.pdf
+	height 60theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.6
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+Is 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[3]
+\begin_inset Formula $ \color{blue} P$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ the same distribution as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+larger
+\end_layout
+
+\end_inset
+
+[3]
+\begin_inset Formula $\color{red} Q$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ ? 
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Tabular 
+<lyxtabular version="3" rows="3" columns="2">
+<features rotate="0" tabularvalignment="middle" tabularwidth="0pt">
+<column alignment="left" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Test - MMD 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Type one error 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Permutation 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+68 % 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Wild Bootstrap 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+6 % 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout FrameTitle
+Indie Pop Group Predicts the Volume of the Dow Jones!
+\end_layout
+
+\begin_layout Columns
+
+\begin_inset Argument 999
+status collapsed
+
+
+\begin_layout Standard
+c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\align center
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/sad-guys-on-trading-floors.jpg
+	width 40theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+.5
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\align center
+
+\begin_inset Graphics 
+	filename wildBootstrapImages/strange_powers_01.jpg
+	width 40theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Pause
+
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Tabular 
+<lyxtabular version="3" rows="3" columns="4">
+<features rotate="0" tabularvalignment="middle" tabularwidth="0pt">
+<column alignment="left" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Test 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+p-value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Dependent 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="none" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Permutation HSIC 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.003 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Yes ! 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="none" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Pause
+W
+\end_layout
+
+\begin_layout Standard
+ild Bootstrap HSIC 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.231 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+colorbox
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+red
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+No
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="none" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

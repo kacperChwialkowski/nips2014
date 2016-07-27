@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: nips2014.aux
+The style file: plain.bst
+Database file #1: nips14Bib.bib
+Warning--empty publisher in besserve_statistical_2013
+Warning--empty publisher in HarBacMou08
+You've used 31 entries,
+            2118 wiz_defined-function locations,
+            687 strings with 8495 characters,
+and the built_in function-call counts, 11513 in all, are:
+= -- 1130
+> -- 539
+< -- 14
++ -- 219
+- -- 182
+* -- 809
+:= -- 1858
+add.period$ -- 97
+call.type$ -- 31
+change.case$ -- 178
+chr.to.int$ -- 0
+cite$ -- 33
+duplicate$ -- 451
+empty$ -- 907
+format.name$ -- 182
+if$ -- 2436
+int.to.chr$ -- 0
+int.to.str$ -- 31
+missing$ -- 35
+newline$ -- 158
+num.names$ -- 62
+pop$ -- 208
+preamble$ -- 1
+purify$ -- 153
+quote$ -- 0
+skip$ -- 315
+stack$ -- 0
+substring$ -- 751
+swap$ -- 117
+text.length$ -- 14
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 114
+warning$ -- 2
+while$ -- 109
+width$ -- 33
+write$ -- 344
+(There were 2 warnings)

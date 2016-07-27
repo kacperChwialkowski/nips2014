@@ -1,0 +1,52 @@
+addpath('..\mmd')
+
+m=650;
+numBoot=700;
+arC = 0.1:0.1:0.9;
+clear mmds;
+for c = 1:length(arC)
+    c
+    ln = -log(arC(c)).^(-1);
+    ar = exp(-1/ln);
+    variance = 1-exp(-2/ln);
+    model = arima('Constant',0,'AR',{ar},'Variance',variance);
+    for i=1:numBoot
+        
+        processes = simulate(model,m,'numPaths',2);
+        [pval,testStat,testStats] = mmdAL2(processes(:,1),processes(:,2),1);
+        
+        mmdsWild(c,i) = testStats;
+    end
+end
+save('mmdsWild','mmdsWild')
+%%
+load('mmdsWild')
+load('hists')
+clr = jet(length(arC));
+
+% figure('units','normalized','outerposition',[0 0 1 1],'Color',[1 1 1]);
+for c = 1:length(arC)-1
+        figure('Color',[1 1 1]);
+    clear h
+  
+    hold on
+   
+    [ft,xit] = ksdensity(mmds(c,:));
+    
+    H =area(xit,ft,'FaceColor','r');
+    histogram(mmdsWild(c,:),'Normalization','pdf','FaceColor','b','FaceAlpha',0.5) 
+    q = quantile(mmds(c,:),0.95);
+    plot([q q],[0 1],'--','Color','r','LineWidth',1.4)
+    
+    q = quantile(mmdsWild(c,:),0.95);
+    if c=
+    plot([q q],[0 1],':','Color','b','LineWidth',1.4)
+    axis([-2 20 -0.02 .72])
+    
+    h=legend('Density of V_n','Histogram of V_{n,w}','Correct threshold','Bootstrapped threshold','Location','northeast');
+    set(h,'FontSize',12)
+
+    hfig = gcf 
+    hfig = saveTightFigure(hfig)
+    saveas(hfig,strcat('./img/wild_ecdf',int2str(c)','.pdf'));
+end

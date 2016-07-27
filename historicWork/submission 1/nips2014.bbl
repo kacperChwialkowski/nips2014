@@ -1,0 +1,167 @@
+\begin{thebibliography}{10}
+
+\bibitem{arcones1998law}
+M.A. Arcones.
+\newblock The law of large numbers for u--statistics under absolute regularity.
+\newblock {\em Electron. Comm. Probab}, 3:13--19, 1998.
+
+\bibitem{bauwens_multivariate_2006}
+L.~Bauwens, S.~Laurent, and J.V.K. Rombouts.
+\newblock Multivariate {GARCH} models: a survey.
+\newblock {\em J. Appl. Econ.}, 21(1):79--109, January 2006.
+
+\bibitem{BerTho04}
+A.~Berlinet and C.~{Thomas-Agnan}.
+\newblock {\em Reproducing Kernel Hilbert Spaces in Probability and
+  Statistics}.
+\newblock Kluwer, 2004.
+
+\bibitem{besserve_statistical_2013}
+M.~Besserve, N.K. Logothetis, and B.~Schölkopf.
+\newblock Statistical analysis of coupled time series with kernel
+  cross-spectral density operators.
+\newblock In {\em NIPS}, page 2535–2543. 2013.
+
+\bibitem{i._s._borisov_orthogonal_2009}
+I.S. Borisov and N.V. Volodko.
+\newblock Orthogonal series and limit theorems for canonical u-and v-statistics
+  of stationary connected observations.
+\newblock {\em Siberian Adv. Math.}, 18(4):242--257, 2008.
+
+\bibitem{borovkova2001limit}
+S.~Borovkova, R.~Burton, and H.~Dehling.
+\newblock Limit theorems for functionals of mixing processes with applications
+  to {U}-statistics and dimension estimation.
+\newblock {\em Trans. Amer. Math. Soc.}, 353(11):4261--4318, 2001.
+
+\bibitem{chwialkowski2014kernel}
+K.~Chwialkowski and A.~Gretton.
+\newblock A kernel independence test for random processes.
+\newblock In {\em ICML}, 2014.
+
+\bibitem{dedecker2007weak}
+J.~Dedecker, P.~Doukhan, G.~Lang, S.~Louhichi, and C.~Prieur.
+\newblock {\em Weak dependence: with examples and applications}.
+
+\bibitem{doukhan1994mixing}
+P.~Doukhan.
+\newblock {\em Mixing}.
+\newblock Springer, 1994.
+
+\bibitem{dudley2002real}
+R.M. Dudley.
+\newblock {\em Real analysis and probability}, volume~74.
+\newblock Cambridge University Press, 2002.
+
+\bibitem{fukumizu2007kernel}
+K.~Fukumizu, A.~Gretton, X.~Sun, and B.~Sch{\"o}lkopf.
+\newblock Kernel measures of conditional dependence.
+\newblock In {\em NIPS}, volume~20, pages 489--496, 2007.
+
+\bibitem{gretton2012kernel}
+A.~Gretton, K.M. Borgwardt, M.J. Rasch, B.~Sch{\"o}lkopf, and A.~Smola.
+\newblock A kernel two-sample test.
+\newblock {\em J. Mach. Learn. Res.}, 13:723--773, 2012.
+
+\bibitem{gretton_measuring_2005}
+A.~Gretton, O.~Bousquet, A.~Smola, and B.~Sch{\"o}lkopf.
+\newblock Measuring statistical dependence with hilbert-schmidt norms.
+\newblock In {\em Algorithmic learning theory}, pages 63--77. Springer, 2005.
+
+\bibitem{gretton_kernel_2008}
+A.~Gretton, K.~Fukumizu, C~Teo, L.~Song, B.~Sch{\"o}lkopf, and A.~Smola.
+\newblock A kernel statistical test of independence.
+\newblock In {\em NIPS}, volume~20, pages 585--592, 2007.
+
+\bibitem{HarBacMou08}
+Z.~Harchaoui, F.~Bach, and E.~Moulines.
+\newblock Testing for homogeneity with kernel {F}isher discriminant analysis.
+\newblock In {\em NIPS}. 2008.
+
+\bibitem{hehrmannthesis}
+P.~Hehrmann.
+\newblock {\em Pitch Perception as Probabilistic Inference}.
+\newblock PhD thesis, Gatsby Computational Neuroscience Unit, University
+  College London, 2011.
+
+\bibitem{leucht2012degenerate}
+A.~Leucht.
+\newblock Degenerate {U}-and {V}-statistics under weak dependence: Asymptotic
+  theory and bootstrap consistency.
+\newblock {\em Bernoulli}, 18(2):552--585, 2012.
+
+\bibitem{leucht_dependent_2013}
+A.~Leucht and M.H. Neumann.
+\newblock Dependent wild bootstrap for degenerate {U}- and {V}-statistics.
+\newblock {\em Journal of Multivariate Analysis}, 117:257--280, 2013.
+
+\bibitem{Lyons13}
+R.~Lyons.
+\newblock Distance covariance in metric spaces.
+\newblock {\em The Annals of Probability}, 41(5):3051--3696, 2013.
+
+\bibitem{pickands1975statistical}
+J.~Pickands~III.
+\newblock Statistical inference using extreme order statistics.
+\newblock {\em Ann. Statist.}, pages 119--131, 1975.
+
+\bibitem{sejdinovic2013kernel}
+D.~Sejdinovic, A.~Gretton, and W.~Bergsma.
+\newblock A kernel test for three-variable interactions.
+\newblock In {\em NIPS}, pages 1124--1132, 2013.
+
+\bibitem{SejSriGreFuk13}
+D.~Sejdinovic, B.~Sriperumbudur, A.~Gretton, and K.~Fukumizu.
+\newblock Equivalence of distance-based and {RKHS}-based statistics in
+  hypothesis testing.
+\newblock {\em Ann. Statist.}, 41(5):2263--2702, 2013.
+
+\bibitem{sejdinovic_KAMH}
+D.~Sejdinovic, H.~Strathmann, M.~Lomeli~Garcia, C.~Andrieu, and A.~Gretton.
+\newblock {Kernel Adaptive Metropolis-Hastings}.
+\newblock In {\em ICML}, 2014.
+
+\bibitem{serfling80}
+R.~Serfling.
+\newblock {\em {Approximation Theorems of Mathematical Statistics}}.
+\newblock Wiley, New York, 1980.
+
+\bibitem{Shao2010}
+X.~Shao.
+\newblock The dependent wild bootstrap.
+\newblock {\em J. Amer. Statist. Assoc.}, 105(489):218--235, 2010.
+
+\bibitem{SmoGreSonSch07}
+A.~J Smola, A.~Gretton, L.~Song, and B.~Sch{\"o}lkopf.
+\newblock A {H}ilbert space embedding for distributions.
+\newblock In {\em Algorithmic Learning Theory}, volume LNAI4754, pages 13--31,
+  Berlin/Heidelberg, 2007. Springer-Verlag.
+
+\bibitem{SriFukLan11}
+B.~Sriperumbudur, K.~Fukumizu, and G.~Lanckriet.
+\newblock Universality, characteristic kernels and {RKHS} embedding of
+  measures.
+\newblock 12:2389--2410, 2011.
+
+\bibitem{SriGreFukLanetal10}
+B.~Sriperumbudur, A.~Gretton, K.~Fukumizu, G.~Lanckriet, and B.~Sch{\"o}lkopf.
+\newblock Hilbert space embeddings and metrics on probability measures.
+\newblock {\em J. Mach. Learn. Res.}, 11:1517--1561, 2010.
+
+\bibitem{SugSuzItoKanetal11}
+M.~Sugiyama, T.~Suzuki, Y.~Itoh, T.~Kanamori, and M.~Kimura.
+\newblock Least-squares two-sample test.
+\newblock {\em Neural Networks}, 24(7):735--751, 2011.
+
+\bibitem{ZhaPetJanSch11}
+K.~Zhang, J.~Peters, D.~Janzing, B., and B.~Sch{\"o}lkopf.
+\newblock Kernel-based conditional independence test and application in causal
+  discovery.
+\newblock In {\em UAI}, pages 804--813, 2011.
+
+\bibitem{smola_kernel_2008}
+X.~Zhang, L.~Song, A.~Gretton, and A.~Smola.
+\newblock Kernel measures of independence for non-iid data.
+\newblock In {\em NIPS}, volume~22, 2008.
+
+\end{thebibliography}
