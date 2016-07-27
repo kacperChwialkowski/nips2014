@@ -198,14 +198,28 @@ The  empirical statistic is written $\widehat{\text{HSIC}}_{\kappa} = \frac{1}{n
 
 In this section, we describe how the wild bootstrap for $V$-statistics can be used to construct kernel tests for independence and the two-sample problem, in presence of weakly dependent observations. The main concepts underpinning the kernel testing framework are reviewed in the section \ref{sec:FBackground}.
 
+%\vspace{-2mm}
 \subsection{Wild Bootstrap For MMD}
+%\vspace{-2mm}
+Denote the observations by $\{X_i\}_{i=1}^{n_x}\sim P_x$, and $\{Y_j\}_{j=1}^{n_y}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
+the alternative $\mathbf H_1: P_x\neq P_y$. In the case where samples have equal sizes, i.e., $n_x=n_y$, application of the wild bootstrap to MMD-based tests on dependent samples is straightforward: the empirical MMD can be written as a $V$-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by $h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2)$. It is clear that whenever $k$ is Lipschitz continuous and bounded, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product  $\left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}$. Under the null hypothesis, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, we can use the bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
 
-Denote the observations by $\{X_i\}_{i=1}^{n}\sim P_x$, and $\{Y_j\}_{j=1}^{n}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
-the alternative $\mathbf H_1: P_x\neq P_y$. The empirical MMD can be written as a $V$-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by $$h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2).$$ 
-It is clear that whenever $k$ is Lipschitz continuous and $\sup_{i,j}\ev k(X_i,X_j), \sup_{i,j}\ev k(Y_i,Y_j)$ are finite, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product  
-$$h(z_1,z_2) = \left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}.$$
-Under the null hypothesis, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, by the Theorems \ref{th:mainOne}, \ref{th:mainTwo}, we can use the bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
+When $n_x\neq n_y$, however, it is no longer possible to write the empirical MMD
+%\begin{align*}
+%\widehat{\text{MMD}}_k=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}k(y_i,y_j)-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}k(x_i,y_j) 
+%\end{align*}
+as a one-sample $V$-statistic. We will therefore require the following bootstrapped version of MMD
+\begin{align}
+\widehat{\text{MMD}}_{k,b}&=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}k(y_i,y_j)\notag\\
+{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}k(x_i,y_j),\label{eq:mmdkb}
+\end{align}
+where $\tilde W_t^{(x)}=W_t^{(x)}-\frac{1}{n_x}\sum_{i=1}^{n_x}W_i^{(x)}$, $\tilde W_t^{(y)}=W_t^{(y)}-\frac{1}{n_y}\sum_{j=1}^{n_y}W_j^{(y)}$;  $\{W_t^{(x)}\}$ and $\{W_t^{(y)}\}$ are two auxiliary wild bootstrap processes that are independent of $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ and also independent of each other, both satisfying the bootstrap assumption in Section \ref{sec:background}.  
+The following Proposition shows that the bootstrapped statistic has the same asymptotic null distribution as the empirical MMD. The proof follows that of \cite[Theorem 3.1]{leucht_dependent_2013}, and is given in the Appendix.
 
+\begin{proposition}\label{prop:mmd}
+ Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
+ both be $\tau$-dependent with coefficients $\tau(r) =  O(r^{-6-\epsilon})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\varphi\left(\rho_x \rho_y n\widehat{\text{MMD}}_k, \rho_x \rho_y n\widehat{\text{MMD}}_{k,b}\right)\to 0$ in probability as $n\to\infty$, where $\varphi$ is the Prokhorov metric and $\widehat{\text{MMD}}_k$ is the MMD between empirical measures.
+\end{proposition}
 
 \subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
 
@@ -367,6 +381,10 @@ We calculate
  \end{proof}
 
 We consider two types of tests: instantaneous independence and independence at multiple time lags.
+
+
+
+
 
 %\vspace{-4mm}
 \paragraph{Test of instantaneous independence}
