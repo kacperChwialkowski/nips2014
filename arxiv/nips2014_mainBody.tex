@@ -149,12 +149,31 @@ converge to zero in mean square. We check assumptions: since $Z_t$ is tau mixing
 This shows that $nB_n(h_2)$ converges weakly to $V$. 
 \end{proof}  
 
-On the other hand, if the $V$-statistic is not degenerate, which is usually true under the alternative, it converges to some non-zero constant. In this setting, Theorem \ref{th:mainTwo} guarantees that the bootstrapped $V$-statistic will converge to zero in probability. This property is necessary in testing, as it implies that the test thresholds computed using the bootstrapped $V$-statistics will also converge to zero, and so will the corresponding Type II error.    The following theorem is due to Lemmas \ref{lem:degb1} and \ref{lem:degb2}.
+On the other hand, if the $V$-statistic is not degenerate, which is usually true under the alternative, it converges to some non-zero constant. 
+\begin{Theorem}
+\label{th:mainThree}
+Assume that the stationary process $Z_t$ is $\tau$-dependent with $\tau(r) = o(r^{-4})$. If the core $h$ is a Lipschitz continuous, and  $h_0$ component is positive then  $V_n$ converges in mean squared to $h_0$.
+\end{Theorem}
+In this setting, Theorem \ref{th:mainTwo} guarantees that the bootstrapped $V$-statistic will converge to zero in probability. This property is necessary in testing, as it implies that the test thresholds computed using the bootstrapped $V$-statistics will also converge to zero, and so will the corresponding Type II error.   
 \begin{Theorem}
 \label{th:mainTwo}
-Assume that the process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(r) = O(r^{-6-\epsilon})$. If the core $h$ is  a Lipschitz continuous, symmetric and bounded function of $m$ arguments,  then $n V_{b2}(h)$ converges in distribution to some non-zero random variable with finite variance, and $V_{b1}(h)$  converges to zero in probability. 
+Assume that the stationary process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(r) = o(r^{-4})$. If the core $h$ is  a function of $m>1$ arguments then $B_1(h)$ and $o(n) B_2(h)$  converge to zero in mean squared. 
 \end{Theorem}
-Although both $V_{b2}$ and $V_{b1}$  converge to zero, the rate and the type of convergence are not the same: $n V_{b2}$ converges in law to some random variable while the behaviour of $n V_{b1}$ is unspecified. As a consequence, tests that utilize $V_{b2}$ usually give lower Type II error then the ones that use $V_{b1}$. On the other hand, $V_{b1}$ seems to better approximate $V$-statistic distribution under the null hypothesis. This agrees with our experiments in Section \ref{sec:Experiments} as well as with those in \cite[Section 5]{leucht_dependent_2013}).  
+Although both $B_2$ and $B_1$  converge to zero, the rate does not seem to be that same. As a consequence, tests that utilize $B_2$ usually give lower Type II error then the ones that use $B_1$. On the other hand, $B_1$ seems to better approximate $V$-statistic distribution under the null hypothesis. This agrees with our experiments in Section \ref{sec:Experiments1} as well as with those in \cite[Section 5]{leucht_dependent_2013}).  
+These results a sufficient for adopting kernel tests developed for i.i.d. data to tests that work on random processes. In particular Theorem \ref{th:mainOne}  justifies usage of bootstraped $V$-statistics for estimating quantiles of the null distribution, while Theorems \ref{th:mainThree}\ref{th:mainTwo} guarantee consistency.
+
+The general testing procedure is 
+\selectlanguage{british}%
+\begin{itemize}
+\item Calculate \foreignlanguage{english}{the test statistic $n V_{n}(h)$.}
+\selectlanguage{english}%
+\item Obtain wild bootstrap samples $\{B_{n}(h)\}_{i=1}^{D}$
+and estimate the $1-\alpha$ empirical quantile of these samples. 
+\item If $n V_{n}(h)$ exceeds the quantile, reject.
+\end{itemize}
+\selectlanguage{english}%
+
+
 
 
 \section{Applications to Kernel Tests}\label{sec:mmd_hsic}
