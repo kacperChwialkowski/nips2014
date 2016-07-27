@@ -106,20 +106,47 @@ In this section, we present main Theorems that describe asymptotic behaviour of 
 
 %This notion can be  expressed  in terms of convergence in Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}. Indeed by \cite[Theorem 11.3.3]{dudley2002real}, since values of $V$-statistics are real numbers, convergence in distribution is equivalent to the convergence in Prokhorov metric. 
 
+Throughout this paper we will make one mild assumption
+\[
+  \sup_{i \in N^m}\ev h(Z_i)^2 < \infty,
+ \]
+ where $Z_i = (Z_{i_1},\cdots Z_{i_m})$. This assumption is almost always automatically satisfied, since most of the kernels used in practice are bounded.
 \begin{Theorem}
 \label{th:mainOne}
-Assume that the stationary process $\{Z_t\}$ is $\tau$-dependent with $\tau(r) = O(r^{-6-\epsilon})$ for some $\epsilon>0$. If the core $h$ is a Lipschitz continuous, one-degenerate, and bounded function of $m$ arguments and its $h_2$-component is a positive definite kernel, then $\varphi(n \binom m 2 V_b(h,Z),n V(h,Z)) \to 0$ in probability as $n\to\infty$, where $\varphi$ is Prokhorov metric. 
+Assume that the stationary process $Z_t$ is $\tau$-dependent with $\sum_{r=1}^\infty r^2 \sqrt{\tau(r)} < \infty$. If the core $h$ is a Lipschitz continuous, one-degenerate and its $h_2$-component is a positive definite kernel, such that $\ev h_2(Z_0,Z_0) < \infty$, then $nB_n$ \eqref{Vb1}, \eqref{Vb2},  and $n V_n$  \eqref{def:Vstat} converge weakly to the same distribution $V$.  Moreover $nB_n(h_2)$ and $nV_n(h_2)$ converge weakly to $\binom {m} {2} ^{-1} V$.
 \end{Theorem}
-%\vspace{-2mm}
 \begin{proof}
-By  Lemma \ref{lem:equivBoot} and Lemma \ref{lem:equivVanila} respectively, $\varphi(n V_b(h),n V_b(h_2))$ and $\varphi(nV(h),n \binom m 2 V(h_2))$ converge to zero. By \cite[Theorem 3.1]{leucht_dependent_2013}, $n V_b(h_2)$ and $n V(h_2,Z)$ have the same limiting distribution, i.e., $\varphi(n V_b(h_2),n V(h_2,Z)) \to 0$ in probability under certain assumptions. Thus, it suffices to check these assumptions hold:
-\textit{Assumption A2.}
-(i) $h_2$ is one-degenerate and symmetric - this follows from Lemma  \ref{lem:Components}; 
-(ii) $h_2$ is a kernel - is one of the assumptions of this Theorem;
-(iii) $\ev h_2(Z_1,Z_1) \leq \infty$ - by Lemma \ref{stm:LipAndBound}, $h_2$ is bounded and therefore has a finite expected value;
-(iv) $h_2$ is Lipschitz continuous - follows from Lemma \ref{stm:LipAndBound}.
-\textit{Assumption B1.} $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$. Since $\tau(r) = O(r^{-6-\epsilon})$ then $\sum_{r=1}^n r^2 \sqrt{\tau(r)} \leq C \sum_{r=1}^n r^{-1 - \epsilon/2} \leq \infty$.
-\textit{Assumption B2.} This assumption about the auxiliary process $\{W_t\}$ is the same as our \textit{Bootstrap assumption}. 
+In the proof we are going to use \cite{leucht_dependent_2013}[Theorems 2.1, 3.1], which characterise asymptotic properties of $nV_n(h_2)$ and $n B(h_2)$. Both  theorems use similar set of assumptions which we verify upfront.  \\
+\textit{Assumption A2.}\begin{itemize}
+ \item (i)  $h_2$ is one-degenerate and symmetric - this follows from the Hoeffding decomposition;
+ \item (ii) $h_2$ is a kernel - is one of the assumptions of this theorem;
+ \item (iii) $\ev h_2(Z_1,Z_1) < \infty$ -- follows from $\sup_{i \in N^6}|\ev h(Z_i) |<\infty$ ;
+ \item  (iv) $h_2$ is Lipschitz continuous - follows from the Lemma \ref{stm:LipAndBound}.
+\end{itemize}
+\textit{Assumption B1, A1.} Assumption $B1$, $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$, is the same as ours, assumption $A1$, $\sum_{r=1}^n  \sqrt{\tau(r)} < \infty$ is implied.\\
+\textit{Assumption B2.} This assumption about the bootstrap process $W_t$ is the same as our Definition \ref{bootstrapAss}. 
+
+
+Denote by $V$ the weak limit of $n V_n(h_2)$, which exits by the  \cite{leucht_dependent_2013}[Theorem 2.1],  and let $\mathcal{F} = \sigma(Z_1, \cdots , Z_n)$.   By \citet[Theorem 3.1]{leucht_dependent_2013}, since the distribution of  $V$ is continuous, we have 
+\begin{align*}
+\sup_{x \in R} &\left| P(nB_n(h_2)  < x|\mathcal{F}) -   P(V<x) \right| \to 0  \\
+\end{align*}
+in probability. We show that $nB_n(h_2)$ converges  to $V$ weakly, by showing  pointwise convergence  of CDF  
+\begin{align*}
+ \lim_{n \to \infty} &P(nB_n(h_2)  < x) =  \lim_{n \to \infty} \ev P(nB_n(h_2)  < x|\mathcal{F}) \\
+ &=  \ev  \lim_{n \to \infty} P(nB_n(h_2)  < x|\mathcal{F})  = \ev P(V<x) =P(V<x) 
+\end{align*}
+To change the order of limit and expectation we have dominated convergence Theorem, justified since  $P(nB_n(h)  < x|\mathcal{F})$  are bounded by 1.
+%TODO mybe write more
+The difference $n(B_n(h) - V_n(h))$ is
+\begin{align*}
+ n \left (B_n(h) -  \binom m 2 B_n(h_2) \right) + \binom m 2 \left (n B_n(h_2) -V\right)+ \left (\binom m 2 V - nV_n(h)\right)
+ \end{align*}
+By  Lemma \ref{lem:equivBoot} and Lemma \ref{lem:equivVanila} respectively, both 
+$$n (B(h) -   \binom m 2  B(h_2)) , n (V_n(h) - n \binom m 2 V_n(h_2))$$
+converge to zero in mean square. We check assumptions: since $Z_t$ is tau mixing and $h$ is Lipschitz continuous, by Lemma \ref{lem:disentangle} all self products of components and $Z_t$, $(h_c \times h_c,Z_t)$ for $c>0$, are $\varDelta$ type of order $\tau(r)$, of order at least  $o(r^{-4})$ (since $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$). Since $h$ is one degenerate,  first and zero component $h_0,h_1$ are equal to zero (and so are $B(h_0),B(h_1)$).  
+
+This shows that $nB_n(h_2)$ converges weakly to $V$. 
 \end{proof}  
 
 On the other hand, if the $V$-statistic is not degenerate, which is usually true under the alternative, it converges to some non-zero constant. In this setting, Theorem \ref{th:mainTwo} guarantees that the bootstrapped $V$-statistic will converge to zero in probability. This property is necessary in testing, as it implies that the test thresholds computed using the bootstrapped $V$-statistics will also converge to zero, and so will the corresponding Type II error.    The following theorem is due to Lemmas \ref{lem:degb1} and \ref{lem:degb2}.
