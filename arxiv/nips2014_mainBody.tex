@@ -196,46 +196,176 @@ $\left\Vert \mu_\kappa(P_{xy})-\mu_\kappa(P_x P_y)\right\Vert_{{\mathcal H}_{\ka
 This quantity is called Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}. When characteristic RKHSs are used, the HSIC is zero iff $X \indep Y$: this follows from \cite{Asimplercondition}.
 The  empirical statistic is written $\widehat{\text{HSIC}}_{\kappa} = \frac{1}{n^2}\text{Tr}(KHLH)$ for kernel matrices $K$ and $L$ and the centering matrix $H=I-\frac{1}{n}\mathbf{1}\mathbf{1}^\top$.
 
+In this section, we describe how the wild bootstrap for $V$-statistics can be used to construct kernel tests for independence and the two-sample problem, in presence of weakly dependent observations. The main concepts underpinning the kernel testing framework are reviewed in the section \ref{sec:FBackground}.
 
-%\vspace{-2mm}
 \subsection{Wild Bootstrap For MMD}
-%\vspace{-2mm}
-Denote the observations by $\{X_i\}_{i=1}^{n_x}\sim P_x$, and $\{Y_j\}_{j=1}^{n_y}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
-the alternative $\mathbf H_1: P_x\neq P_y$. In the case where samples have equal sizes, i.e., $n_x=n_y$, application of the wild bootstrap to MMD-based tests on dependent samples is straightforward: the empirical MMD can be written as a $V$-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by $h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2)$. It is clear that whenever $k$ is Lipschitz continuous and bounded, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product  $\left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}$. Under the null hypothesis, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, we can use the bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
 
-When $n_x\neq n_y$, however, it is no longer possible to write the empirical MMD
-%\begin{align*}
-%\widehat{\text{MMD}}_k=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}k(y_i,y_j)-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}k(x_i,y_j) 
-%\end{align*}
-as a one-sample $V$-statistic. We will therefore require the following bootstrapped version of MMD
-\begin{align}
-\widehat{\text{MMD}}_{k,b}&=\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}k(y_i,y_j)\notag\\
-{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}k(x_i,y_j),\label{eq:mmdkb}
-\end{align}
-where $\tilde W_t^{(x)}=W_t^{(x)}-\frac{1}{n_x}\sum_{i=1}^{n_x}W_i^{(x)}$, $\tilde W_t^{(y)}=W_t^{(y)}-\frac{1}{n_y}\sum_{j=1}^{n_y}W_j^{(y)}$;  $\{W_t^{(x)}\}$ and $\{W_t^{(y)}\}$ are two auxiliary wild bootstrap processes that are independent of $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ and also independent of each other, both satisfying the bootstrap assumption in Section \ref{sec:background}.  
-The following Proposition shows that the bootstrapped statistic has the same asymptotic null distribution as the empirical MMD. The proof follows that of \cite[Theorem 3.1]{leucht_dependent_2013}, and is given in the Appendix.
-
-\begin{proposition}\label{prop:mmd}
- Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
- both be $\tau$-dependent with coefficients $\tau(r) =  O(r^{-6-\epsilon})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\varphi\left(\rho_x \rho_y n\widehat{\text{MMD}}_k, \rho_x \rho_y n\widehat{\text{MMD}}_{k,b}\right)\to 0$ in probability as $n\to\infty$, where $\varphi$ is the Prokhorov metric and $\widehat{\text{MMD}}_k$ is the MMD between empirical measures.
-\end{proposition}
+Denote the observations by $\{X_i\}_{i=1}^{n}\sim P_x$, and $\{Y_j\}_{j=1}^{n}\sim P_y$. Our goal is to test the null hypothesis $\mathbf H_0: P_x=P_y$ vs. 
+the alternative $\mathbf H_1: P_x\neq P_y$. The empirical MMD can be written as a $V$-statistic with the core of degree two on pairs $z_i=(x_i,y_i)$ given by $$h(z_1,z_2) = k(x_1,x_2)- k(x_1,y_2) - k(x_2,y_1) + k(y_1,y_2).$$ 
+It is clear that whenever $k$ is Lipschitz continuous and $\sup_{i,j}\ev k(X_i,X_j), \sup_{i,j}\ev k(Y_i,Y_j)$ are finite, so is $h$. Moreover, $h$ is a valid positive definite kernel, since it can be represented as an RKHS inner product  
+$$h(z_1,z_2) = \left\langle k(\cdot, x_1) -k(\cdot, y_1),k(\cdot, x_2) -k(\cdot, y_2) \right\rangle_{\Hk}.$$
+Under the null hypothesis, $h$ is also one-degenerate, i.e., $\ev h\left((x_1,y_1),(X_2,Y_2)\right) = 0$. Therefore, by the Theorems \ref{th:mainOne}, \ref{th:mainTwo}, we can use the bootstrapped statistics in \eqref{Vb1} and \eqref{Vb2} to approximate the null distribution and attain a desired test level.
 
 
-
-%\vspace{-2mm}
 \subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
-%\vspace{-2mm}
-%Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}, which can be interpreted as the distance between embeddings  of the joint distribution and the product of the marginals in a reproducing kernel Hilbert space (RKHS) \cite[Section 7]{gretton2012kernel}.  
 
-Using HSIC in the context of random processes is not new in the machine learning literature. For a 1-approximating functional of an absolutely regular process \cite{borovkova2001limit}, convergence in probability of the empirical HSIC to its population value was shown in \cite{smola_kernel_2008}. No asymptotic distributions were obtained, however, nor was a statistical test constructed.  The asymptotics of a normalized $V$-statistic were obtained in \cite{chwialkowski2014kernel}  for absolutely regular and $\phi$-mixing processes \cite{doukhan1994mixing}. Due to the intractability of the null distribution for the test statistic, the authors propose a procedure to approximate its null distribution using circular shifts of the observations leading to tests of instantaneous independence, i.e., of $X_t \indep Y_t$, $\forall t$. This was shown to be consistent under the null (i.e., leading to the correct Type I error), however consistency of the shift procedure under the alternative is a challenging open question (see \cite[Section A.2]{chwialkowski2014kernel} for further discussion).
- In contrast, as shown below in Propositions \ref{prop:null} and \ref{prop:alternative} (which are direct consequences of the Theorems \ref{th:mainOne} and \ref{th:mainTwo}), the wild bootstrap guarantees test consistency under both hypotheses: null and alternative, which is a major advantage. 
-In addition,  the wild bootstrap can be used in constructing a test for the harder problem of determining independence across multiple lags simultaneously, similar to the one in \cite{besserve_statistical_2013}.
+Recall (\ref{eq:hsicOMG}) that the core of the test static for HSIC, with notation $z_i = (x_i,y_i)$, is  
+\begin{equation*}
+\begin{split}
+h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)})  \\
+ &+  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})] . \\
+\end{split}  
+\end{equation*}
+One-degeneracy of the core under the null hypothesis was stated in \cite[Theorem 2]{gretton_kernel_2008}, \cite[Section A.2, following eq. (11)]{gretton_kernel_2008} shows that $h_2$ is a kernel; $h_0\geq 0$ follows from the fact that HSIC is a distance. Using Theorems \ref{th:mainOne},\ref{th:mainTwo},\ref{th:mainThree} we can construct an independence test using $h$. Drawback of this test, when implemented in the most straightforward way,  is its quadruple computational complexity. To achieve quadratic time complexity, that matches time complexity of HSIC test for i.i.d. data, we modify our bootstrapped statistic.
 
-Following symmetrisation, it is shown in \cite{gretton_kernel_2008,chwialkowski2014kernel} that the empirical HSIC can be written as a degree four $V$-statistic with core given by
+\paragraph{Quadratic time HSIC.}
+In this section we assume that kernels $k,l$ are positive and bounded. We define empirical mean embedding $\tilde \mu_X(x) = \frac 1 n \sum_{i}^n k(x,X_i) $ and centred kernels
+\begin{equation*}
+\begin{split}
+\bar{k}(x,x') =& k(x',x) - \ev k(x,X) -\ev k(X',x') + \ev k(X,X')\\
+=&\langle k(x,\cdot ) -\mu_X ,k(x',\cdot)- \mu_X\rangle. \\
+ \tilde k(x,x') =& k(x,x') - \frac 1 n \sum_{i}^n k(x,X_i) - \frac 1 n \sum_{i}^n k(x',X_i) +   \frac {1} {n^2} \sum_{i,j}^n k(X_j,X_i)\\
+=&\langle k(x,\cdot ) - \tilde\mu_X ,k(x',\cdot)- \tilde \mu_X\rangle. \\
+\end{split}
+\end{equation*}
+where $X,X'$ are i.i.d. copies of $X_1$. Same definitions hold for the kernel $l$. Let $Q_i$ denote  $W_i$ or  $\tilde W_i$ (where  it is necessary, we check claims for both $W_i$ and  $\tilde W_i$ separately). We further define 
+\begin{align}
+\label{hsic_2}
+S_n &= \frac {1} {\sqrt n}\sum_{i \in N} Q_i ( \phi(X_i) - \tilde \mu_X ) \otimes (\phi(Y_i )  - \tilde \mu_Y), \\
+T_n &= \frac {1} {\sqrt n}  \sum_{i \in N} Q_i ( \phi(X_i) -  \mu_X ) \otimes(\phi(Y_i )  -  \mu_Y). 
+\end{align}
+First, we  relate $T_n$ to $B(h_2)$. 
+\begin{statement}{ \cite[section A.2, following eq. (11)]{gretton_kernel_2008}}
+\label{stm:thanks}
+The second component of $h$ is $h_2(z_1,z_2) =  \frac 1 6 \bar{k}(x_1,x_2) \bar{l}(y_1,y_2).$ 
+\end{statement}
+\begin{lemma}
+\label{lem:T_n}
+ Squared norm of $T_n$  is equal to $ 6 B(h_2) $.
+\end{lemma}
+\begin{proof}
+  \begin{align*}
+ \| T_n \|^2 =  & \frac 1 n  \sum_{i,j \in N} Q_i Q_j \bigg\langle   ( \phi(X_i) -  \mu_X ) \otimes  (\phi(Y_i )  -  \mu_Y),   ( \phi(X_j) -  \mu_X ) \otimes (\phi(Y_j )  -  \mu_Y) \bigg\rangle  \\
+  =& \frac 1 n \sum_{i,j \in N} Q_i Q_j \bar k(X_i,X_j)  \bar l(Y_i,Y_j)  \\
+  =&6 B(h_2).
+ \end{align*}
+\end{proof}
+Next we relate $S_n$ to $T_n$ -- we  show that the difference between them is asymptotically negligible. We start with a technical lemma.  
+\begin{lemma}
+\label{lem:hahaha}
+If $(\bar k \times \bar k,Z_i)$  is of type $\varDelta$   of order $O(r^{-4})$ (see Definition \ref{def:varDelta}), then 
+$$\lim_{n \to \infty} \ev \left \| \sqrt n (\tilde  \mu_X  - \mu_X) \right \|^4 = O(1).$$
+\end{lemma}
+\begin{proof}
+ \begin{align*}
+   \ev \left \| \sqrt n (\tilde  \mu_X  -  \mu_X) \right \|^4  &=  \ev \left \|  \frac {1} {\sqrt n}  \sum_{i \in N} \phi(X_i) - \mu_X  \right\|^4  \\
+     &=\ev  \left( \frac 1 n   \sum_{i \in N} \langle  \phi(X_j) - \mu_X, \phi(X_i) - \mu_X \rangle  \right)^2 \\
+   &=\frac{1}{n^2} \ev  \sum_{i \in N^4} \bar k \times \bar k (Z_i). 
+ \end{align*}
+ Since $(\bar k \times \bar k, X_i)$  is of type $\varDelta$, by Lemma \ref{lem:higherVstats}, the expected value is of order $O(1)$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:difS_nT_n}
+ If $(\bar k \times \bar k,Z_i)$, $(\bar l \times \bar l,Z_i)$  are of type $\varDelta$ of order $O(r^{-4})$, then, under the null,  $\|S_n\|^2- \|T_n\|^2$  converges to zero in mean square. Under the alternative $\frac 1 n (\|S_n\|^2- \|T_n\|^2) $ converges to zero in  mean square.
+\end{lemma}
+\begin{proof}
+%wild bootstrap validate ?
+% p.44 ?
+We first show that $\ev \| S_n- T_n\|^2 \to 0$ both under the null and the alternative. Then,  using the fact that $\|T_n\|^2< \infty$ under the null  and $\frac 1 n \|T_n\|^2< \infty $ under alternative we  will conclude the proof. The difference $S_n- T_n$ is 
 \begin{align*}
-h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)}) +  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})],  
+\label{eq:diferencesAgain}
+ \frac {1} { \sqrt n} &\sum_{i \in N}Q_i \bigg[ (\phi(X_i) - \tilde \mu_X ) \otimes (\phi(Y_i )  - \tilde \mu_Y) - ( \phi(X_i) -  \mu_X ) \otimes(\phi(Y_i )  -  \mu_Y)\bigg] \\
+&= \frac {1} { \sqrt n} \sum_{i \in N} Q_i \bigg[    \phi(X_i)  \otimes   \mu_Y -\phi(X_i) \otimes \tilde \mu_Y \bigg]  \\
+&+\frac {1} { \sqrt n} \sum_{i \in N} Q_i \bigg[    \phi(Y_i)  \otimes   \mu_X -\phi(Y_i) \otimes \tilde \mu_X \bigg] \\
+&+\frac {1} { \sqrt n} \sum_{i \in N}Q_i  ( \tilde  \mu_X   \otimes \tilde \mu_Y - \mu_Y \otimes \mu_X).
 \end{align*}
-where we denote by $S_n$ the group of permutations over $n$ elements. Thus, we can directly apply the theory developed for higher-order $V$-statistics in Section \ref{sec:main}. 
+We  examine differences separately -- it is sufficient to show that each difference converges to zero in mean square. 
+
+The expected  norm of the first difference  is
+\begin{align*}
+  \ev &\bigg \|\frac {1} { \sqrt n}\sum_{i \in N} Q_i \bigg[   \phi(X_i)  \otimes   \mu_Y -\phi(X_i) \otimes \tilde \mu_Y \bigg] \bigg \|^2\\
+  &=\ev \bigg \| \sqrt n(  \mu_Y-  \tilde  \mu_Y) \otimes \frac {1} { \sqrt n} \sum_{i \in N} Q_i  \phi(X_i)  \bigg \|^2  \\
+ & \leq \sqrt {\ev \bigg \| \sqrt n( \tilde \mu_Y - \mu_Y ) \bigg \|^4 \ev \bigg \| \frac {1} { \sqrt n} \sum_{i \in N} Q_i  \phi(X_i)  \bigg \|^4}.
+ \end{align*}
+We used $\|v \otimes u\| = \|v \|\| u\|$ and Cauchy-Schwarz inequality.  By Lemma \ref{lem:hahaha} the first term is $O(1)$. The second term is equal to 
+ \begin{align*}
+ \ev  \|  \frac {1} { n} \sum_{i \in N} Q_i  \phi(X_i)    \|^4 = \ev  \left(\frac {1} { n^2}  \sum_{i,j} k(X_i,X_j)Q_iQ_j \right)^2.
+ \end{align*}
+The expected value converges  to zero in mean square by  Lemma \ref{lem:higherVstats} (the assumption $\sup_{i,j}  k(X_i,X_j) < \infty$ is satisfied). Using similar reasoning, the second term 
+\begin{align*}
+ \ev &\bigg \|\frac {1} { \sqrt n}\sum_{i \in N} Q_i \bigg[  \phi(Y_i) \otimes \tilde \mu_X  -\phi(Y_i)  \otimes   \mu_X \bigg] \bigg \|^2
+\end{align*}
+ also converges to zero. The final term is 
+ \begin{align*} 
+ \ev  &\bigg \|  \frac {1} { \sqrt n} \sum_{i \in N}Q_i  ( \tilde  \mu_X   \otimes \tilde \mu_Y - \mu_Y \otimes \mu_X)\bigg \|^2  \\
+ &=\ev \left| \frac {1} {  n} \sum_{i \in N}Q_i \right | \ev \bigg \|  \sqrt n (\tilde  \mu_X   \otimes \tilde \mu_Y - \mu_Y \otimes \mu_X )\bigg \|^2 \\
+\end{align*}
+$ \frac {1} { n} \sum_{i \in N}Q_i$ converges in  mean square to zero (Lemmas \ref{lem:meanWi}, \ref{stmt:obviousD}). We rewrite the second term  
+\begin{align*}
+ \ev \bigg \| \sqrt n (\tilde  \mu_X   \otimes \tilde \mu_Y -  \tilde\mu_Y \otimes \mu_X + \tilde \mu_Y \otimes \mu_X - \mu_Y \otimes \mu_X) \bigg \|^2 
+ \end{align*}
+It is sufficient to bound  
+ \begin{align*}
+ \ev \bigg \|  \sqrt n \tilde \mu_Y \otimes ( \tilde \mu_X   -\mu_X) \bigg \|^2 & \leq  \ev  \sqrt {\bigg \|  \tilde \mu_Y \bigg \|^4 \ev \bigg \| \sqrt n ( \tilde \mu_X   -\mu_X) \bigg \|^4}\\
+   \ev \bigg \|  \sqrt n \mu_X \otimes ( \tilde \mu_Y   -\mu_Y) \bigg \|^2  &=    \bigg \|  \mu_X \bigg \|^2  \ev \bigg \|\sqrt n ( \tilde \mu_Y   -\mu_Y) \bigg \|^2  \\
+\end{align*}
+$ \ev   \| \tilde \mu_Y \|^4 = E \frac {1} {n^4} \sum_{i \in N^4} (l \times l)(Y_i) = O(1)$, since $ l$ is bounded. By Lemma \ref{lem:hahaha} $\ev \big \| \sqrt n ( \tilde \mu_X   -\mu_X) \big \|^4$ and $ \ev \big \|\sqrt n ( \tilde \mu_Y   -\mu_Y) \big \|^2$ are finite. Thus, to whole expression converges to zero. We proved  that $T_n-S_n$ converges in  mean square to zero.
+We have 
+%why not absolute value
+\begin{align*}
+  \ev | \|T_n\|^2 - \|S_n\|^2 |  & \leq\ev  \big | \|T_n\| - \|S_n\| \big | \big |  \|T_n\| +  \|S_n\| \big | \\
+  &\leq \sqrt{ \ev \big | \|T_n\| - \|S_n\| \big |^2  \ev \big| \|T_n\| +  \|S_n\| \big|^2 }\\ 
+\end{align*}
+To show that the above expression converges to zero it is sufficient to show that  $\ev \|T_n\|^2< \infty$ and  $\ev  \|S_n\|^2< \infty$.
+Under the null hypothesis, by Lemma \ref{lem:higherVstats}, expected value of   $\ev \|T_n\|^2 =n B_n(h_2) $ is finite. 
+Since $\ev \| T_n -S_n\|^2 \to 0$ we also have  $\ev \| T_n -S_n\| \to 0$. $ \ev \|S_n\|$ is therefore finite since
+\[
+ \ev \|S_n\| = \ev \|S_n - T_n +T_n\| \leq \ev \|S_n - T_n\| + \ev \|T_n\|< \infty 
+\]
+Therefore we have 
+%parallegram identity how?
+\begin{align*}
+ \ev \|S_n\|^2 &\leq \ev \|S_n-T_n+T_n\|^2 \\
+ & \leq \ev \|S_n-T_n\|^2+ \ev \| T_n -S_n\| \ev \|T_n\| + \ev\|T_n\|^2 < \infty
+\end{align*}
+Under the alternative we have 
+\begin{align*}
+  n^{-1}  \ev | \|T_n\|^2 - \|S_n\|^2 |  &\leq n^{-1}  \ev \big | \|T_n\| - \|S_n\| \big | \big |   \|T_n\| +  \|S_n\| \big | \\
+  &\leq \sqrt{ \ev \big | \|T_n\| - \|S_n\| \big |^2   n^{-1}\ev \big| \|T_n\| +  \|S_n\| \big|^2 }\\ 
+\end{align*}
+it is sufficient to show that  $n^{-1}  \ev\|T_n\|^2< \infty$ and  $n^{-1}  \ev \|S_n\|^2< \infty$. By Theorem \ref{th:mainTwo}, $n^{-1}  \ev \|T_n\|^2< \infty$ is finite and, using the reasoning similar to the one above, we have that    $n^{-1}  \ev \|S_n\|^2< \infty$.
+\end{proof}
+
+This shows  that we can use squared norm of $S_n$ as a bootstrapped test statistic.  For HSIC we redefine $B_n$ 
+\begin{align}
+\label{eq:hsic:1}
+B_n^* :=  \| S_n \|^2 = \frac 1  n \sum_{i,j \in N }Q_i, Q_j \tilde k(X_i,X_j) \tilde l(X_i,X_j).
+\end{align}
+$B_{1}^*$ corresponds to $Q_i=W_i$, $B_{2}^*$  corresponds to $Q_i= \tilde W_i$ . This bootstrapped statistic interestingly coincides with $V_n(h)$. \citet{gretton_kernel_2008} showed that 
+\begin{align}
+\label{eq:hsic:2}
+V_n(h) = \frac 1  n \sum_{i,j \in N }\tilde k(X_i,X_j) \tilde l(X_i,X_j).
+\end{align}
+Finally, notice that both statistics \ref{eq:hsic:1} and \ref{eq:hsic:2} can be calculated in quadratic time.
+
+
+\begin{proposition}
+\label{prop:null}
+Let  $Z_t=\left(X_t,Y_t\right)$  be a stationary process  that is $\tau$-dependent such that $\sum_{r=1}^{\infty} r^2 \sqrt{ \tau(r)} <\infty$. Under the null hypothesis  $B_n^*$ (\ref{eq:hsic:1}) and $n V_n(h)$  (\ref{eq:hsic:2})converge weakly to the same distribution. Under the alternative hypothesis $B_n^*$  converges to zero in probability, while $V_n(h)$ converges to a positive constant. 
+\end{proposition}
+\begin{proof}
+We calculate 
+\begin{align*}
+ n V_n(h) - B_n^* = n V_n(h) - 6 nB_n(h_2) + 6 nB_n(h_2) -  B_n^* .
+\end{align*}
+ By Lemma \ref{lem:T_n},  $6 nB_n(h_2) = \| T_n \|^2$. By definition \eqref{eq:hsic:1}, $B_n^* =  \| S_n \|^2 $ .  By Lemma \ref{lem:difS_nT_n}, $6 nB_n(h_2) -  B_n^*$ converges to zero in mean square. We check assumptions; since process $Z_t$ is $\tau$-mixing (of order $o(r^{-4})$ ) and both $\bar k$, $\bar l$ are canonical, Lemma \ref{lem:disentangle} guarantees that  $(\bar k,Z_i)$, $(\bar l,Z_i)$  are of type $\varDelta$ of order $O(r^{-4})$.
+ 
+ Under the null  hypothesis, by Theorem \ref{th:mainOne}, $n V_n(h) - 6 nB_n(h_2)$ converges to zero.  We check assumptions; by Lemma \ref{stm:thanks}, $h_2$ is a symmetric, one-degenerate, bounded kernel, assumptions concerning $\tau$-mixing are satisfied. 
+ 
+ Under the alternative, by Theorem \ref{th:mainTwo} and  Lemma \ref{lem:difS_nT_n} respectively,  $6 B_n(h_2)$ and $\frac 1 n B_n^* -6 B_n(h_2) $ converge to zero in mean square. By Theorem \ref{th:mainTwo}, $V_n(h)$ converges to a positive constant.
+ \end{proof}
+
 We consider two types of tests: instantaneous independence and independence at multiple time lags.
 
 %\vspace{-4mm}
