@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: nips2014.aux
 The style file: plain.bst
@@ -10,45 +10,45 @@ You're missing a field name---line 110 of file nips14Bib.bib
 I'm skipping whatever remains of this entry
 Warning--empty publisher in besserve_statistical_2013
 Warning--empty publisher in HarBacMou08
-You've used 33 entries,
+You've used 27 entries,
             2118 wiz_defined-function locations,
-            697 strings with 8902 characters,
-and the built_in function-call counts, 11909 in all, are:
-= -- 1163
-> -- 565
-< -- 14
-+ -- 231
-- -- 190
-* -- 823
-:= -- 1934
-add.period$ -- 103
-call.type$ -- 33
-change.case$ -- 187
+            663 strings with 8051 characters,
+and the built_in function-call counts, 10041 in all, are:
+= -- 987
+> -- 480
+< -- 12
++ -- 197
+- -- 162
+* -- 688
+:= -- 1619
+add.period$ -- 85
+call.type$ -- 27
+change.case$ -- 157
 chr.to.int$ -- 0
-cite$ -- 35
-duplicate$ -- 468
-empty$ -- 938
-format.name$ -- 190
-if$ -- 2518
+cite$ -- 29
+duplicate$ -- 397
+empty$ -- 781
+format.name$ -- 162
+if$ -- 2133
 int.to.chr$ -- 0
-int.to.str$ -- 33
-missing$ -- 36
-newline$ -- 168
-num.names$ -- 66
-pop$ -- 221
+int.to.str$ -- 27
+missing$ -- 28
+newline$ -- 138
+num.names$ -- 54
+pop$ -- 185
 preamble$ -- 1
-purify$ -- 160
+purify$ -- 134
 quote$ -- 0
-skip$ -- 332
+skip$ -- 290
 stack$ -- 0
-substring$ -- 732
-swap$ -- 119
-text.length$ -- 14
+substring$ -- 619
+swap$ -- 110
+text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 122
+type$ -- 102
 warning$ -- 2
-while$ -- 112
-width$ -- 35
-write$ -- 364
+while$ -- 95
+width$ -- 29
+write$ -- 299
 (There was 1 error message)

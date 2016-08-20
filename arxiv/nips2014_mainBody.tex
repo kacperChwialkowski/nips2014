@@ -60,7 +60,7 @@ The main results of the paper are based around two concepts: $\tau$-mixing \cite
 \tau(r) &= \sup_{l \in \mathbb{N}} \frac 1 l \sup_{ r \leq i_1 \leq ... \leq i_l} \tau( \mathcal F_0,(Z_{i_1},...,Z_{i_l}) )  \overset{r \to \infty}{\longrightarrow} 0,\;\text{where} \\
 \tau(\mathcal{M},X) &=  \ev \left( \sup_{g \in \Lambda} \left| \int g(t) P_{X|\mathcal{M}}(dt) - \int g(t) P_X(dt) \right| \right)
 \end{align*}
-and $\Lambda$ is the set of all one-Lipschitz continuous real-valued functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough, this $X^*$ can be constructed (see Proposition \ref{prop:Coupling} in the Appendix). More information is provided in the Appendix \ref{append:differentMixing}.
+and $\Lambda$ is the set of all one-Lipschitz continuous real-valued functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough, this $X^*$ can be constructed, more information is provided in the Appendix \ref{append:differentMixing}.
 
 %  Note that this mixing definition differs from commonly used notions of mixing, such as $\alpha, \beta$, or $\phi$ mixing, some of which were required in the previous work \cite{chwialkowski2014kernel}. We describe in more detail how these notions of dependence are related in Appendix \ref{append:differentMixing}.
 %  
@@ -96,15 +96,7 @@ The versions of the bootstrapped $V$-statistics in \eqref{Vb1} and \eqref{Vb2} w
 %\vspace{-2.5mm}
 \section{Asymptotics of wild bootstrapped $V$-statistics}\label{sec:main}
 %\vspace{-2.5mm}
-In this section, we present main Theorems that describe asymptotic behaviour of $V$-statistics. In the next section, these results will be used to construct kernel-based statistical tests applicable to dependent observations. Tests are constructed so that the  $V$-statistic is degenerate under the null hypothesis and non-degenerate under the alternative. Theorem \ref{th:mainOne} guarantees that the bootstrapped $V$-statistic will converge to the same limiting null distribution as the simple $V$-statistic. 
-
-% Following \cite{leucht_dependent_2013}, we will establish the convergence of the bootstrapped distribution to the desired asymptotic distribution in the Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}), and ensure that this distance approaches zero \emph{in probability} as $n\rightarrow\infty$. This two-part convergence statement is needed due to  the additional randomness introduced by the $W_{j,n}$.
-
-%since distributions of the bootstrapped statistics are random, 
-
-%AG: I modified and shortened the wording.
-
-%This notion can be  expressed  in terms of convergence in Prokhorov metric $\varphi$ \cite[Section 11.3]{dudley2002real}. Indeed by \cite[Theorem 11.3.3]{dudley2002real}, since values of $V$-statistics are real numbers, convergence in distribution is equivalent to the convergence in Prokhorov metric. 
+In this section, we present main Theorems that describe asymptotic behaviour of $V$-statistics, all the poofs are in the Appendix \ref{sec:Wildproofs}.  In the next section, these results will be used to construct kernel-based statistical tests applicable to dependent observations. Tests are constructed so that the  $V$-statistic is degenerate under the null hypothesis and non-degenerate under the alternative. Theorem \ref{th:mainOne} guarantees that the bootstrapped $V$-statistic will converge to the same limiting null distribution as the simple $V$-statistic. 
 
 Throughout this paper we will make one mild assumption
 \[
@@ -115,39 +107,6 @@ Throughout this paper we will make one mild assumption
 \label{th:mainOne}
 Assume that the stationary process $Z_t$ is $\tau$-dependent with $\sum_{r=1}^\infty r^2 \sqrt{\tau(r)} < \infty$. If the core $h$ is a Lipschitz continuous, one-degenerate and its $h_2$-component is a positive definite kernel, such that $\ev h_2(Z_0,Z_0) < \infty$, then $nB_n$ \eqref{Vb1}, \eqref{Vb2},  and $n V_n$  \eqref{def:Vstat} converge weakly to the same distribution $V$.  Moreover $nB_n(h_2)$ and $nV_n(h_2)$ converge weakly to $\binom {m} {2} ^{-1} V$.
 \end{Theorem}
-\begin{proof}
-In the proof we are going to use \cite{leucht_dependent_2013}[Theorems 2.1, 3.1], which characterise asymptotic properties of $nV_n(h_2)$ and $n B(h_2)$. Both  theorems use similar set of assumptions which we verify upfront.  \\
-\textit{Assumption A2.}\begin{itemize}
- \item (i)  $h_2$ is one-degenerate and symmetric - this follows from the Hoeffding decomposition;
- \item (ii) $h_2$ is a kernel - is one of the assumptions of this theorem;
- \item (iii) $\ev h_2(Z_1,Z_1) < \infty$ -- follows from $\sup_{i \in N^6}|\ev h(Z_i) |<\infty$ ;
- \item  (iv) $h_2$ is Lipschitz continuous - follows from the Lemma \ref{stm:LipAndBound}.
-\end{itemize}
-\textit{Assumption B1, A1.} Assumption $B1$, $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$, is the same as ours, assumption $A1$, $\sum_{r=1}^n  \sqrt{\tau(r)} < \infty$ is implied.\\
-\textit{Assumption B2.} This assumption about the bootstrap process $W_t$ is the same as our Definition \ref{bootstrapAss}. 
-
-
-Denote by $V$ the weak limit of $n V_n(h_2)$, which exits by the  \cite{leucht_dependent_2013}[Theorem 2.1],  and let $\mathcal{F} = \sigma(Z_1, \cdots , Z_n)$.   By \cite[Theorem 3.1]{leucht_dependent_2013}, since the distribution of  $V$ is continuous, we have 
-\begin{align*}
-\sup_{x \in R} &\left| P(nB_n(h_2)  < x|\mathcal{F}) -   P(V<x) \right| \to 0  \\
-\end{align*}
-in probability. We show that $nB_n(h_2)$ converges  to $V$ weakly, by showing  pointwise convergence  of CDF  
-\begin{align*}
- \lim_{n \to \infty} &P(nB_n(h_2)  < x) =  \lim_{n \to \infty} \ev P(nB_n(h_2)  < x|\mathcal{F}) \\
- &=  \ev  \lim_{n \to \infty} P(nB_n(h_2)  < x|\mathcal{F})  = \ev P(V<x) =P(V<x) 
-\end{align*}
-To change the order of limit and expectation we have dominated convergence Theorem, justified since  $P(nB_n(h)  < x|\mathcal{F})$  are bounded by 1.
-%TODO mybe write more
-The difference $n(B_n(h) - V_n(h))$ is
-\begin{align*}
- n \left (B_n(h) -  \binom m 2 B_n(h_2) \right) + \binom m 2 \left (n B_n(h_2) -V\right)+ \left (\binom m 2 V - nV_n(h)\right)
- \end{align*}
-By  Lemma \ref{lem:equivBoot} and Lemma \ref{lem:equivVanila} respectively, both 
-$$n (B(h) -   \binom m 2  B(h_2)) , n (V_n(h) - n \binom m 2 V_n(h_2))$$
-converge to zero in mean square. We check assumptions: since $Z_t$ is tau mixing and $h$ is Lipschitz continuous, by Lemma \ref{lem:disentangle} all self products of components and $Z_t$, $(h_c \times h_c,Z_t)$ for $c>0$, are $\varDelta$ type of order $\tau(r)$, of order at least  $o(r^{-4})$ (since $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$). Since $h$ is one degenerate,  first and zero component $h_0,h_1$ are equal to zero (and so are $B(h_0),B(h_1)$).  
-
-This shows that $nB_n(h_2)$ converges weakly to $V$. 
-\end{proof}  
 
 On the other hand, if the $V$-statistic is not degenerate, which is usually true under the alternative, it converges to some non-zero constant. 
 \begin{Theorem}
@@ -159,7 +118,7 @@ In this setting, Theorem \ref{th:mainTwo} guarantees that the bootstrapped $V$-s
 \label{th:mainTwo}
 Assume that the stationary process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(r) = o(r^{-4})$. If the core $h$ is  a function of $m>1$ arguments then $B_1(h)$ and $o(n) B_2(h)$  converge to zero in mean squared. 
 \end{Theorem}
-Although both $B_2$ and $B_1$  converge to zero, the rate does not seem to be that same. As a consequence, tests that utilize $B_2$ usually give lower Type II error then the ones that use $B_1$. On the other hand, $B_1$ seems to better approximate $V$-statistic distribution under the null hypothesis. This agrees with our experiments in Section \ref{sec:Experiments1} as well as with those in \cite[Section 5]{leucht_dependent_2013}).  
+Although both $B_2$ and $B_1$  converge to zero, the rate does not seem to be that same. As a consequence, tests that utilize $B_2$ usually give lower Type II error then the ones that use $B_1$. On the other hand, $B_1$ seems to better approximate $V$-statistic distribution under the null hypothesis. This agrees with our experiments in Section \ref{sec:Experiments} as well as with those in \cite[Section 5]{leucht_dependent_2013}).  
 These results a sufficient for adopting kernel tests developed for i.i.d. data to tests that work on random processes. In particular Theorem \ref{th:mainOne}  justifies usage of bootstraped $V$-statistics for estimating quantiles of the null distribution, while Theorems \ref{th:mainThree}\ref{th:mainTwo} guarantee consistency.
 
 The general testing procedure is 
@@ -195,7 +154,7 @@ $\left\Vert \mu_\kappa(P_{xy})-\mu_\kappa(P_x P_y)\right\Vert_{{\mathcal H}_{\ka
 This quantity is called Hilbert-Schmidt Independence Criterion (HSIC) \cite{gretton_measuring_2005,gretton_kernel_2008}. When characteristic RKHSs are used, the HSIC is zero iff $X \indep Y$: this follows from \cite{Asimplercondition}.
 The  empirical statistic is written $\widehat{\text{HSIC}}_{\kappa} = \frac{1}{n^2}\text{Tr}(KHLH)$ for kernel matrices $K$ and $L$ and the centering matrix $H=I-\frac{1}{n}\mathbf{1}\mathbf{1}^\top$.
 
-In this section, we describe how the wild bootstrap for $V$-statistics can be used to construct kernel tests for independence and the two-sample problem, in presence of weakly dependent observations. The main concepts underpinning the kernel testing framework are reviewed in the section \ref{sec:FBackground}.
+In this section, we describe how the wild bootstrap for $V$-statistics can be used to construct kernel tests for independence and the two-sample problem, in presence of weakly dependent observations.
 
 %\vspace{-2mm}
 \subsection{Wild Bootstrap For MMD}
@@ -222,7 +181,7 @@ The following Proposition shows that the bootstrapped statistic has the same asy
 
 \subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
 
-Recall (\ref{eq:hsicOMG}) that the core of the test static for HSIC, with notation $z_i = (x_i,y_i)$, is  
+The core of the test static for HSIC, with notation $z_i = (x_i,y_i)$, is  
 \begin{equation*}
 \begin{split}
 h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)})  \\

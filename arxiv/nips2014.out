@@ -8,11 +8,8 @@
 \BOOKMARK [1][-]{appendix.A}{An Introduction to the Wild Bootstrap}{}% 8
 \BOOKMARK [1][-]{appendix.B}{Relation between , and \040mixing}{}% 9
 \BOOKMARK [1][-]{appendix.C}{Proofs}{}% 10
-\BOOKMARK [2][-]{subsection.C.1}{Notation and basic facts.}{appendix.C}% 11
-\BOOKMARK [2][-]{subsection.C.2}{Proof of Theorem 1}{appendix.C}% 12
-\BOOKMARK [2][-]{subsection.C.3}{Proof of Proposition 3}{appendix.C}% 13
-\BOOKMARK [2][-]{subsection.C.4}{Proof of Proposition 1 }{appendix.C}% 14
-\BOOKMARK [2][-]{subsection.C.5}{Auxiliary results }{appendix.C}% 15
-\BOOKMARK [1][-]{appendix.D}{Lag-HSIC with M }{}% 16
-\BOOKMARK [1][-]{appendix.E}{Various comments}{}% 17
-\BOOKMARK [2][-]{subsection.E.1}{Time complexity}{appendix.E}% 18
+\BOOKMARK [2][-]{subsection.C.1}{Proof of the Theorem 1}{appendix.C}% 11
+\BOOKMARK [2][-]{subsection.C.2}{Proof of Theorem 2}{appendix.C}% 12
+\BOOKMARK [2][-]{subsection.C.3}{Proof of Theorem 3}{appendix.C}% 13
+\BOOKMARK [1][-]{appendix.D}{Various comments}{}% 14
+\BOOKMARK [2][-]{subsection.D.1}{Time complexity}{appendix.D}% 15
