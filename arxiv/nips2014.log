@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.6)  20 AUG 2016 12:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.6)  20 AUG 2016 13:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -374,11 +374,7 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \c@corollary=\count129
 \c@proposition=\count130
 
-(./nips2014.aux
-
-LaTeX Warning: Label `prop:null' multiply defined.
-
-)
+(./nips2014.aux)
 \openout1 = `nips2014.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
@@ -492,41 +488,44 @@ File: omsptm.fd
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 127.
- [4] [5] [6]
-Underfull \hbox (badness 3803) in paragraph at lines 266--268
+ [4]
+
+LaTeX Warning: Reference `prop:alternative' on page 5 undefined on input line 1
+84.
+
+[5] [6]
+Underfull \hbox (badness 3803) in paragraph at lines 267--269
 \OT1/ptm/m/n/10 The ex-pected value con-verges to zero in mean square by Lemma 
 []4[] (the as-sump-tion
  []
 
 [7] [8]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 378.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 379.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 378.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 379.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 384.
- [9]) (./nips2014_experiments.tex
-<./imgNips14/arExtinct.pdf, id=279, 497.86pt x 167.62625pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 385.
+) (./nips2014_experiments.tex
+<./imgNips14/arExtinct.pdf, id=274, 497.86pt x 167.62625pt>
 File: ./imgNips14/arExtinct.pdf Graphic file (type pdf)
 
 <use ./imgNips14/arExtinct.pdf>
 Package pdftex.def Info: ./imgNips14/arExtinct.pdf used on input line 9.
 (pdftex.def)             Requested size: 397.50607pt x 102.49995pt.
-
-<./imgNips14/varAndPhase.pdf, id=280, 451.6875pt x 148.555pt>
+ [9]
+<./imgNips14/varAndPhase.pdf, id=286, 451.6875pt x 148.555pt>
 File: ./imgNips14/varAndPhase.pdf Graphic file (type pdf)
 
 <use ./imgNips14/varAndPhase.pdf>
 Package pdftex.def Info: ./imgNips14/varAndPhase.pdf used on input line 16.
 (pdftex.def)             Requested size: 397.52068pt x 102.50531pt.
- [10 <./imgNips14/arExtinct.pdf> <./imgNips14/varAndPhase.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11])
-(./nips2014.bbl
+ [10 <./imgNips14/arExtinct.pdf> <./imgNips14/varAndPhase.pdf>] [11]) (./nips20
+14.bbl
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¶ in font ptmr7t!
- [12]) [13] (./nips2014_appendix.tex [14]
+ [12]) [13] (./nips2014_appendix.tex
+[14]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 49.
@@ -578,15 +577,15 @@ Package rerunfilecheck Info: File `nips2014.out' has not changed.
 (rerunfilecheck)             Checksum: 92F4D92DFE6698FB313D199365A0F252;939.
 
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: There were undefined references.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 100.
  ) 
 Here is how much of TeX's memory you used:
- 8979 strings out of 493029
- 133786 string characters out of 6136235
- 240496 words of memory out of 5000000
- 12230 multiletter control sequences out of 15000+600000
+ 8981 strings out of 493029
+ 133838 string characters out of 6136235
+ 240508 words of memory out of 5000000
+ 12232 multiletter control sequences out of 15000+600000
  34106 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,17n,40p,1312b,433s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -616,10 +615,10 @@ r/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on nips2014.pdf (24 pages, 404071 bytes).
+Output written on nips2014.pdf (24 pages, 404225 bytes).
 PDF statistics:
- 603 PDF objects out of 1000 (max. 8388607)
- 528 compressed objects within 6 object streams
+ 612 PDF objects out of 1000 (max. 8388607)
+ 537 compressed objects within 6 object streams
  129 named destinations out of 1000 (max. 500000)
  131 words of extra memory for PDF output out of 10000 (max. 10000000)
 
