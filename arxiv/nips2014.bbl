@@ -40,11 +40,6 @@ K.~Chwialkowski and A.~Gretton.
 \newblock A kernel independence test for random processes.
 \newblock In {\em ICML}, 2014.
 
-\bibitem{chwialkowski2014wild}
-Kacper Chwialkowski, Dino Sejdinovic, and Arthur Gretton.
-\newblock A wild bootstrap for degenerate kernel tests. tech. report.
-\newblock {\em arXiv preprint arXiv:1408.5404}, 2014.
-
 \bibitem{dedecker2007weak}
 J.~Dedecker, P.~Doukhan, G.~Lang, S.~Louhichi, and C.~Prieur.
 \newblock {\em Weak dependence: with examples and applications}, volume 190.

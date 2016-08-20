@@ -48,7 +48,7 @@ The main result of this paper is to show that the wild bootstrap procedure yield
 
 %Simultaneous testing for dependence of two time series across multiple time lags is also of interest, since it may not be a priori known at what lag the dependence occurs \cite{besserve_statistical_2013}. In this case, the shift procedure of \cite{chwialkowski2014kernel} can be problematic, as certain shifts may increase dependence between the time series, and it cannot be known in advance which shifts these will be. By contrast, the wild bootstrap can be used straightforwardly in this circumstance, and outperforms \cite{besserve_statistical_2013} in experiments.
 
-We begin our presentation in Section \ref{sec:background}, with a review of the $\tau$-mixing assumption required of the time series, as well as of   $V$-statistics (of which MMD and HSIC are instances). We also introduce the form taken by the wild bootstrap. In Section \ref{sec:main}, we establish a general consistency result for the wild bootstrap procedure on $V$-statistics, which we apply to MMD and to HSIC in Section \ref{sec:mmd_hsic}. Finally, in Section \ref{sec:Experiments}, we present a number of empirical comparisons: in the two sample case, we test for differences in audio signals with the same underlying pitch, and present a performance diagnostic for the output of a Gibbs sampler (the MCMC M.D.); in the independence case, we test for independence of two time series sharing a common variance (a characteristic of econometric models), and compare against the test of \cite{besserve_statistical_2013} in the case where dependence may occur at multiple, potentially unknown lags. Our tests outperform both the naive approach which neglects the dependence structure within the samples, and the approach of \cite{besserve_statistical_2013}, when testing across multiple lags. Detailed proofs are found in the appendices of an accompanying technical report \cite{chwialkowski2014wild}, which we reference from the present document as needed.
+We begin our presentation in Section \ref{sec:background}, with a review of the $\tau$-mixing assumption required of the time series, as well as of   $V$-statistics (of which MMD and HSIC are instances). We also introduce the form taken by the wild bootstrap. In Section \ref{sec:main}, we establish a general consistency result for the wild bootstrap procedure on $V$-statistics, which we apply to MMD and to HSIC in Section \ref{sec:mmd_hsic}. Finally, in Section \ref{sec:Experiments}, we present a number of empirical comparisons: in the two sample case, we test for differences in audio signals with the same underlying pitch, and present a performance diagnostic for the output of a Gibbs sampler (the MCMC M.D.); in the independence case, we test for independence of two time series sharing a common variance (a characteristic of econometric models), and compare against the test of \cite{besserve_statistical_2013} in the case where dependence may occur at multiple, potentially unknown lags. Our tests outperform both the naive approach which neglects the dependence structure within the samples, and the approach of \cite{besserve_statistical_2013}, when testing across multiple lags. Detailed proofs are found in the appendices.
 
 %\vspace{-2mm}
 \section{Background}\label{sec:background}
@@ -82,8 +82,8 @@ Our main results will rely on the fact that $h_2$ governs the asymptotic behavio
 \paragraph{Bootstrapped $V$-statistic.} 
 We will study two versions of the bootstrapped $V$-statistics  
 \begin{align}
- V_{b1}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} \nolimits W_{i_1,n} W_{i_2,n} h(Z_{i_1},...,Z_{i_m}), \label{Vb1}\\ 
- V_{b2}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m}  \nolimits \tilde W_{i_1,n}  \tilde W_{i_2,n} h(Z_{i_1},...,Z_{i_m}),\label{Vb2}
+ B_{1,n}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m} \nolimits W_{i_1,n} W_{i_2,n} h(Z_{i_1},...,Z_{i_m}), \label{Vb1}\\ 
+ B_{1,n}(h,Z) = \frac{1}{n^m} \sum_{i \in N^m}  \nolimits \tilde W_{i_1,n}  \tilde W_{i_2,n} h(Z_{i_1},...,Z_{i_m}),\label{Vb2}
 \end{align}
 where $\{W_{t,n}\}_{1 \leq t \leq n }$ is an auxiliary wild bootstrap process and $\tilde W_{t,n} = W_{t,n} - \frac 1 n \sum_{j=1}^n W_{j,n}$. This auxiliary process, proposed by \cite{Shao2010,leucht_dependent_2013}, satisfies the following assumption:
 
@@ -92,7 +92,7 @@ where $\{W_{t,n}\}_{1 \leq t \leq n }$ is an auxiliary wild bootstrap process an
 As noted in in \cite[Remark 2]{leucht_dependent_2013}, a simple realization of a process that satisfies this assumption is $W_{t,n} = e^{-1/l_n}W_{t-1,n} + \sqrt{1 -e^{-2/l_n}} \epsilon_t$
 where $W_{0,n}$ and $\epsilon_1,\ldots,\epsilon_n$ are independent standard normal random variables. For simplicity, we will drop the index $n$ and write $W_t$ instead of $W_{t,n}$. A process that fulfils the \emph{bootstrap assumption} will be called  \emph{bootstrap process}. Further discussion of the wild bootstrap is provided in the Appendix  \ref{wildintro}.
 % AG: removed paragraph break to save space
-The versions of the bootstrapped $V$-statistics in \eqref{Vb1} and \eqref{Vb2} were previously studied in \cite{leucht_dependent_2013} for the case of canonical cores of degree $m=2$. We extend their results to higher degree cores (common within the kernel testing framework), which are not necessarily one-degenerate. When stating a fact that applies to both $V_{b1}$ and $V_{b2}$, we will simply write $V_b$, and the argument $Z$ will be dropped when there is no ambiguity. 
+The versions of the bootstrapped $V$-statistics in \eqref{Vb1} and \eqref{Vb2} were previously studied in \cite{leucht_dependent_2013} for the case of canonical cores of degree $m=2$. We extend their results to higher degree cores (common within the kernel testing framework), which are not necessarily one-degenerate. When stating a fact that applies to both $B_1$ and $B_2$, we will simply write $B$, and the argument $h$ or index $n$ will be dropped when there is no ambiguity. 
 %\vspace{-2.5mm}
 \section{Asymptotics of wild bootstrapped $V$-statistics}\label{sec:main}
 %\vspace{-2.5mm}
@@ -180,14 +180,15 @@ The following Proposition shows that the bootstrapped statistic has the same asy
 \end{proposition}
 
 \subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
+Using HSIC in the context of random processes is not new in the machine learning literature. For a 1-approximating functional of an absolutely regular process \cite{borovkova2001limit}, convergence in probability of the empirical HSIC to its population value was shown in \cite{smola_kernel_2008}. No asymptotic distributions were obtained, however, nor was a statistical test constructed.  The asymptotics of a normalized $V$-statistic were obtained in \cite{chwialkowski2014kernel}  for absolutely regular and $\phi$-mixing processes \cite{doukhan1994mixing}. Due to the intractability of the null distribution for the test statistic, the authors propose a procedure to approximate its null distribution using circular shifts of the observations leading to tests of instantaneous independence, i.e., of $X_t \indep Y_t$, $\forall t$. This was shown to be consistent under the null (i.e., leading to the correct Type I error), however consistency of the shift procedure under the alternative is a challenging open question (see \cite[Section A.2]{chwialkowski2014kernel} for further discussion).
+ In contrast, as shown below in Propositions \ref{prop:null} and \ref{prop:alternative} (which are direct consequences of the Theorems \ref{th:mainOne} and \ref{th:mainTwo}), the wild bootstrap guarantees test consistency under both hypotheses: null and alternative, which is a major advantage. 
+In addition,  the wild bootstrap can be used in constructing a test for the harder problem of determining independence across multiple lags simultaneously, similar to the one in \cite{besserve_statistical_2013}.
 
-The core of the test static for HSIC, with notation $z_i = (x_i,y_i)$, is  
-\begin{equation*}
-\begin{split}
-h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)})  \\
- &+  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})] . \\
-\end{split}  
-\end{equation*}
+Following symmetrisation, it is shown in \cite{gretton_kernel_2008,chwialkowski2014kernel} that the empirical HSIC can be written as a degree four $V$-statistic with core given by
+\begin{align*}
+h(&z_1,z_2,z_3,z_4) = \frac{1}{4!} \sum_{\pi \in S_4}  k(x_{\pi(1)},x_{\pi(2)}) [  l(y_{\pi(1)},y_{\pi(2)}) +  l(y_{\pi(3)},y_{\pi(4)}) - 2  l(y_{\pi(2)},y_{\pi(3)})],  
+\end{align*}
+where we denote by $S_n$ the group of permutations over $n$ elements. 
 One-degeneracy of the core under the null hypothesis was stated in \cite[Theorem 2]{gretton_kernel_2008}, \cite[Section A.2, following eq. (11)]{gretton_kernel_2008} shows that $h_2$ is a kernel; $h_0\geq 0$ follows from the fact that HSIC is a distance. Using Theorems \ref{th:mainOne},\ref{th:mainTwo},\ref{th:mainThree} we can construct an independence test using $h$. Drawback of this test, when implemented in the most straightforward way,  is its quadruple computational complexity. To achieve quadratic time complexity, that matches time complexity of HSIC test for i.i.d. data, we modify our bootstrapped statistic.
 
 \paragraph{Quadratic time HSIC.}
