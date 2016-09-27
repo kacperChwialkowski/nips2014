@@ -10,45 +10,45 @@ You're missing a field name---line 110 of file nips14Bib.bib
 I'm skipping whatever remains of this entry
 Warning--empty publisher in besserve_statistical_2013
 Warning--empty publisher in HarBacMou08
-You've used 29 entries,
+You've used 30 entries,
             2118 wiz_defined-function locations,
-            674 strings with 8252 characters,
-and the built_in function-call counts, 10710 in all, are:
-= -- 1048
-> -- 510
+            681 strings with 8436 characters,
+and the built_in function-call counts, 11113 in all, are:
+= -- 1086
+> -- 533
 < -- 13
-+ -- 208
-- -- 172
-* -- 737
-:= -- 1727
-add.period$ -- 91
-call.type$ -- 29
-change.case$ -- 167
++ -- 217
+- -- 180
+* -- 773
+:= -- 1795
+add.period$ -- 94
+call.type$ -- 30
+change.case$ -- 174
 chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 424
-empty$ -- 843
-format.name$ -- 172
-if$ -- 2274
+cite$ -- 32
+duplicate$ -- 435
+empty$ -- 872
+format.name$ -- 180
+if$ -- 2356
 int.to.chr$ -- 0
-int.to.str$ -- 29
-missing$ -- 31
-newline$ -- 148
-num.names$ -- 58
-pop$ -- 201
+int.to.str$ -- 30
+missing$ -- 32
+newline$ -- 153
+num.names$ -- 60
+pop$ -- 206
 preamble$ -- 1
-purify$ -- 143
+purify$ -- 149
 quote$ -- 0
-skip$ -- 304
+skip$ -- 311
 stack$ -- 0
-substring$ -- 659
-swap$ -- 114
+substring$ -- 691
+swap$ -- 115
 text.length$ -- 13
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 108
+type$ -- 112
 warning$ -- 2
-while$ -- 101
-width$ -- 31
-write$ -- 321
+while$ -- 104
+width$ -- 32
+write$ -- 332
 (There was 1 error message)

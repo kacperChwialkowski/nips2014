@@ -60,9 +60,9 @@ The main results of the paper are based around two concepts: $\tau$-mixing \cite
 \tau(r) &= \sup_{l \in \mathbb{N}} \frac 1 l \sup_{ r \leq i_1 \leq ... \leq i_l} \tau( \mathcal F_0,(Z_{i_1},...,Z_{i_l}) )  \overset{r \to \infty}{\longrightarrow} 0,\;\text{where} \\
 \tau(\mathcal{M},X) &=  \ev \left( \sup_{g \in \Lambda} \left| \int g(t) P_{X|\mathcal{M}}(dt) - \int g(t) P_X(dt) \right| \right)
 \end{align*}
-and $\Lambda$ is the set of all one-Lipschitz continuous real-valued functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough, this $X^*$ can be constructed, more information is provided in the Appendix \ref{append:differentMixing}.
+and $\Lambda$ is the set of all one-Lipschitz continuous real-valued functions on the domain of $X$. $\tau(\mathcal M,X)$ can be interpreted as the minimal $L_1$ distance between $X$ and $X^*$ such that $X \overset{d}{=}X^*$ and $X^*$ is independent of $\mathcal M \subset \mathcal F$. Furthermore, if $\mathcal F$ is rich enough, this $X^*$ can be constructed.
 
-%  Note that this mixing definition differs from commonly used notions of mixing, such as $\alpha, \beta$, or $\phi$ mixing, some of which were required in the previous work \cite{chwialkowski2014kernel}. We describe in more detail how these notions of dependence are related in Appendix \ref{append:differentMixing}.
+Note that this mixing definition differs from commonly used notion of $\beta$ mixing (or $\phi$ mixing),  which was required in the previous work \cite{chwialkowski2014kernel}. We describe in more detail how these notions of dependence are related in Appendix \ref{append:differentMixing}.
 %  
 %\vspace{-4mm}
 \paragraph{$V$-statistics.} The test statistics considered in this paper are always $V$-statistics. Given the observations $Z=\left\{Z_t\right\}_{t=1}^n$, a $V$-statistic of a symmetric function $h$ taking $m$ arguments is given by 
@@ -172,7 +172,7 @@ as a one-sample $V$-statistic. We will therefore require the following bootstrap
 {}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}k(x_i,y_j),\label{eq:mmdkb}
 \end{align}
 where $\tilde W_t^{(x)}=W_t^{(x)}-\frac{1}{n_x}\sum_{i=1}^{n_x}W_i^{(x)}$, $\tilde W_t^{(y)}=W_t^{(y)}-\frac{1}{n_y}\sum_{j=1}^{n_y}W_j^{(y)}$;  $\{W_t^{(x)}\}$ and $\{W_t^{(y)}\}$ are two auxiliary wild bootstrap processes that are independent of $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ and also independent of each other, both satisfying the bootstrap assumption in Section \ref{sec:background}.  
-The following Proposition shows that the bootstrapped statistic has the same asymptotic null distribution as the empirical MMD. The proof follows that of \cite[Theorem 3.1]{leucht_dependent_2013}, and is given in the Appendix.
+The following Proposition shows that the bootstrapped statistic has the same asymptotic null distribution as the empirical MMD. The proof follows that of \cite[Theorem 3.1]{leucht_dependent_2013}, and is given in the Appendix \ref{sub:prop:mmd}.
 
 \begin{proposition}\label{prop:mmd}
  Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
@@ -181,7 +181,7 @@ The following Proposition shows that the bootstrapped statistic has the same asy
 
 \subsection{Wild Bootstrap For HSIC}\label{sec:hsic}
 Using HSIC in the context of random processes is not new in the machine learning literature. For a 1-approximating functional of an absolutely regular process \cite{borovkova2001limit}, convergence in probability of the empirical HSIC to its population value was shown in \cite{smola_kernel_2008}. No asymptotic distributions were obtained, however, nor was a statistical test constructed.  The asymptotics of a normalized $V$-statistic were obtained in \cite{chwialkowski2014kernel}  for absolutely regular and $\phi$-mixing processes \cite{doukhan1994mixing}. Due to the intractability of the null distribution for the test statistic, the authors propose a procedure to approximate its null distribution using circular shifts of the observations leading to tests of instantaneous independence, i.e., of $X_t \indep Y_t$, $\forall t$. This was shown to be consistent under the null (i.e., leading to the correct Type I error), however consistency of the shift procedure under the alternative is a challenging open question (see \cite[Section A.2]{chwialkowski2014kernel} for further discussion).
- In contrast, as shown below in Propositions \ref{prop:null} and \ref{prop:alternative} (which are direct consequences of the Theorems \ref{th:mainOne} and \ref{th:mainTwo}), the wild bootstrap guarantees test consistency under both hypotheses: null and alternative, which is a major advantage. 
+ In contrast, the wild bootstrap guarantees test consistency under both hypotheses: null and alternative, which is a major advantage. 
 In addition,  the wild bootstrap can be used in constructing a test for the harder problem of determining independence across multiple lags simultaneously, similar to the one in \cite{besserve_statistical_2013}.
 
 Following symmetrisation, it is shown in \cite{gretton_kernel_2008,chwialkowski2014kernel} that the empirical HSIC can be written as a degree four $V$-statistic with core given by
@@ -247,7 +247,7 @@ $$\lim_{n \to \infty} \ev \left \| \sqrt n (\tilde  \mu_X  - \mu_X) \right \|^4 
 % p.44 ?
 We first show that $\ev \| S_n- T_n\|^2 \to 0$ both under the null and the alternative. Then,  using the fact that $\|T_n\|^2< \infty$ under the null  and $\frac 1 n \|T_n\|^2< \infty $ under alternative we  will conclude the proof. The difference $S_n- T_n$ is 
 \begin{align*}
-\label{eq:diferencesAgain}
+% \label{eq:diferencesAgain}
  \frac {1} { \sqrt n} &\sum_{i \in N}Q_i \bigg[ (\phi(X_i) - \tilde \mu_X ) \otimes (\phi(Y_i )  - \tilde \mu_Y) - ( \phi(X_i) -  \mu_X ) \otimes(\phi(Y_i )  -  \mu_Y)\bigg] \\
 &= \frac {1} { \sqrt n} \sum_{i \in N} Q_i \bigg[    \phi(X_i)  \otimes   \mu_Y -\phi(X_i) \otimes \tilde \mu_Y \bigg]  \\
 &+\frac {1} { \sqrt n} \sum_{i \in N} Q_i \bigg[    \phi(Y_i)  \otimes   \mu_X -\phi(Y_i) \otimes \tilde \mu_X \bigg] \\
@@ -292,10 +292,7 @@ We have
 \end{align*}
 To show that the above expression converges to zero it is sufficient to show that  $\ev \|T_n\|^2< \infty$ and  $\ev  \|S_n\|^2< \infty$.
 Under the null hypothesis, by Lemma \ref{lem:higherVstats}, expected value of   $\ev \|T_n\|^2 =n B_n(h_2) $ is finite. 
-Since $\ev \| T_n -S_n\|^2 \to 0$ we also have  $\ev \| T_n -S_n\| \to 0$. $ \ev \|S_n\|$ is therefore finite since
-\[
- \ev \|S_n\| = \ev \|S_n - T_n +T_n\| \leq \ev \|S_n - T_n\| + \ev \|T_n\|< \infty 
-\]
+Since $\ev \| T_n -S_n\|^2 \to 0$ we also have  $\ev \| T_n -S_n\| \to 0$. 
 Therefore we have 
 %parallegram identity how?
 \begin{align*}

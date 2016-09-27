@@ -1,20 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.24)  17 NOV 2014 13:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.6)  27 SEP 2016 11:49
 entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
 **nips2014_experiments.tex
-
-(C:\Users\kcx\Dropbox\studia\ucl\dependency\nips2014\arxiv\nips2014_experiments
-.tex
-LaTeX2e <2011/06/27>
-Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
-abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
-croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
- lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
-german-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
-ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
-an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
-ishmax, welsh, loaded.
+(./nips2014_experiments.tex
+LaTeX2e <2016/02/01>
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 ! Undefined control sequence.
 l.1 \section
             {Experiments}
@@ -67,7 +58,7 @@ or  <return>  to continue without it.
 
 ! Undefined control sequence.
 l.9 \includegraphics
-                    [width=397.5pt,height=102.5pt]{./imgNips14/arExtinct.pdf}
+                    [width=397.5pt,height=102.5pt]{./arExtinct.pdf}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -82,7 +73,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.9 \includegraphics[
-                     width=397.5pt,height=102.5pt]{./imgNips14/arExtinct.pdf}
+                     width=397.5pt,height=102.5pt]{./arExtinct.pdf}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
@@ -117,16 +108,6 @@ Missing character: There is no p in font nullfont!
 Missing character: There is no t in font nullfont!
 Missing character: There is no ] in font nullfont!
 Missing character: There is no . in font nullfont!
-Missing character: There is no / in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no m in font nullfont!
-Missing character: There is no g in font nullfont!
-Missing character: There is no N in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no 4 in font nullfont!
 Missing character: There is no / in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no r in font nullfont!
@@ -457,12 +438,12 @@ or  <return>  to continue without it.
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 9--13
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 9--13
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
@@ -480,7 +461,7 @@ or  <return>  to continue without it.
 
 ! Undefined control sequence.
 l.16 \includegraphics
-                     [width=397.5pt,height=102.5pt]{./imgNips14/varAndPhase....
+                     [width=397.5pt,height=102.5pt]{./varAndPhase.pdf}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -495,8 +476,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.16 \includegraphics[
-                      width=397.5pt,height=102.5pt]{./imgNips14/varAndPhase....
-
+                      width=397.5pt,height=102.5pt]{./varAndPhase.pdf}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
@@ -531,16 +511,6 @@ Missing character: There is no p in font nullfont!
 Missing character: There is no t in font nullfont!
 Missing character: There is no ] in font nullfont!
 Missing character: There is no . in font nullfont!
-Missing character: There is no / in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no m in font nullfont!
-Missing character: There is no g in font nullfont!
-Missing character: There is no N in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no 4 in font nullfont!
 Missing character: There is no / in font nullfont!
 Missing character: There is no v in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -3612,27 +3582,27 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 22--57
 
 
 Overfull \hbox (21.61404pt too wide) in paragraph at lines 22--57
-$\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 X[]\OMS/cmsy/m/n/10 g$
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 X[]\OMS/cmsy/m/n/10 g$
  []
 
 
 Overfull \hbox (19.13487pt too wide) in paragraph at lines 22--57
-$\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 Y[]\OMS/cmsy/m/n/10 g$
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 Y[]\OMS/cmsy/m/n/10 g$
  []
 
 
 Overfull \hbox (18.36455pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 P \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 P \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (86.0675pt too wide) in paragraph at lines 22--57
-$\OMS/cmsy/m/n/10 N []$
+\OMS/cmsy/m/n/10 N []$
  []
 
 
 Overfull \hbox (7.80904pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 P$
+\OML/cmm/m/it/10 P$
  []
 
 
@@ -3662,22 +3632,22 @@ Overfull \hbox (20.8276pt too wide) in paragraph at lines 22--57
 
 
 Overfull \hbox (16.98955pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (17.77783pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05$
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05$
  []
 
 
 Overfull \hbox (6.43404pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 $
+\OML/cmm/m/it/10 $
  []
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
@@ -3687,37 +3657,37 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 22--57
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
 Overfull \hbox (40.95209pt too wide) in paragraph at lines 22--57
-$[][]$
+[][]$
  []
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
 Overfull \hbox (19.13487pt too wide) in paragraph at lines 22--57
-$\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 Y[]\OMS/cmsy/m/n/10 g$
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 Y[]\OMS/cmsy/m/n/10 g$
  []
 
 
 Overfull \hbox (16.581pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 ^^V \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (23.3334pt too wide) in paragraph at lines 22--57
-$[]$
+[]$
  []
 
 
@@ -3727,161 +3697,161 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 22--57
 
 
 Overfull \hbox (3.44513pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 i$
+\OML/cmm/m/it/10 i$
  []
 
 
 Overfull \hbox (7.22223pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 
+\OT1/cmr/m/n/10 
 $
  []
 
 
 Overfull \hbox (15.76038pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 d \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 d \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (10.00003pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 20$
+\OT1/cmr/m/n/10 20$
  []
 
 
 Overfull \hbox (15.55553pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0 =$
+\OT1/cmr/m/n/10 0 =
  []
 
 
 Overfull \hbox (18.65276pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 t[] <$
+\OML/cmm/m/it/10 t[] <
  []
 
 
 Overfull \hbox (22.22212pt too wide) in paragraph at lines 22--57
-$[] \OML/cmm/m/it/10 <$
+[] \OML/cmm/m/it/10 <
  []
 
 
 Overfull \hbox (18.8295pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 t[] <$
+\OML/cmm/m/it/10 t[] <
  []
 
 
 Overfull \hbox (7.22223pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 
+\OT1/cmr/m/n/10 
 $
  []
 
 
 Overfull \hbox (11.61401pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 X[]$
+\OML/cmm/m/it/10 X[]$
  []
 
 
 Overfull \hbox (9.13484pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 Y[]$
+\OML/cmm/m/it/10 Y[]$
  []
 
 
 Overfull \hbox (16.14241pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 R[]$
+\OML/cmm/m/it/10 R[]$
  []
 
 
 Overfull \hbox (19.17068pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 a[] \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 a[] \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (32.46248pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 a[] \OT1/cmr/m/n/10 +$
+\OML/cmm/m/it/10 ^^Ua[] \OT1/cmr/m/n/10 +
  []
 
 
 Overfull \hbox (43.26332pt too wide) in paragraph at lines 22--57
-$[]\OML/cmm/m/it/10 []$
+[]\OML/cmm/m/it/10 ^^O[]$
  []
 
 
 Overfull \hbox (32.16026pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 a[]; [] \OMS/cmsy/m/n/10 $
+\OML/cmm/m/it/10 a[]; ^^O[] \OMS/cmsy/m/n/10 ^^X
  []
 
 
 Overfull \hbox (35.95943pt too wide) in paragraph at lines 22--57
-$\OMS/cmsy/m/n/10 N\OT1/cmr/m/n/10 (0\OML/cmm/m/it/10 ; I[]\OT1/cmr/m/n/10 )$
+\OMS/cmsy/m/n/10 N\OT1/cmr/m/n/10 (0\OML/cmm/m/it/10 ; I[]\OT1/cmr/m/n/10 )$
  []
 
 
 Overfull \hbox (28.47278pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (160.33559pt too wide) in paragraph at lines 22--57
-$[][] [][] \OML/cmm/m/it/10 a[] [] []$
+[][] [][] \OML/cmm/m/it/10 a[] [] []$
  []
 
 
 Overfull \hbox (9.77202pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 a[]$
+\OML/cmm/m/it/10 a[]$
  []
 
 
 Overfull \hbox (9.06943pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 X$
+\OML/cmm/m/it/10 X$
  []
 
 
 Overfull \hbox (16.62842pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 ^^[ \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (20.00005pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1
 $
  []
 
 
 Overfull \hbox (16.38887pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 ^^U \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (12.77782pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 8$
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 8$
  []
 
 
 Overfull \hbox (8.02779pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 Y$
+\OML/cmm/m/it/10 Y$
  []
 
 
 Overfull \hbox (9.06943pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 X$
+\OML/cmm/m/it/10 X$
  []
 
 
 Overfull \hbox (16.62842pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10  \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 ^^[ \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (25.00006pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05
 $
  []
 
 
 Overfull \hbox (11.03708pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 n[]$
+\OML/cmm/m/it/10 n[]$
  []
 
 
 Overfull \hbox (10.8091pt too wide) in paragraph at lines 22--57
-$\OML/cmm/m/it/10 n[]$
+\OML/cmm/m/it/10 n[]$
  []
 
 
@@ -3896,7 +3866,7 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 22--57
 
 
 Overfull \hbox (17.77783pt too wide) in paragraph at lines 22--57
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05$
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 05$
  []
 
 ! Undefined control sequence.
@@ -6358,12 +6328,12 @@ Overfull \hbox (10.86105pt too wide) in paragraph at lines 82--100
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
 Overfull \hbox (13.83612pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 V[]$
+\OML/cmm/m/it/10 V[]$
  []
 
 
@@ -6373,17 +6343,17 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
 
 
 Overfull \hbox (10.02779pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 t$$t[]$
+\OML/cmm/m/it/10 t$$t[]$
  []
 
 
 Overfull \hbox (10.34724pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 Z[]$
+\OML/cmm/m/it/10 Z[]$
  []
 
 
 Overfull \hbox (13.05212pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 Z[]$
+\OML/cmm/m/it/10 Z[]$
  []
 
 
@@ -6393,194 +6363,194 @@ Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
 
 
 Overfull \hbox (63.64131pt too wide) in paragraph at lines 82--100
-$[]\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 10\OML/cmm/m/it/10 ; [] n\OMS/cmsy/m/n/10 
-g$
- []
-
-
-Overfull \hbox (6.00235pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 n$
- []
-
-
-Overfull \hbox (8.05556pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 V$
- []
-
-
-Overfull \hbox (19.83847pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 nV[]$
- []
-
-
-Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
-[]
- []
-
-
-Overfull \hbox (14.07635pt too wide) in paragraph at lines 82--100
-$[] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (48.82637pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 [][];  Y[] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (50.059pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 [][]; [] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (12.77782pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 1 +$
- []
-
-
-Overfull \hbox (51.48625pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 45(\OML/cmm/m/it/10 X[] \OT
-1/cmr/m/n/10 +$
- []
-
-
-Overfull \hbox (89.91469pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 Y[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  []\OMS/cmsy/m/n/10 N
-\OT1/cmr/m/n/10 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;  i \O
-MS/cmsy/m/n/10 2$
- []
-
-
-Overfull \hbox (27.22226pt too wide) in paragraph at lines 82--100
-$\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 2\OMS/cm
-sy/m/n/10 g\OML/cmm/m/it/10 :$
- []
-
-
-Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
-[]
- []
-
-
-Overfull \hbox (10.86105pt too wide) in paragraph at lines 82--100
-[]
- []
-
-
-Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
- []
-
-
-Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
- []
-
-
-Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
- []
-
-
-Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
-[]
- []
-
-
-Overfull \hbox (14.07635pt too wide) in paragraph at lines 82--100
-$[] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (67.84726pt too wide) in paragraph at lines 82--100
-$[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  [
-] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (33.85426pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 [] \OT1/cmr/m/n/10 +$
- []
-
-
-Overfull \hbox (34.49663pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 [] \OT1/
-cmr/m/n/10 +$
- []
-
-
-Overfull \hbox (85.28969pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 f[]T[];  []\OMS/cmsy/m/n/10 N\OT1/cmr/m/n/
-10 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;[] [] $
- []
-
-
-Overfull \hbox (19.88191pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 Y[] \OT1/cmr/m/n/10 =$
- []
-
-
-Overfull \hbox (15.5556pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 [2 +$
- []
-
-
-Overfull \hbox (117.7167pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 C []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )] [
-](\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; [] \OT1/cmr/m/n/10 =
+[]\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 10\OML/cmm/m/it/10 ; [] n\OMS/cmsy/m/n/10 g
 $
  []
 
 
+Overfull \hbox (6.00235pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 n$
+ []
+
+
+Overfull \hbox (8.05556pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 V$
+ []
+
+
+Overfull \hbox (19.83847pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 nV[]$
+ []
+
+
+Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
+[]
+ []
+
+
+Overfull \hbox (14.07635pt too wide) in paragraph at lines 82--100
+[] \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (48.82637pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 ^^O[]^^[[];  Y[] \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (50.059pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 ^^O[]^^[[]; ^^[[] \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (12.77782pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 1 +
+ []
+
+
+Overfull \hbox (51.48625pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 45(\OML/cmm/m/it/10 X[] \OT1
+/cmr/m/n/10 +
+ []
+
+
+Overfull \hbox (89.91469pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 Y[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  ^^O[]\OMS/cmsy/m/n/10 
+N\OT1/cmr/m/n/10 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;  i \
+OMS/cmsy/m/n/10 2
+ []
+
+
+Overfull \hbox (27.22226pt too wide) in paragraph at lines 82--100
+\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 2\OMS/cms
+y/m/n/10 g\OML/cmm/m/it/10 :$
+ []
+
+
+Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
+[]
+ []
+
+
+Overfull \hbox (10.86105pt too wide) in paragraph at lines 82--100
+[]
+ []
+
+
+Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
+ []
+
+
+Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
+ []
+
+
+Overfull \hbox (50.79175pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X[]; Y[]\OT1/cmr/m/n/10 )$
+ []
+
+
+Overfull \hbox (5.43053pt too wide) in paragraph at lines 82--100
+[]
+ []
+
+
+Overfull \hbox (14.07635pt too wide) in paragraph at lines 82--100
+[] \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (67.84726pt too wide) in paragraph at lines 82--100
+[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^^[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  ^
+^^[] \OT1/cmr/m/n/10 =
+ []
+
+
 Overfull \hbox (33.85426pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 [] \OT1/cmr/m/n/10 +$
+\OML/cmm/m/it/10 ^^^[] \OT1/cmr/m/n/10 +
  []
 
 
 Overfull \hbox (34.49663pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 [] \OT1/
-cmr/m/n/10 +$
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ^^O[] \OT1
+/cmr/m/n/10 +
+ []
+
+
+Overfull \hbox (85.28969pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ^^Yf[]T[];  ^^O[]\OMS/cmsy/m/n/10 N\OT1/cmr/m
+/n/10 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;[] [] 
+ []
+
+
+Overfull \hbox (19.88191pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 Y[] \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (15.5556pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 [2 +
+ []
+
+
+Overfull \hbox (117.7167pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 C []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^^[]\OT1/cmr/m/n/10 )] 
+[](\OML/cmm/m/it/10 ^^^[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; ^^^[] \OT1/cmr/m/n
+/10 =
+ []
+
+
+Overfull \hbox (33.85426pt too wide) in paragraph at lines 82--100
+\OML/cmm/m/it/10 ^^^[] \OT1/cmr/m/n/10 +
+ []
+
+
+Overfull \hbox (34.49663pt too wide) in paragraph at lines 82--100
+\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ^^O[] \OT1
+/cmr/m/n/10 +
  []
 
 
 Overfull \hbox (83.62306pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 f[]T[]; []\OMS/cmsy/m/n/10 N\OT1/cmr/m/n/1
-0 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;[]$
+\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ^^Yf[]T[]; ^^O[]\OMS/cmsy/m/n/10 N\OT1/cmr/m/
+n/10 (0\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1)\OML/cmm/m/it/10 ;[]$
  []
 
 
 Overfull \hbox (18.418pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 C \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 C \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (7.7778pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 4$
+\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 4$
  []
 
 
 Overfull \hbox (19.9375pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 f[] \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 f[] \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (39.15279pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 4\OML/cmm/m/it/10 Hz$$f[] \OT1/cmr/m/n/10 =$
+\OT1/cmr/m/n/10 4\OML/cmm/m/it/10 Hz$$f[] \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (24.2153pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 20\OML/cmm/m/it/10 Hz$
+\OT1/cmr/m/n/10 20\OML/cmm/m/it/10 Hz$
  []
 
 
 Overfull \hbox (21.5295pt too wide) in paragraph at lines 82--100
-$[] \OT1/cmr/m/n/10 =$
+[] \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (29.21532pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 100\OML/cmm/m/it/10 Hz$
+\OT1/cmr/m/n/10 100\OML/cmm/m/it/10 Hz$
  []
 
 
@@ -6595,12 +6565,12 @@ Overfull \hbox (10.86105pt too wide) in paragraph at lines 82--100
 
 
 Overfull \hbox (18.418pt too wide) in paragraph at lines 82--100
-$\OML/cmm/m/it/10 C \OT1/cmr/m/n/10 =$
+\OML/cmm/m/it/10 C \OT1/cmr/m/n/10 =
  []
 
 
 Overfull \hbox (5.00002pt too wide) in paragraph at lines 82--100
-$\OT1/cmr/m/n/10 0$
+\OT1/cmr/m/n/10 0$
  []
 
 )
@@ -6611,11 +6581,11 @@ $\OT1/cmr/m/n/10 0$
 
  
 Here is how much of TeX's memory you used:
- 31 strings out of 493921
- 657 string characters out of 3147288
- 56031 words of memory out of 3000000
- 3422 multiletter control sequences out of 15000+200000
- 4294 words of font info for 16 fonts, out of 3000000 for 9000
- 841 hyphenation exceptions out of 8191
- 18i,9n,21p,855b,92s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29 strings out of 493029
+ 517 string characters out of 6136235
+ 60063 words of memory out of 5000000
+ 3663 multiletter control sequences out of 15000+600000
+ 4294 words of font info for 16 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 18i,9n,21p,855b,93s stack positions out of 5000i,500n,10000p,200000b,80000s
 !  ==> Fatal error occurred, no output PDF file produced!

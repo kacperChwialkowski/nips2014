@@ -1,6 +1,5 @@
 \documentclass{article} % For LaTeX2e
 \usepackage{nips14submit_e,times}
-\usepackage{hyperref}
 \usepackage{url}
 \usepackage{amsfonts}
 \usepackage{amssymb,amsmath}
@@ -92,7 +91,588 @@ A wild bootstrap method for nonparametric hypothesis tests based on kernel distr
 \newpage
 \normalsize
 \appendix
-\input{nips2014_appendix}
+
+
+
+
+\section{An Introduction to the Wild Bootstrap}
+\label{wildintro}
+Bootstrap methods aim to evaluate the accuracy of the sample estimates - they are particularly useful when dealing with complicated distributions, or when the assumptions of a parametric procedure are in doubt. Bootstrap methods randomize the dataset used for the sample estimate calculation, so that a new dataset with a similar statistical properties is obtained, e.g. one popular method is resampling. In the wild bootstrap method  the observations in the dataset are multiplied by  appropriate random numbers. To present the idea behind the wild bootstrap we will discuss a toy example similar to that in \cite{Shao2010}, and then relate it to the wild bootstrap method used in this article. 
+
+Consider a stationary autoregressive-moving-average random process $\{X_i\}_{i \in \mathbf{Z}}$ with zero mean. The normalized sample mean of the process $X_t$ has normal distribution
+\begin{equation}
+\frac{\sum_{i=1}^{N} X_i}{\sqrt{n}} \overset{d}{\to} N(0,\sigma_{\infty}^{2}),    
+\end{equation}      
+where $\sigma_{\infty}^2 = \sum_{j=-\infty}^{j=\infty} cov(X_0,X_j)$. The variance $\sigma_{\infty}^2$ is not easy to estimate (the naive approach of approximating different covariances separately and summing them has several drawbacks, e.g. how many empirical covariances should be calculated?). Using the wild bootstrap method we will construct processes that mimic behaviour of the $X_t$ process and then use them to approximate the distribution of the normalized sample mean, $\frac{\sum_{i=1}^{N} X_i}{\sqrt{n}}$. The bootstrap process used to to randomize the sample meets the following criteria: 
+\begin{itemize}
+\item $\{W_{t,n}\}_{1 \leq t \leq n }$ is a row-wise strictly stationary triangular array independent of all $X_t$, such that $\ev W_{t,n}=0$ and $\sup_{n} \ev|W_{t,n}^{2+\sigma}| < \infty$ for some $\sigma > 0$. 
+\item The autocovariance of the process is given by $\ev W_{s,n} W_{t,n}=\rho(|s-t|/l_n)$ for some function $\rho$, such that $\lim_{u \to 0} \rho(u) = 1$. 
+\item The sequence $\left\{l_n\right\}$ is taken such that $\lim_{n \to \infty} l_n = \infty$.
+\end{itemize}
+A process that fulfils those criteria, given also in the main article, is
+\begin{align}
+W_{t,n} = e^{-1/l_n}W_{t-1,n} + \sqrt{1 -e^{-2/l_n}} \epsilon_t
+\end{align} 
+  
+We need to show that the distribution of the normalized sample mean of the process  $Y_t^{n} = W_t^{n}X_t$, where $|t| \leq n$, mimics the distribution $N(0,\sigma_{\infty}^2)$. It suffices to calculate the expected value and correlations:   
+\begin{align}
+\ev Y_t^{n} &= \ev W_t^n X_t = 0 ,\\
+cov(Y_0^n,Y_t^n) &= cov(X_0,X_t)cov(Y_0^n,Y_t^n) = cov(X_0,X_t)\rho(|t|/l_n) \to cov(X_0,X_t)
+\end{align}
+The asymptotic auto-covariance structure of the process $Y_t$ is the same as the auto-covariance structure of the process $X_t$. Therefore 
+\begin{equation}
+\frac{\sum_{i=1}^{N} Y_i}{\sqrt{n}} \overset{d}{\to} N(0,\sigma_{\infty}).    
+\end{equation}  
+
+This mechanism is used in \cite{leucht_dependent_2013}. Recall that, under some assumptions, a normalized V-statistic can be written as 
+$$
+\sum_{k=0}^{\infty} \lambda_k  \left( \frac{ \sum_{i=1}^{n} \phi_k(X_i) } {\sqrt n}  \right)^2 \overset{P}{=} \frac 1  n \sum_{1\leq i,j \leq n} h(X_i,X_j) 
+$$ 
+
+where $\lambda_k$ are eigenvalues and $\phi_k$ are eigenfunction of the  kernel $h$, respectively.  Since $\ev  \phi_k(X_i) = 0$ (degeneracy condition) one may replace  
+$$  \frac{ \sum_{i=1}^{n} \phi_k(X_i)} {\sqrt n} $$
+with a bootstrapped version 
+$$ \frac{  \sum_{i=1}^{n}  W_t^n \phi_k(X_i) } {\sqrt n}, $$  
+and conclude, as in the toy example, that the limiting distribution of the single component of the sum $\sum_k \lambda_k  ...$  remains the same. One of the main  contributions of \cite{leucht_dependent_2013}  is in showing that the distribution of the whole sum $\sum_k \lambda_k \left(\frac{  \sum_{i=1}^{n}  W_t^n \phi_k(X_i) } {\sqrt n} \right)^2$ with the components bootstrapped  
+converges in a particular sense (in  probability in Prokhorov metric) to the distribution of the normalized V-statistic, $\frac 1  n \sum_{1\leq i,j \leq n} h(X_i,X_j) $.
+
+
+%is the same (in quite a peculiar sense i.e. convergence in  probability in Prokhorov metric) as distribution of the normalized V-statistic, $\frac 1  n \sum_{1\leq i,j \leq n} h(X_i,X_j) $.
+
+\section{Relation between $\beta$,$\phi$ and $\tau$ mixing}
+\label{append:differentMixing}
+
+Strong mixing is historically the most studied type of temporal dependence -- a lot of models, example being Markov Chains, are proved to be strongly mixing, therefore it's useful to relate weak mixing  to strong mixing. For a random variable $X$ on a probability space $(\Omega,\mathcal{F},P_X)$ and $\mathcal{M} \subset \mathcal{F}$ we define 
+\begin{equation*}
+\beta(\mathcal{M},\sigma(X)) = \| \sup_{A \in \mathbb{B}(R)} | P_{X|\mathcal{M}}(A) - P_X(A)|\|_1.
+\end{equation*}
+A process  is called $\beta$-mixing or absolutely regular if  
+\begin{align*}
+\beta(r) &= \sup_{l \in \mathbb{N}} \frac 1 l \sup_{ r \leq i_1 \leq ... \leq i_l} \beta( \mathcal F_0,(X_{i_1},...,X_{i_l}) )  \overset{r \to \infty}{\longrightarrow} 0,\
+\end{align*}
+$\phi$ mixing is defined similarly
+\begin{equation*}
+\phi(\mathcal{M},\sigma(X)) = \| \sup_{A \in \mathbb{B}(R)} | P_{X|\mathcal{M}}(A) - P_X(A)|\|_\infty.
+\end{equation*}
+ By \cite{bradley_basic_2005} we have  $\beta(\mathcal{M},\sigma(X)) \leq \phi(\mathcal{M},\sigma(X)) $ . 
+ 
+ 
+\cite[Equation  7.6]{dedecker2005new} relates $\tau$-mixing and $\beta$-mixing , as follows: if $Q_x$ is the generalized inverse of the tail function
+\[
+ Q_x(u) = \inf_{t \in R} \{  P(|X| > t) \leq u\},  
+\]
+then
+\[
+ \tau(\mathcal{M},X) \leq 2 \int_{0}^{\beta(\mathcal{M},\sigma(X))}  Q_x(u) du.
+\]
+While this definition can be hard to interpret, it can be simplified in the case $E|X|^p=M$  for some $p>1$, since via Markov's inequality $P(|X|>t) \leq \frac{M}{t^p}$, and thus $\frac{M}{t^p} \leq u $ implies $P(|X|>t) \leq u$. Therefore $Q'(u) = \frac{M}{\sqrt[p]{u}} \geq Q_x(u)$. As a result, we have the following inequality 
+\begin{equation}
+\label{eq:theBeta}
+ \frac{ \sqrt[p]{ \beta(\mathcal{M},\sigma(X))} }{ M }  \geq C  \tau(\mathcal{M},X) 
+\end{equation}
+
+\paragraph{Models that satisfy $\tau$-mixing.}
+\cite{dedecker2005new} provides  examples of systems that are tau-mixing. In particular, given that certain assumptions are satisfied  causal functions of stationary sequences, iterated random functions, Markov chains, expanding maps are all $\tau$-mixing. 
+
+Of particular interest to this work are Markov chains. The assumptions provided by \cite{dedecker2005new}, under which Markov chains are tau-mixing are somehow difficult to check but we can use classical theorems about the $\beta$-mixing).  In particular \cite[Corollary 3.6]{bradley_basic_2005}  states that a Harris recurrent (chain returns to a fixed set of the state space an infinite number of times) and aperiodic Markov chain satisfies absolute regularity.  \cite[Theorem 3.7]{bradley_basic_2005} states that geometric ergodicity \footnote{ $\forall_{x} \|P^n(x,\cdot)  -\pi \|_{TV} \leq C q^n, 0<q<1$} implies geometric decay of the $\beta$ coefficient. Interestingly \cite[Theorem 3.3]{bradley_basic_2005} describes situations in which a non-stationary chain $\beta$-mixes exponentially. 
+
+Using inequality \ref{eq:theBeta} between $\tau$-mixing coefficient and strong mixing coefficients one can use  those classical theorems show that e.g for  $p=2$ we have 
+\[
+ \sqrt{ \beta(\mathcal{M},\sigma(X))}  \geq \tau(\mathcal{M},X).
+\]
+
+
+
+
+\section{Proofs}
+\label{sec:Wildproofs}
+In this section we prove the main theorems. As for the notation,  $n$ denotes number of observations, $N = \{1,\cdots, n\}$, if $h$ is  function then $h \times h$ denotes  a  product of $h$ with itself, $\lim_{n \to \infty} X_n \overset{L_2}{=} X$ denotes convergence in mean square 
+
+\subsection{Proof of the Theorem   \ref{th:mainOne}} 
+\label{sec:prMainOne}
+
+Hoeffding decomposition reduces any $V$-statistic to a sum of canonical $V$-statistics with canonical cores $h_c$, which are easier to study in context of  non-iid data. As an illustration, consider a canonical core $h$ of $m$ arguments and fix some indexes  $i_1 \leq  \cdots \leq i_{m-1} \ll i_m $, for a sake of  example we may assume that indexes represent time. If observations $Z_{i_1}, \cdots, Z_{i_{m-1}}$ are independent of the observation $Z_{i_m}$, then the expected value of $h(Z_{i_1}, \cdots, Z_{i_m})$, by degeneracy, is equal to zero. If it is reasonable to assume that $Z_{i_m}$ is almost independent of $Z_{i_1}, \cdots, Z_{i_{m-1}}$, maybe because it is so distant in time, then it is also reasonable to expect that for a canonical core $h$ (which is not too complicated ) 
+\[
+ \ev h(Z_{i_1}, \cdot, Z_{i_m}) \approx 0.
+\]
+which follows from the following approximate calculation
+\[
+ \int h(z_{i_1}, \cdot, z_{i_m}) dP_{Z_{i_1}, \cdots, Z_{i_m}} \approx  \int h(z_{i_1}, \cdots, z_{i_m}) dP_{Z_{i_1}, \cdots, Z_{i_{m-1}}} dP_{Z_{i_m}} =0
+\]
+We formalize this intuition.
+\begin{definition}
+ Associate with  any  set of indexes $ i_1,\cdots,i_m$ its nearest neighbor within the set. Suppose $i_r$ is is an index with the most distant nearest neighbor. We will call $i_r$ the most isolated index, and we will refer to its distance to the nearest neighbor as an isolation distance.
+\end{definition}
+Consider a following example, for the set $\{1,5,7\}$, $1$ is the most isolated index and the isolation distance is $4$.
+\begin{definition}
+\label{isolation}
+\label{def:varDelta}
+ Given a sequence of random variables $Z_{t} $ and a function $h$, if for all sets of indexes $i_1,\cdots,i_m$, with the isolation distance equal to $r$ 
+ \[
+  |E h(Z_{i_1}, \cdots, Z_{i_m})| \leq \varDelta(h,r)
+ \]
+ for some some function $\varDelta$, then we say that the pair $(h,Z_{t})$ is of type $\varDelta$. 
+\end{definition}
+
+The next theorem shows a growth rate of  a canonical $V$-statistic when a pair $h,Z_{t}$ is of type $\varDelta$. 
+\begin{Theorem}
+\label{th:boundTh}
+Let $(Z_{t},h)$, where $h$ is a function of $m>1$ arguments, be a  of type $\varDelta$, with $\varDelta(h,r) = o( r^{-k})$ for some $k$, then
+\begin{equation*}
+\sum_{i\in N^{m}}\left| \ev  h(Z_i) \right| =  O\left(n^{\left\lfloor \frac{m}{2}\right\rfloor }\right)+ o\left(n^{2\left\lfloor \frac{m}{2}\right\rfloor +2-k}\right).
+\end{equation*}
+\end{Theorem}
+\begin{proof} 
+The proof uses a technique similar to   \cite[Lemma 3]{arcones1998law}.
+ We will focus on ordered $m$-tuples $1\leq i_{1}\leq\ldots\leq i_{m}\leq n$,
+and by considering all possible permutations of their indices, we
+obtain an upper bound 
+\begin{equation*}
+\sum_{i\in N^{m}}\left|\ev  h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right|  <  \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}\sum_{\pi\in S_{m}}\left|  \ev h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right|,
+\end{equation*}
+
+where (strict) inequality stems from the fact that the $m$-tuples
+with some coinciding entries appear multiple times on the right.
+
+Since  $(h,Z_{t})$ is a  of type $\varDelta$
+\[
+\forall i \in N^{m} \sum_{\pi\in S_{m}}\left| \ev h\left(Z_{i_{\pi(1)}},\ldots,Z_{i_{\pi(m)}}\right)\right| = O( \varDelta(h,w(i)) ),
+\]
+where $w(i)$ is an isolating distance of the index set $i = i_1,\cdots i_m$. We need to estimate order of the sum 
+\begin{equation*}
+ \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}  O( \varDelta(h,w(i)) ).
+\end{equation*}
+Let us upper bound the number of ordered $m$-tuples $i$ with $w(i)=w$.  Denote $s=\left\lfloor \frac{m}{2}\right\rfloor +1$. 
+$i_{1}$ can take $n$ different values, but since $i_{2}\leq i_{1}+w$,
+$i_{2}$ can take at most $w+1$ different values.
+For $2\leq l\leq s-1$, since $\min\left\{ i_{2l}-i_{2l-1},i_{2l-1}-i_{2l-2}\right\} \leq w$,
+we can either let $i_{2l-1}$ take up to $n$ different values and
+let $i_{2l}$ take up to $w+1$ different values (if $i_{2l}-i_{2l-1}\leq i_{2l-1}-i_{2l-2}$)
+or let $i_{2l-1}$ take up to $w+1$ different values and let $i_{2l}$
+take up to $n$ different values (if $i_{2l}-i_{2l-1}>i_{2l-1}-i_{2l-2}$),
+upper bounding the total number of choices for $\left[i_{2l-1},i_{2l}\right]$
+by $2n(w+1)$. Finally, the last term $i_{m}$ can always have at
+most $w+1$ different values.  
+This brings the total number of $m$-tuples with $w(i)=w$ to at most $2^{\ensuremath{s-2}}n^{s-1}(w+1)^{s}$.
+Thus, the number of $m$-tuples with $w(i)=0$ is $O(n^{s-1})$ and
+since $\ev  h\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right) < \infty$, we have
+\begin{align*}
+ &  \sum_{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}O( \varDelta(h,w(i)) )\\
+ & \leq O(n^{s-1})+\sum_{w=1}^{n-1}\;\sum_{\underset{w(i)=w}{1\leq i_{1}\leq\ldots\leq i_{m}\leq n}:} O( \varDelta(h,w(i)) )\\
+ & \leq O(n^{s-1})+ n^{s-1}\sum_{w=1}^{n-1}(w+1)^{s} O(\varDelta(h,w))\\
+ & \leq O(n^{s-1})+n^{s-1}\sum_{w=1}^{n-1}o(w^{s-k})\\
+ & \leq O(n^{s-1})+n^{s-1}\max( o(n^{s-k+1}),O(1))\\
+  & \leq O(n^{s-1})+o(n^{2s-k})+ O(n^{s-1}))\\
+ &=  O(n^{s-1})+o(n^{2s-k}),
+\end{align*}
+which proves the claim. We have used $\varDelta(h,w)=o(w^{-k})$. 
+\end{proof}
+The previous theorem states sufficient conditions for a $V$-statistic  or a bootstrapped $V$-statistic to  converge to zero.
+\begin{lemma}
+ \label{lem:higherVstats}
+ Let $h$ be a function of  $m>1$ arguments and let $(\{ Z_{t}\}_{t \in N},h \times h)$ be a of type $\varDelta$, with $\varDelta(h \times h,r) = o( r^{-4})$. If  $\{ G_i \}_{i \in N}$  is a random process,  independent of $ Z_{t}$, such that $\sup_{i} \ev G_i^4 < \infty$, with notation $T_n =\frac {1} {n^{m-1}} \sum_{i \in N^m}   G_{i_1}G_{i_2}   h(Z_i)  $,
+\begin{align*}
+ \begin{cases}
+ \lim_{n \to \infty}  o(1) T_n \overset{L_2}{=} 0 & m=2,  \\
+\lim_{n \to \infty} T_n \overset{L_2}{=} 0  & m>2
+\end{cases}
+\end{align*}
+since, 
+\begin{align*}
+ \begin{cases}
+ \ev T_n^2 = O(1) & m=2,  \\
+\ev T_n^2  = o(1)  & m>2. 
+\end{cases}
+\end{align*}
+\end{lemma}
+\begin{proof}
+First we verify that for $i,j \in N^m$
+\[
+ a_{i,j} =  \ev G_{i_1} G_{i_2}  G_{j_1} G_{j_2}
+\]
+is uniformly bounded. We get the bound by applying Cauchy-Schwarz iteratively and using assumption   $\sup_{i} \ev G_i^4 < \infty$. 
+
+We check that the second non-central moment converges to zero,
+\begin{align*}
+&\ev  \left( T_n \right)^2 \\
+&= \frac {1} {n^{2m-2}}   \sum_{i,j \in N^{m}}    \ev G_{i_1} G_{i_2} G_{j_1} G_{j_2} \ev h(Z_i)h(Z_j)   \\
+&\leq    \frac {1} {n^{2m-2}} \sum_{i,j \in N^{m}}  |a_{i,j} \ev h(Z_i)h(Z_j) |  &\\
+&\leq \left( \sup_{n} \sup_{i,j \in N^m} |a_{i,j}| \right) \frac {1} {n^{2m-2}} \sum_{i,j \in N^{m}} |\ev h(Z_i)h(Z_j) |.
+\end{align*}
+Supremum over $n$ is needed since $\ev G_{i_1} G_{i_2}  G_{j_1} G_{j_2}$ might change with $n$. Lemma \ref{th:boundTh}, by the assumption that  $(h(\cdots ) \times h(\cdots ),Z_t )$ is of type $\varDelta$, the growth of the inner sum 
+$
+ \sum_{i,j \in N^{m}} |\ev h(Z_i)h(Z_j) |
+$
+is at most of order 
+\[
+O(n^m) +o(n^{2 m +2-k}). 
+\]
+Since $\varDelta(h \times h,r) =o( r^{-4})$, the growth rate is 
+\begin{align*}
+ \ev &\left( T_n \right)^2= \frac{O\left(n^m) +o(n^{2m-2}\right) }{ n^{2m-2}} =\begin{cases}
+O(1)   & m=2\\
+o(1) & m >2
+\end{cases}
+\end{align*}
+For $m=2$ we have assumed existence of an  extra term $o(1)$,  which concludes the proof.
+\end{proof}
+
+We next  prove that the asymptotic distribution of a $V$-statistic depends on number of terms in the  Hoeffding decomposition that are equal to zero.
+
+\begin{lemma}
+\label{lem:equivVanila}
+Let $h$ be a core with $m$ arguments. If $h_0=h_1=0$, and for all $c>2$  component  $(h_c \times h_c,Z_{t})$ is  of type $\varDelta$, with $\varDelta(h_c \times h_c,r) = o( r^{-4})$ then    
+\begin{align*}
+ \lim_{n \to \infty} \left( n V_n(h) -  \binom m 2  n V_n(h_2)  \right) \overset{L_2}{=} 0
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+Using  Hoeffding decomposition we  write the core  $h$ as a sum of the components $h_c$ ,
+\begin{align*}
+  n V_n(h) =& n V_n(h_m) + \binom m 1 n V_n(h_{m-1}) + ... \\ 
+  &+ \binom {m} {m-2} n V_n(h_{2}) + \binom {m} {m-1} n V_n(h_{1})+h_0.
+\end{align*}
+$h_0=0$ and  $h_1=0$. By  Lemma \ref{lem:higherVstats}, for $c \geq 3$, $n V_n(h_{c})$  converges to zero in mean squared. To see that it suffices to put $Q=1$ and verify that  $(h_c \times h_c,Z_t)$ is of $\varDelta$ type, which  is explicitly assumed.
+\end{proof}
+
+Before we study the asymptotic distribution of a bootstrapped statistic $B_n$ we need to sate three simple lemmas that will be frequently used.  
+\begin{lemma}
+\label{lem:meanWi}
+If $W_i$ is a bootstrap process then
+\begin{align*}
+\lim_{n \to \infty} \frac {l_n}{ n} \sum_{i=1}^n W_i \overset{L_2}{=} 0.
+\end{align*}
+\end{lemma}
+\begin{proof}
+By the definition of $W_i$, $\ev (\sum_{i=1}^n W_i)^2 \leq n 2\sum_{r=1}^n Cov(W_0,W_r)=  nO(l_n)$, where $\sum_{r=1}^n Cov(W_0,W_r)=  O(l_n)$ follows from bootstrap assumption.  Also, by the  Bootstrap assumptions we have $\lim_{n \to \infty} \frac {l_n^3}{n^2} =0 $. Therefore $\frac{1} {n} \sum_{i=1}^{n}W_i$ converges to zero in mean squared.
+\end{proof}
+
+
+\begin{lemma}
+\label{stmt:obviousD}
+If $\{W_i\}$ is a bootstrap process then
+\begin{align*}
+\sum_{i=1}^n \tilde W_i = \sum_{i=1}^n  \left( W_i - \frac 1 n \sum_{j=1}^n  W_j \right) = 0. 
+\end{align*}
+\end{lemma}
+
+\begin{lemma}
+\label{lem:summingLema}
+Let $f$ be a  function and let $j=\{j_1,\ldots,j_q\}$ be a subset of $\{1,\ldots,m\}$. Then
+\begin{align*}
+\sum_{i \in N^m} f(Z_{i_{j_1}},...,Z_{i_{j_q}})= n^{m-q} \sum_{i \in N^q} f(Z_{i_1},...,Z_{i_q})
+\end{align*}
+\end{lemma}
+\begin{proof}
+ Each element $f(Z_{i_{j_1}},...,Z_{i_{j_q}})$ is repeated exactly $n^{m-q}$ times.
+\end{proof}
+
+
+We now prove an analogue of the Lemma \ref{lem:equivVanila} for bootstrapped statistics $B$.
+
+
+\begin{lemma}
+\label{lem:equivBoot}
+Let $h$ be a core of a $m$ arguments and let $Q_i$ denote  $W_i$ or  $\tilde W_i$. If  
+\begin{align*}
+\frac{1} {n^2}  \sum_{i \in N^2}   Q_{i_1} Q_{i_2} h_0 &=0, \\
+\frac{1} {n^m}  \sum_{i \in N^m}  \sum_{1 \leq j \leq m } Q_{i_1} Q_{i_2} h_1(Z_{i_j}) &=0.
+\end{align*}
+and $(h_c,Z_{t})$ for $c>2$  are  of type $\varDelta$, with $\varDelta(h_c \times h_c,r) = o( r^{-4})$ then    
+\begin{align*}
+  \lim_{n \to \infty} \left( n B(h) -  \binom m 2  n B(h_2)  \right) \overset{L_2}{=} 0
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+Where  it is necessary, we check claims for both $W_i$ and  $\tilde W_i$ separately. We will frequently use the fact that 
+$
+ \frac{l_n}{n} \sum_{i=1}^{n}Q_i, \frac{1}{n} \sum_{i=1}^{n}Q_i
+$
+converge to zero in mean square.
+
+Using Hoeffding decomposition we  write core  $h$ as a sum of components $h_c$ (the ones with $h_0,h_1$ are equal to zero and therefore omitted)
+\begin{align*}
+ n B_1(h) = \frac{1} {n^{m-1}}  &\sum_{i \in N^m}  \Big[ Q_{i_1} Q_{i_2}   h_m(Z_{i_1},...,Z_{i_m})  + \\ 
+ &\sum_{1 \leq j_1 < ...<j_{m-1} \leq m } Q_{i_1} Q_{i_2} h_{m-1}(Z_{i_{j_1}},...,Z_{i_{j_{m-1}}})   + ... + \\
+ &\sum_{1 \leq j_1 < j_2 \leq m } Q_{i_1} Q_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) \Big].
+\end{align*}
+Consider the sum associated with $h_c$
+\begin{align}
+\label{eq:sumfortwo}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  \sum_{1 \leq j_1 < ...<j_c \leq m } Q_{i_1} Q_{i_2} h_c(Z_{i_{j_1}},...,Z_{i_{j_c}}).
+\end{align}
+We will show that for almost all fixed  $j_1 < \cdots < j_c$ the sum \ref{eq:sumfortwo} converges to zero.
+
+Suppose  $j_1 >2$. The sum \ref{eq:sumfortwo} can be written
+\begin{align*}
+&\frac{1} {n^{m-1}}  \sum_{i \in N^m}   Q_{i_1} Q_{i_2} h_c(Z_{i_{j_1}},...,Z_{i_{j_c}})	 \overset{L.\ref{lem:summingLema}}{=\joinrel=}  
+\frac{1} {n^{c+1}}  \sum_{i \in N^{c+2}}   Q_{i_1} Q_{i_2} h_c(Z_{i_3},...,Z_{i_{c+2}})  \\
+=& \left( \frac{1}{n^{c-1}}   \sum_{ i \in N^c} h_c(Z_{i_1},...,Z_{i_c}) \right) \left( \frac{1}{n} \sum_{i=1}^{n}Q_i \right)^2  = \frac{n}{l_n}V_n(h_c)  \left( \frac{l_n}{n} \sum_{i=1}^{n}Q_i \right)^2 .  
+\end{align*}
+By   Lemma \ref{lem:higherVstats}, for $c \geq 3$, $\frac{n}{l_n} V_n(h_{c})$  converges to zero in mean squared. Indeed, it is sufficient to put $G_i=1$ and $T_n = n V_n(h_{c})$ and notice that $\frac{n}{l_n} V_n(h_{c}) = \frac{1}{l_n} = o(1)T_n$, since $l_n \to \infty$. Consequently, since   $(\frac{1}{n} \sum_{i=1}^{n}Q_i)^2$ converges to zero in mean square  \ref{lem:meanWi}, the product, converges to zero in mean square i.e.
+\[
+ V_n(h_c)  \left( \frac{1}{n} \sum_{i=1}^{n}Q_i \right)^2  \overset{L_2}{\to} 0
+\]
+
+
+Suppose  $j_1 = 2$. The sum  \ref{eq:sumfortwo} can be written
+\begin{align}
+ \label{eq:h2eq1}
+ \begin{split}
+&\frac{1} {n^{m-1}}  \sum_{i \in N^m}  Q_{i_1} Q_{i_2} h_c(Z_{i_2},...,Z_{i_{j_c}})  
+\overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^c}  \sum_{i \in N^{c+1}}   Q_{i_1} Q_{i_2} h_c(Z_{i_2},\cdots,Z_{i_{j_c}}) = \\
+& \left( \frac{1}{l_n n^{c-1} } \sum_{i \in N^c} Q_{i_1}  h_c(Z_{i_1}, \cdots ,Z_{i_c}) \right) \left( \frac {l_n}{n} \sum_{i=1}^{n}Q_i \right).
+\end{split}
+\end{align}
+The latter expression $\frac {l_n}{n} \sum_{i=1}^{n}Q_i$ converges to zero in mean square. The former expression can be further decomposed
+\begin{align*}
+& \frac{1}{ l_n} n^{-c+1} \sum_{i \in N^c} Q_{i_1}  h_c(Z_{i_1}, \cdots ,Z_{i_c}) = \frac 1 4 \frac{1}{l_n} (T_{+}-T_{-}) \text{ where,} \\   
+\frac{1}{l_n} T_{-} &=   \frac{1}{l_n} n^{-c+1} \sum_{i \in N^2} (Q_{i_1}-1)h_c(Z_{i_1}, \cdots ,Z_{i_c})(Q_{i_2}-1), \\
+\frac{1}{l_n} T_{+} &= \frac{1}{l_n} n^{-c+1} \sum_{i \in N^2}  (Q_{i_1}+1)h_c(Z_{i_1}, \cdots ,Z_{i_c})(Q_{i_2}+1),
+\end{align*}
+We  use Lemma \ref{lem:higherVstats} for $\frac{1}{l_n} T_{+}$ and $\frac{1}{l_n} T_{-}$, to show that they converge to zero. We  need to check that 
+\[
+ \sup_{i } E ( Q_{i}+/-1)^4   <\infty
+\]
+If $Q_i = W_i$ this follows from the Bootstrap assumptions $\sup_{n} \sup_{i \leq n} \ev W_{i,n}^{4} < \infty$. If $Q_i = \tilde W_i$ we check that  
+\[
+ E (\frac 1 n \sum_{i=1}^n W_i)^4  \leq \sup_{n} \sup_{i \leq n} \ev W_{i,n}^{4},
+\]
+and so $\leq  \sup_{i} \ev (\tilde W_i)  < \infty$. Now we conclude that both $\frac{1}{l_n} T_{+}$ and $\frac{1}{l_n} T_{-}$ converge to zero. Therefore their sum (even though they are not independent) converges to zero. 
+
+Suppose $j_1=1$ and $j_2>2$. This case is identical to the previous case, up to swapping $i_1,i_2$ in the equation \ref{eq:h2eq1}.  
+
+Finally, suppose $j_1=1$ and $j_2=2$ and $c>2$. The sum  \ref{eq:sumfortwo} can be written
+\begin{align*}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  Q_{i_1} Q_{i_2} h_c(Z_{i_1},Z_{i_2},...,Z_{i_{j_c}})  \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^c}  \sum_{i \in N^{c+1}}   Q_{i_1} Q_{i_2}  h_c(Z_{i_1},Z_{i_2},...,Z_{i_{j_c}})
+\end{align*}
+We  again use Lemma \ref{lem:higherVstats} to see that this sum converges to zero in mean squared (we checked the assumptions above). We have proved that 
+\begin{align*}
+  \lim_{n \to \infty} \left( n B(h) -  \binom m 2  n B(h_2)  \right) \overset{L_2}{=} 0
+\end{align*}
+\end{proof}
+So far we  avoided expressing results in terms of $\tau$-mixing and degeneracy of a core, now we relate $\varDelta$ formalism to those concepts. We start with a technical lemma. 
+\begin{lemma}
+\label{stm:LipAndBound}
+ If $h$ is a  Lipschitz continuous core then its components are also Lipschitz continuous.
+\end{lemma}
+\begin{proof}
+The auxiliary function  used in the Hoeffding decomposition
+\begin{align*}
+g_c(z_1,...z_c) = \ev h(z_1,...,z_c,Z_{c+1}^*,...,Z_{m}^*).  
+\end{align*}
+is Lipschitz, since $h$ is Lipschitz continuous.
+\begin{align*}
+|&g_c(z_1,...z_c) - g_c(z_1',...z_c')| \\
+ &\leq \left| \int    [h(z_1,...,z_c,z_{c+1},...,z_{m}) - h(z_1',...,z_c',z_{c+1},...,z_{m}) ] dP(z_{c+1}) \cdots dP(z_m)\right| \\
+ &\leq \left| \int    Lip(h) \left(  \sum_{i=1}^c | z_i - z_i'| + \sum_{i=c+1}^m | z_i - z_i|  \right)  dP(z_{c+1})  \cdots dP(z_m) \right| \\
+  &\leq \left| \int    Lip(h) \left(  \sum_{i=1}^c | z_i - z_i'|   \right)   dP(z_{c+1})  \cdots dP(z_m) \right| \\
+& = | Lip(h)   \sum_{i=1}^c | z_i - z_i'| \int  dP(z_{c+1})   \cdots dP(z_m)  |  \\
+& = | Lip(h)   \sum_{i=1}^c | z_i - z_i'|  |.  \\
+\end{align*}
+$h_0$ is obviously Lipschitz continuous. If $h_{k}$ for $k<c$ are Lipschitz continuous then, since $g_c$ is Lipschitz continuous, $h_c$ is also Lipschitz continuous as a sum of Lipschitz continuous functions.
+\end{proof}
+\begin{lemma}
+\label{lem:disentangle}
+Let $\left\{ Z_{t}\right\} $ be a $\tau$-dependent stationary process and $h$ be a Lipschitz  core of $m$ arguments, If   for all $c>0$
+$(h_c \times h_c,Z_t)$ and $(h,Z_t)$  are of type $\varDelta$ with the rate  $O(\tau(d))$ then 
+\[
+ \varDelta(h,d) =\varDelta(h_c \times h_c,d)  = O(\tau(d))
+\]
+\end{lemma}
+
+\begin{proof}
+Let $f = h_c \times h_c$ or $f=h$. $f$ is canonical and Lipschitz continuous (if $f = h_c \times h_c$ it follows from  Lemma \ref{stm:LipAndBound}).   Suppose $i_r$ is  the isolating index. Further suppose there are $k$  indexes $a_1,\cdots ,a_k$ smaller than $i_r$ and $m-k-1$ indexes greater than $i_r$, namely $a_{k+2}, \cdots , a_m$. In this  notation $a_{k+1}=i_r$.   
+
+Let us partition the vector $\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)$ into three parts:
+\begin{equation*}
+A =  \left(Z_{a_{1}},\ldots,Z_{a_{k}}\right),\; B=Z_{a_{k+1}},\; C=\left(Z_{a_{k+2}},\ldots,Z_{a_{m}}\right).
+\end{equation*}
+where $a_{k+1}$ is the isolating index. If $k=0$, $A$ is empty and if $k=m-1$, $C$ is empty but this does not change our arguments below. Using
+Lemma \cite[Lemma 5.3]{dedecker2007weak}, we will construct $B^{*}$ and $C^{**}$ that are independent
+of $A$ and independent of each other and 
+\begin{equation}
+\ev \left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{**}\right)\right\Vert _{1} =  O(\tau\left(w\right)), \label{eq: ABCLemma_property1}
+\end{equation}
+where $w$ is an isolating distance \footnote{ \cite[Lemma 5.3]{dedecker2007weak}   assumes that there exists a random variable $\delta$ independent of the vector $(A,B,C)$. This assumption is important only if CDF of the vector is not continuous, we can assume that our space is endowed with such $\delta$.}.  Let $D=(B,C)$ The \cite[Lemma 5.3]{dedecker2007weak}  guarantees that there exist $D^*$ independent of $A$, such that 
+\begin{align*}
+ \|& \ev d(D,D^*) | \sigma(A) \|_1 = \ev |  \ev d(D,D^*) | \sigma(A) | \\
+ &= \ev   (\ev d(D,D^*) | \sigma(A)) = \ev d(D,D^*) = O(\tau(w)),
+\end{align*}
+where $d$ is the $L_1$ distance on Euclidean space (non-negativity justifies dropping absolute value). By definition of  $\tau$-mixing, $\tau(w) \geq \tau(\sigma(A),D )$. Since  $D^*=(B^*,C^*)$ has the same distribution as $D$ (in particular it has the same $\tau$ dependence structure) we use the lemma again to construct $C^{**}$, independent of $A$ and $B^*$, such that 
+\[
+  \ev d(C,C^{**}) =  O(\tau(w)).
+\]
+By the triangle inequality we obtain equation \ref{eq: ABCLemma_property1}. 
+\begin{align*}
+&\ev  d \big( (A,B,C) - (A,D^*) + (A,D^*) - (A,B^*,C^{**}) \big) \leq \\
+&\ev d \big( (A,B,C) - (A,D^*)\big) + \ev d\big((A,D^*) - (A,B^*,C^{**}) \big) =\\
+&\ev d(D,D^*) + \ev d(C,C^{**}) = O(\tau(w)).
+\end{align*}
+Since $B^{*}$ is a singleton, independent of both $A$ and $C^{**}$, by degeneracy of $f$  
+\begin{equation}
+\ev f(A,B^{*},C^{**})=0.\label{eq: ABCLemma_property2}
+\end{equation}
+Note that $ f(A,B^{*},C^{**})$ is just a shorthand, random variables $A,B^{*},C^{**}$ are  inserted in the right order. Thus, we have that
+\begin{align*}
+\left|\ev f\left(Z_{i_{1}},\ldots,Z_{i_{m}}\right)\right| & \leq  \ev \left|f\left(A,B,C\right)-f\left(A,B^{*},C^{**}\right)\right|+\left|\ev f(A,B^{*},C^{**})\right|\\
+ & \leq  \text{Lip}(f)\ev \left\Vert \left(A,B,C\right)-\left(A,B^{*},C^{**}\right)\right\Vert _{1}+0\\
+&= O(\tau(w)).
+\end{align*}
+\end{proof}
+
+Finally we can prove   Theorem \ref{th:mainOne}. 
+
+% \begin{Theorem}
+% \label{th:mainOne}
+% Assume that the stationary process $Z_t$ is $\tau$-dependent with $\tau(r) = O(r^{-4})$. If the core $h$ is a Lipschitz continuous, one-degenerate,  function of $m$ arguments, such that $\ev h(Z_0,\cdot,Z_0) < \infty$ and its $h_2$-component is a positive definite kernel, then 
+% \[
+%  \sup_{x \in R} \left| P(B_n  < x|Z_1, \cdots , Z_n ) -  \lim_{n \to \infty} P(n V_n(n<x) \right| \to 0 
+% \]
+% in probability.
+% \end{Theorem}
+
+\begin{proof}
+In the proof we are going to use \cite{leucht_dependent_2013}[Theorems 2.1, 3.1], which characterise asymptotic properties of $nV_n(h_2)$ and $n B(h_2)$. Both  theorems use similar set of assumptions which we verify upfront.  \\
+\textit{Assumption A2.}\begin{itemize}
+ \item (i)  $h_2$ is one-degenerate and symmetric - this follows from the Hoeffding decomposition;
+ \item (ii) $h_2$ is a kernel - is one of the assumptions of this theorem;
+ \item (iii) $\ev h_2(Z_1,Z_1) < \infty$ -- follows from $\sup_{i \in N^6}|\ev h(Z_i) |<\infty$ ;
+ \item  (iv) $h_2$ is Lipschitz continuous - follows from the Lemma \ref{stm:LipAndBound}.
+\end{itemize}
+\textit{Assumption B1, A1.} Assumption $B1$, $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$, is the same as ours, assumption $A1$, $\sum_{r=1}^n  \sqrt{\tau(r)} < \infty$ is implied.\\
+\textit{Assumption B2.} This assumption about the bootstrap process $W_t$ is the same as our Bootstrap assumptions. 
+
+
+Denote by $V$ the weak limit of $n V_n(h_2)$, which exits by the  \cite{leucht_dependent_2013}[Theorem 2.1],  and let $\mathcal{F} = \sigma(Z_1, \cdots , Z_n)$.   By \cite[Theorem 3.1]{leucht_dependent_2013}, since the distribution of  $V$ is continuous, we have 
+\begin{align*}
+\sup_{x \in R} &\left| P(nB_n(h_2)  < x|\mathcal{F}) -   P(V<x) \right| \to 0  \\
+\end{align*}
+in probability. We show that $nB_n(h_2)$ converges  to $V$ weakly, by showing  pointwise convergence  of CDF  
+\begin{align*}
+ \lim_{n \to \infty} &P(nB_n(h_2)  < x) =  \lim_{n \to \infty} \ev P(nB_n(h_2)  < x|\mathcal{F}) \\
+ &=  \ev  \lim_{n \to \infty} P(nB_n(h_2)  < x|\mathcal{F})  = \ev P(V<x) =P(V<x) 
+\end{align*}
+To change the order of limit and expectation we have dominated convergence Theorem, justified since  $P(nB_n(h)  < x|\mathcal{F})$  are bounded by 1.
+%TODO mybe write more
+The difference $n(B_n(h) - V_n(h))$ is
+\begin{align*}
+ n \left (B_n(h) -  \binom m 2 B_n(h_2) \right) + \binom m 2 \left (n B_n(h_2) -V\right)+ \left (\binom m 2 V - nV_n(h)\right)
+ \end{align*}
+By  Lemma \ref{lem:equivBoot} and Lemma \ref{lem:equivVanila} respectively, both 
+$$n (B(h) -   \binom m 2  B(h_2)) , n (V_n(h) - n \binom m 2 V_n(h_2))$$
+converge to zero in mean square. We check assumptions: since $Z_t$ is tau mixing and $h$ is Lipschitz continuous, by Lemma \ref{lem:disentangle} all self products of components and $Z_t$, $(h_c \times h_c,Z_t)$ for $c>0$, are $\varDelta$ type of order $\tau(r)$, of order at least  $o(r^{-4})$ (since $\sum_{r=1}^n r^2 \sqrt{\tau(r)} < \infty$). Since $h$ is one degenerate,  first and zero component $h_0,h_1$ are equal to zero (and so are $B(h_0),B(h_1)$).  
+
+This shows that $nB_n(h_2)$ converges weakly to $V$. 
+\end{proof}  
+
+\subsection{Proof of Theorem \ref{th:mainThree}}
+
+\begin{proof}
+Using  Hoeffding decomposition we  write the core  $h$ as a sum of the components $h_c$ ,
+\begin{align*}
+  n V_n(h) =& n V_n(h_m) + \binom m 1 n V_n(h_{m-1}) + ... \\ 
+  &+ \binom {m} {m-2} n V_n(h_{2}) + \binom {m} {m-1} n V_n(h_{1})+h_0.
+\end{align*}
+By the  Lemma \ref{lem:higherVstats}, for $c \geq 1$, $V_n(h_{c})$  converges to zero in probability. The sum associated with $h_1$ is
+\[
+V_n(h_1) = \frac 1 n \sum_{i=1}^{N} h_1(Z_i).
+\]
+By Lemma \ref{lem:disentangle}  $(h_1 \times h_1,Z_t)$ is $\varDelta$ type of order  $o(r^{-4})$. Using Lemma \ref{lem:higherVstats} we get the growth rate of 
+$ \ev (V_n(h_1))^2= O(\frac 1 n)$, thus $V_n(h_1)$ converges in mean square to zero.
+\end{proof}
+
+
+\subsection{Proof of Theorem \ref{th:mainTwo}}
+\label{sec:prMainTwo}
+
+
+% \begin{Theorem}
+% \label{th:mainTwo}
+% Assume that the process $\{Z_t\}$ is $\tau$-dependent with a coefficient $\tau(r) = o(r^{-4})$. If the core $h$ is  a function of $m$ arguments,  such that 
+% \[
+%   \sup_{n} \sup_{i \in N^m}\ev h(Z_{i_1},...,Z_{i_m})  h(Z_{i_{m+1}},...,Z_{i_2m})
+% \]
+% then $B(h)$  converges to zero in probability. 
+% \end{Theorem}
+
+
+\begin{proof}
+ We  show that the second non central moment of $B_1$ converges to $0$. The second non central moment is 
+\begin{align*}
+ \ev B_1 &= \ev \frac {1} {n^{2m}} \sum_{i \in N^{2m}}  W_{i_1} W_{i_2}  W_{i_{m+1}} W_{i_{m+2}} \ev h(Z_{i_1},...,Z_{i_m})  h(Z_{i_{m+1}},...,Z_{i_{2m}})\\
+              &=\frac {1} {n^{2m}} \sum_{i \in N^{2m}} \ev W_{i_1} W_{i_2}  W_{i_{m+1}} W_{i_{m+2}}  \ev h(\cdots) h(\cdots)   \\
+               & \leq  C \ev  \frac {1}  {n^4} \sum_{i \in N^4}  |\ev W_{i_1} W_{i_2}  W_{i_{m+1}} W_{i_{m+2}}|\\
+              & = C \ev  \left( \frac {1}  {n}  \sum_{i=1}^n W_i \right)^4.
+\end{align*}
+The inequality in the third line follows from the fact that correlations of the bootstrap process $W_i$ are positive (Bootstrap assumption) and 
+$$C = \sup_{n} \sup_{i \in N^m}\ev h(Z_{i_1},...,Z_{i_m})  h(Z_{i_{m+1}},...,Z_{i_2m}),$$ 
+is finite. By Lemma \ref{lem:meanWi} 
+\[
+ \frac {1}  {n}  \sum_{i=1}^n W_i  \to 0,
+\]
+and therefore  $\ev C \left( \frac {1}  {n}  \sum_{i=1}^n W_i \right)^4 \to 0$.
+
+We now prove that $o(n) B_2(h)$ converges to zero. Using Hoeffding decomposition  we write core  $h$ as a sum of components $h_c$ and $h_0$  
+\begin{align}
+\label{eq:bootstrapedOne}
+ &n B_2(h) = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \Big[h_0  \tilde W_{i_1} \tilde W_{i_2} + \sum_{1 \leq j \leq m } \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_j})    \\ 
+ &\sum_{1 \leq j_1 < j_2 \leq m } \tilde W_{i_1} \tilde W_{i_2} h_2(Z_{i_{j_1}},Z_{i_{j_2}}) + ... +  \tilde W_{i_1} \tilde W_{i_2}   h_m(Z_{i_1},...,Z_{i_m}) \Big].
+\end{align}
+We examine terms of the above sum starting form the one with $h_0$ - it is equal to zero
+\begin{align*}
+\frac{1} {n^{m-1}}  \sum_{i \in N^m}  h_0  \tilde W_{i_1} \tilde W_{i_2}   \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac 1 n h_0 \sum_{i \in N^2} \tilde W_{i_1} \tilde W_{i_2} = \frac 1 n h_0 \left( \sum_{i=1} \tilde W_i \right)^2  \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align*}  
+Term with $h_1$ is zero as well, to see that fix $j$ and consider 
+\begin{align*}
+T_{j} = \frac{1} {n^{m-1}}  \sum_{i \in N^m}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_j}).  
+\end{align*}  
+If $j=1$ then
+\begin{align*}
+T_{1} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n}  \sum_{i \in N^2}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_1}) =  \frac{1} {n}  \left( \sum_{i=1}^n  \tilde W_i h_1(Z_i) \right) \left( \sum_{i=1} \tilde W_i \right) \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align*}
+If $j=2$ the same reasoning holds and if $j>2$
+\begin{align*}
+T_{j} \overset{L.\ref{lem:summingLema}}{=\joinrel=} \frac{1} {n^2}  \sum_{i \in N^3}  \tilde W_{i_1} \tilde W_{i_2} h_1(Z_{i_3}) =  \frac{1} {n}  \left( \sum_{i=1}^n h_1(Z_i) \right) \left( \sum_{i=1} \tilde W_i \right)^2 \overset{L.\ref{stmt:obviousD}}{=\joinrel=} 0.
+\end{align*}
+By Lemma \ref{lem:equivBoot}, since $B(h_0)=B(h_1)=0$, $(nB(h) - \binom m 2 nB(h_2)) \to 0$ in mean square and the only term that remains is 
+\begin{align*}
+T_n = \frac{1} {n}  \sum_{i,j \in N}  \tilde W_{i} \tilde W_j h_2(Z_i,Z_j)
+\end{align*}
+ Now we can use the Lemma \ref{lem:higherVstats} to show that $o(1) T_n$ converges to zero. 
+ \end{proof}
+
+\subsection{Proof of Proposition \ref{prop:mmd} }
+  \label{sub:prop:mmd}
+\begin{proposition*}
+ Let $k$ be bounded and Lipschitz continuous, and let $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ 
+ both be $\tau$-dependent with coefficients $\tau(i) =  O(i^{-6-\epsilon})$, but independent of each other. Further, let $n_x=\rho_x n$ and $n_y=\rho_y n$ where $n=n_x+n_y$. Then, under the null hypothesis $P_x=P_y$, $\varphi\left(\rho_x \rho_y n\widehat{\text{MMD}}_k, \rho_x \rho_y n\widehat{\text{MMD}}_{k,b}\right)\to 0$ in probability as $n\to\infty$, where $\varphi$ is the Prokhorov metric.
+\end{proposition*}
+  \begin{proof}
+  Since $\widehat{\text{MMD}}_k$ is just the MMD between empirical measures
+using kernel $k$, it must be the same as the empirical MMD $\widehat{\text{MMD}}_{\tilde k}$ with centred kernel $\tilde{k}(x,x')=\left \langle k(\cdot,x)-\ev k(\cdot,X), k(\cdot,x')-\ev k(\cdot,X) \right \rangle_{\Hk}$ according to \cite[Theorem 22]{SejSriGreFuk13}. Using the Mercer expansion, we can write
+\begin{align*}
+\rho_x \rho_y n\widehat{\text{MMD}}_k & = \rho_{x}\rho_{y}n\sum_{r=1}^{\infty}\lambda_{r}\left(\frac{1}{n_{x}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})-\frac{1}{n_{y}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\right)^{2}\\
+ & = \sum_{r=1}^{\infty}\lambda_{r}\left(\sqrt{\frac{\rho_{y}}{n_{x}}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})-\sqrt{\frac{\rho_{x}}{n_{y}}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\right)^{2},
+\end{align*}
+where $\{\lambda_r\}$ and $\{\Phi_r\}$ are the eigenvalues and the eigenfunctions of the integral operator $f\mapsto \int f(x)\tilde k(\cdot,x)dP_x(x)$ on $L_2(P_x)$. Similarly as in \cite[Theorem 2.1]{leucht_dependent_2013}, the above converges in distribution to $\sum_{r=1}^\infty \lambda_r Z_r^2$, where $\{Z_r\}$ are marginally standard normal, jointly normal and given by $Z_r=\sqrt{\rho_x}A_r-\sqrt{\rho_y}B_r$. $\{A_r\}$ and $\{B_r\}$ are in turn also marginally standard normal and jointly normal, with a dependence structure induced by that of $\{X_t\}$ and $\{Y_t\}$ respectively. This suggests individually bootstrapping each of the terms $\Phi_{r}(x_{i})$ and $\Phi_{r}(y_{j})$, giving rise to 
+\begin{align*}
+\widehat{\text{MMD}}_{\tilde k, b}&=\sum_{r=1}^{\infty}\lambda_{r}\left(\frac{1}{n_{x}}\sum_{i=1}^{n_{x}}\Phi_{r}(x_{i})\tilde W_i^{(x)}-\frac{1}{n_{y}}\sum_{j=1}^{n_{y}}\Phi_{r}(y_{j})\tilde W_j^{(y)}\right)^{2}\\
+{}&=\quad\frac{1}{n_x^2}\sum_{i=1}^{n_x}\sum_{j=1}^{n_x}\tilde W_i^{(x)}\tilde W_j^{(x)}\tilde k(x_i,x_j)-\frac{1}{n_x^2}\sum_{i=1}^{n_y}\sum_{j=1}^{n_y}\tilde W_i^{(y)}\tilde W_j^{(y)}\tilde k(y_i,y_j)\\
+{}&\qquad-\frac{2}{n_x n_y}\sum_{i=1}^{n_x}\sum_{j=1}^{n_y}\tilde W_i^{(x)}\tilde W_j^{(y)}\tilde k(x_i,y_j). 
+\end{align*}
+Now, since $\tilde k$ is degenerate under the null distribution, the first two terms (after appropriate normalization) converge in distribution to $\rho_x\sum_{r=1}^\infty \lambda_r A_r^2$ and  $\rho_y\sum_{r=1}^\infty \lambda_r B_r^2$ by \cite[Theorem 3.1]{leucht_dependent_2013} as required. 
+The last term follows the same reasoning - it suffices to check part (b) of \cite[Theorem 3.1]{leucht_dependent_2013} (which is trivial as processes $\left\{ X_t \right\}$ and $\left\{ Y_t \right\}$ are assumed to be independent of each other) and apply the continuous mapping theorem to obtain convergence to $-2\sqrt{\rho_x\rho_y}\sum_{r=1}^\infty \lambda_r A_rB_r$ implying that $\widehat{\text{MMD}}_{\tilde k, b}$ has the same limiting distribution as $\widehat{\text{MMD}}_{k}$.
+While we cannot compute $\tilde k$ as it depends on the underlying probability measure $P_x$, it is readily checked that due to the empirical centering of processes $\{\tilde W_t^{(x)}\}$ and $\{\tilde W_t^{(y)}\}$, $\widehat{\text{MMD}}_{\tilde k, b}=\widehat{\text{MMD}}_{k, b}$ holds and the claim follows. Note that the result fails to be valid for wild bootstrap processes that are not empirically centred.
+\end{proof}
+
+
+\section{Various comments}
+
+\subsection{Time complexity}
+The original HSIC and MMD tests for i.i.d. data, the computational cost of the wild bootstrap approach scales quadratically in the number of samples, and linearly in the number of bootstrap iterations (in the i.i.d. case, these were permutations of the data). The main alternative approaches are the lagged bootstrap of \cite{chwialkowski2014kernel}, which has the same scaling with data and number of bootstraps, and the spectrogram approach of \cite{besserve_statistical_2013} (note, however, that both these alternative approaches apply only to the independence testing case). The cost of \cite{besserve_statistical_2013} is comparable to our approach, however the statistical power of \cite{besserve_statistical_2013} was much weaker on the data we examined.
 
   
 %\bibliographystyle{plain}

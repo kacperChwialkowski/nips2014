@@ -112,6 +112,12 @@ D.~Sejdinovic, A.~Gretton, and W.~Bergsma.
 \newblock A kernel test for three-variable interactions.
 \newblock In {\em NIPS}, pages 1124--1132, 2013.
 
+\bibitem{SejSriGreFuk13}
+D.~Sejdinovic, B.~Sriperumbudur, A.~Gretton, and K.~Fukumizu.
+\newblock Equivalence of distance-based and {RKHS}-based statistics in
+  hypothesis testing.
+\newblock {\em Ann. Statist.}, 41(5):2263--2702, 2013.
+
 \bibitem{sejdinovic_KAMH}
 D.~Sejdinovic, H.~Strathmann, M.~Lomeli~Garcia, C.~Andrieu, and A.~Gretton.
 \newblock {Kernel Adaptive Metropolis-Hastings}.
